@@ -19,7 +19,7 @@ endif(LINUX)
 include_directories(include)
 add_subdirectory(fssimplewindow_src)
 
-add_executable(battle_city_demo MACOSX_BUNDLE "src/battlecitydemo.cpp" "src/menu.cpp" "fssimplewindow_src/fssimplewindowcommon.cpp")
+add_executable(battle_city_demo MACOSX_BUNDLE "src/battlecitydemo.cpp" "src/menu.cpp")
 target_link_libraries(battle_city_demo fssimplewindow)
 
 if(APPLE)
