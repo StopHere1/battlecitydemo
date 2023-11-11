@@ -14,8 +14,9 @@ class buttom{
         float width ;
         float height ;
         int state ;
+        char* title;
     public:
-        buttom(float x, float y, float width, float height);
+        buttom(float x, float y, float width, float height, char* title);
         float getstate();
         float getx();
         float gety();

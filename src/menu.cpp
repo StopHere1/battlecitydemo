@@ -13,9 +13,10 @@ protected:
     float width = 0;
     float height = 0;
     int state = 0;
+    char *title = nullptr;
 
 public:
-    buttom(float x, float y, float width, float height);
+    buttom(float x, float y, float width, float height, char *title);
     float getstate();
     float getx();
     float gety();
@@ -26,18 +27,19 @@ public:
     bool isinsidebuttom(int mx, int my);
 };
 
-buttom::buttom(float ix, float iy, float iwidth, float iheight)
+buttom::buttom(float ix, float iy, float iwidth, float iheight, char *title)
 {
     x = ix;
     y = iy;
     width = iwidth;
     height = iheight;
     state = 0;
+    this->title = title;
 }
 
 bool buttom::isinsidebuttom(int mx, int my)
 {
-    return (mx >= x - width / 2.0f) && (mx <= x + width / 2.0f) && (my >= y - height / 2.0f) && (my <= x + height / 2.0f);
+    return (mx >= x - width / 2.0f) && (mx <= x + width / 2.0f) && (my >= y - height / 2.0f) && (my <= y + height / 2.0f);
 }
 float buttom::getstate()
 {
@@ -85,6 +87,9 @@ void buttom::draw()
     glVertex2f(x + width / 2.0f, y + height / 2.0f);
     glVertex2f(x - width / 2.0f, y + height / 2.0f);
     glEnd();
+    glColor3ub(0, 0, 0);
+    glRasterPos2f(x - 8.0f*(float)(strlen(title)/2), y + 6.0f);
+    YsGlDrawFontBitmap8x12(title);
 }
 
 /* begin of menu class*/
@@ -119,11 +124,13 @@ void menu::run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::ve
             auto key = FsInkey();
             if (key == FSKEY_ESC)
             {
+                stage = -1;
                 break;
             }
             int lb, mb, rb, mx, my;
             int mouseEvent;
             mouseEvent = FsGetMouseEvent(lb, mb, rb, mx, my);
+
             if (stage0[0].isinsidebuttom(mx, my))
             {
                 stage0[0].setstate(1);
@@ -137,26 +144,220 @@ void menu::run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::ve
             {
                 stage0[0].setstate(0);
             }
+
+            if (stage0[1].isinsidebuttom(mx, my))
+            {
+                stage0[1].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    stage = 2;
+                    break;
+                }
+            }
+            else
+            {
+                stage0[1].setstate(0);
+            }
+
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            stage0[0].draw();
-            glRasterPos2d(100,100);
-            YsGlDrawFontBitmap8x12("ABCD");
+            for (int i = 0; i < stage0.size(); i++)
+            {
+                stage0[i].draw();
+            }
             FsSwapBuffers();
-            FsSleep(100);
         }
     }
     else if (stage == 1)
     {
+        for (;;)
+        {
+            FsPollDevice();
+            auto key = FsInkey();
+            if (key == FSKEY_ESC)
+            {
+                break;
+            }
+            int lb, mb, rb, mx, my;
+            int mouseEvent;
+            mouseEvent = FsGetMouseEvent(lb, mb, rb, mx, my);
+
+            if (stage1[0].isinsidebuttom(mx, my))
+            {
+                stage1[0].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    stage = 3;
+                    break;
+                }
+            }
+            else
+            {
+                stage1[0].setstate(0);
+            }
+
+            if (stage1[1].isinsidebuttom(mx, my))
+            {
+                stage1[1].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    stage = 4;
+                    break;
+                }
+            }
+            else
+            {
+                stage1[1].setstate(0);
+            }
+            if (stage1[2].isinsidebuttom(mx, my))
+            {
+                stage1[2].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    stage = 5;
+                    break;
+                }
+            }
+            else
+            {
+                stage1[2].setstate(0);
+            }
+
+            if (stage1[3].isinsidebuttom(mx, my))
+            {
+                stage1[3].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    stage = 0;
+                    break;
+                }
+            }
+            else
+            {
+                stage1[3].setstate(0);
+            }
+
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            for (int i = 0; i < stage1.size(); i++)
+            {
+                stage1[i].draw();
+            }
+            FsSwapBuffers();
+        }
+    }
+    else if (stage == 2)
+    {
+        for (;;)
+        {
+            FsPollDevice();
+            auto key = FsInkey();
+            if (key == FSKEY_ESC)
+            {
+                break;
+            }
+            int lb, mb, rb, mx, my;
+            int mouseEvent;
+            mouseEvent = FsGetMouseEvent(lb, mb, rb, mx, my);
+
+            if (stage2[0].isinsidebuttom(mx, my))
+            {
+                stage2[0].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    /*  increase the volumn */
+
+                }
+            }
+            else
+            {
+                stage2[0].setstate(0);
+            }
+
+            if (stage2[1].isinsidebuttom(mx, my))
+            {
+                stage2[1].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    /*  decrease the volumn */
+                }
+            }
+            else
+            {
+                stage2[1].setstate(0);
+            }
+
+            if (stage2[2].isinsidebuttom(mx, my))
+            {
+                stage2[2].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                   /*set winning condition*/
+                }
+            }
+            else
+            {
+                stage2[2].setstate(0);
+            }
+
+            if (stage2[3].isinsidebuttom(mx, my))
+            {
+                stage2[3].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    stage = 0;
+                    break;
+                }
+            }
+            else
+            {
+                stage2[3].setstate(0);
+            }
+
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            for (int i = 0; i < stage2.size(); i++)
+            {
+                stage2[i].draw();
+            }
+            FsSwapBuffers();
+        }
     }
 }
 
 void menu::start()
 {
-    FsOpenWindow(0, 0, 1920, 1080, 1);
-    buttom buttom1(200.0f, 200.0f, 100.0f, 100.0f);
+    FsOpenWindow(0, 0, 1600, 1000, 1);
+
     std::vector<buttom> stage0;
-    std::vector<buttom> stage1;
-    std::vector<buttom> stage2;
+    buttom buttom1(800.0f, 500.0f, 200.0f, 80.0f, " START ");
+    buttom buttom2(800.0f, 600.0f, 200.0f, 80.0f, "SETTING");
     stage0.push_back(buttom1);
-    run(stage0, stage1, stage2);
+    stage0.push_back(buttom2);
+    std::vector<buttom> stage1;
+    buttom buttom3(800.0f, 400.0f, 200.0f, 80.0f, "DEATHBATTLE");
+    buttom buttom4(800.0f, 500.0f, 200.0f, 80.0f, "OCCUPATION");
+    buttom buttom5(800.0f, 600.0f, 200.0f, 80.0f, "TIMELIMITED");
+    buttom buttom6(100.0f, 100.0f, 60.0f, 60.0f, "BACK  ");
+    stage1.push_back(buttom3);
+    stage1.push_back(buttom4);
+    stage1.push_back(buttom5);
+    stage1.push_back(buttom6);
+    std::vector<buttom> stage2;
+    buttom buttom7(700.0f, 500.0f, 100.0f, 80.0f, "VOLUME UP ");
+    buttom buttom8(900.0f, 500.0f, 100.0f, 80.0f, "VOLUMEDOWN ");
+    buttom buttom9(800.0f, 600.0f, 300.0f, 80.0f, "WINNING CONDITION");
+    buttom buttom10(100.0f, 100.0f, 60.0f, 60.0f, "BACK");
+    stage2.push_back(buttom7);
+    stage2.push_back(buttom8);
+    stage2.push_back(buttom9);
+    stage2.push_back(buttom10);
+    
+    for (;;)
+    {
+        run(stage0, stage1, stage2);
+        FsPollDevice();
+        auto key = FsInkey();
+        if (key == FSKEY_ESC)
+        {
+            break;
+        }
+    }
 }
