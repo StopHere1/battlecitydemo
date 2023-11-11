@@ -35,6 +35,8 @@ class menu{
     menu();
     void test();
     void start();
+    void drawBackground();
+    void setstage(int input);
     void run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2);
 };
 

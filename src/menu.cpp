@@ -74,19 +74,28 @@ void buttom::setstate(int input)
 void buttom::draw()
 {
     glBegin(GL_QUADS);
+    glColor3ub(0,0,0);
+    glVertex2f(x - width / 2.0f-10.0f, y - height / 2.0f-10.0f);
+    glVertex2f(x + width / 2.0f+10.0f, y - height / 2.0f-10.0f);
+    glVertex2f(x + width / 2.0f+10.0f, y + height / 2.0f+10.0f);
+    glVertex2f(x - width / 2.0f-10.0f, y + height / 2.0f+10.0f);
+    glEnd();
+
+    glBegin(GL_QUADS);
     if (state == 0)
     {
-        glColor3ub(120, 120, 120);
+        glColor3ub(230, 230, 230);
     }
     else
     {
-        glColor3ub(230, 230, 230);
+        glColor3ub(120, 120, 120);
     }
     glVertex2f(x - width / 2.0f, y - height / 2.0f);
     glVertex2f(x + width / 2.0f, y - height / 2.0f);
     glVertex2f(x + width / 2.0f, y + height / 2.0f);
     glVertex2f(x - width / 2.0f, y + height / 2.0f);
     glEnd();
+    
     glColor3ub(0, 0, 0);
     glRasterPos2f(x - 8.0f*(float)(strlen(title)/2), y + 6.0f);
     YsGlDrawFontBitmap8x12(title);
@@ -103,6 +112,8 @@ public:
     menu();
     void test();
     void start();
+    void drawBackground();
+    void setstage(int input);
     void run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2);
 };
 menu::menu()
@@ -113,7 +124,12 @@ void menu::test()
 {
     std::cout << "hello world from menu!" << std::endl;
 }
+void menu::drawBackground(){
 
+}
+void menu::setstage(int input){
+    stage = input;
+}
 void menu::run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2)
 {
     if (stage == 0)
@@ -322,34 +338,35 @@ void menu::run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::ve
     }
 }
 
-void menu::start()
+void menu::start() 
 {
-    FsOpenWindow(0, 0, 1600, 1000, 1);
-
+    FsOpenWindow(0, 0, 1280, 720, 1);
+    /* initialization */
     std::vector<buttom> stage0;
-    buttom buttom1(800.0f, 500.0f, 200.0f, 80.0f, " START ");
-    buttom buttom2(800.0f, 600.0f, 200.0f, 80.0f, "SETTING");
+    buttom buttom1(640.0f, 400.0f, 150.0f, 50.0f, " START ");
+    buttom buttom2(640.0f, 500.0f, 150.0f, 50.0f, "SETTING");
     stage0.push_back(buttom1);
     stage0.push_back(buttom2);
     std::vector<buttom> stage1;
-    buttom buttom3(800.0f, 400.0f, 200.0f, 80.0f, "DEATHBATTLE");
-    buttom buttom4(800.0f, 500.0f, 200.0f, 80.0f, "OCCUPATION");
-    buttom buttom5(800.0f, 600.0f, 200.0f, 80.0f, "TIMELIMITED");
-    buttom buttom6(100.0f, 100.0f, 60.0f, 60.0f, "BACK  ");
+    buttom buttom3(640.0f, 300.0f, 150.0f, 50.0f, "DEATHBATTLE");
+    buttom buttom4(640.0f, 400.0f, 150.0f, 50.0f, "OCCUPATION");
+    buttom buttom5(640.0f, 500.0f, 150.0f, 50.0f, "TIMELIMITED");
+    buttom buttom6(50.0f, 50.0f, 50.0f, 50.0f, "BACK");
     stage1.push_back(buttom3);
     stage1.push_back(buttom4);
     stage1.push_back(buttom5);
     stage1.push_back(buttom6);
     std::vector<buttom> stage2;
-    buttom buttom7(700.0f, 500.0f, 100.0f, 80.0f, "VOLUME UP ");
-    buttom buttom8(900.0f, 500.0f, 100.0f, 80.0f, "VOLUMEDOWN ");
-    buttom buttom9(800.0f, 600.0f, 300.0f, 80.0f, "WINNING CONDITION");
-    buttom buttom10(100.0f, 100.0f, 60.0f, 60.0f, "BACK");
+    buttom buttom7(540.0f, 400.0f, 150.0f, 50.0f, "VOLUME UP");
+    buttom buttom8(740.0f, 400.0f, 150.0f, 50.0f, "VOLUMEDOWN");
+    buttom buttom9(640.0f, 500.0f, 250.0f, 50.0f, "WINNING CONDITION");
+    buttom buttom10(50.0f, 50.0f, 50.0f, 50.0f, "BACK");
     stage2.push_back(buttom7);
     stage2.push_back(buttom8);
     stage2.push_back(buttom9);
     stage2.push_back(buttom10);
     
+    /* main game loop*/
     for (;;)
     {
         run(stage0, stage1, stage2);
