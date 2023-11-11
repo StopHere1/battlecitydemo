@@ -114,7 +114,7 @@ public:
     void start();
     void drawBackground();
     void setstage(int input);
-    void run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2);
+    void run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2, std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5);
 };
 menu::menu()
 {
@@ -130,7 +130,7 @@ void menu::drawBackground(){
 void menu::setstage(int input){
     stage = input;
 }
-void menu::run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2)
+void menu::run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2, std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5)
 {
     if (stage == 0)
     {
@@ -335,6 +335,150 @@ void menu::run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::ve
             }
             FsSwapBuffers();
         }
+    }else if(stage == 3){
+        for (;;)
+        {
+            FsPollDevice();
+            auto key = FsInkey();
+            if (key == FSKEY_ESC)
+            {
+                stage = -1;
+                break;
+            }
+            int lb, mb, rb, mx, my;
+            int mouseEvent;
+            mouseEvent = FsGetMouseEvent(lb, mb, rb, mx, my);
+
+            if (stage3[0].isinsidebuttom(mx, my))
+            {
+                stage3[0].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    stage = 1;
+                    break;
+                }
+            }
+            else
+            {
+                stage3[0].setstate(0);
+            }
+
+            if (stage3[1].isinsidebuttom(mx, my))
+            {
+                stage3[1].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    /* pause */
+                }
+            }
+            else
+            {
+                stage3[1].setstate(0);
+            }
+
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            for (int i = 0; i < stage3.size(); i++)
+            {
+                stage3[i].draw();
+            }
+            FsSwapBuffers();
+        }
+    }else if(stage == 4){
+        for (;;)
+        {
+            FsPollDevice();
+            auto key = FsInkey();
+            if (key == FSKEY_ESC)
+            {
+                stage = -1;
+                break;
+            }
+            int lb, mb, rb, mx, my;
+            int mouseEvent;
+            mouseEvent = FsGetMouseEvent(lb, mb, rb, mx, my);
+
+            if (stage4[0].isinsidebuttom(mx, my))
+            {
+                stage4[0].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    stage = 1;
+                    break;
+                }
+            }
+            else
+            {
+                stage4[0].setstate(0);
+            }
+
+            if (stage4[1].isinsidebuttom(mx, my))
+            {
+                stage4[1].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    /* pause */
+                }
+            }
+            else
+            {
+                stage4[1].setstate(0);
+            }
+
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            for (int i = 0; i < stage4.size(); i++)
+            {
+                stage4[i].draw();
+            }
+            FsSwapBuffers();
+        }
+    }else if(stage == 5){
+        for (;;)
+        {
+            FsPollDevice();
+            auto key = FsInkey();
+            if (key == FSKEY_ESC)
+            {
+                stage = -1;
+                break;
+            }
+            int lb, mb, rb, mx, my;
+            int mouseEvent;
+            mouseEvent = FsGetMouseEvent(lb, mb, rb, mx, my);
+
+            if (stage5[0].isinsidebuttom(mx, my))
+            {
+                stage5[0].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    stage = 1;
+                    break;
+                }
+            }
+            else
+            {
+                stage5[0].setstate(0);
+            }
+
+            if (stage5[1].isinsidebuttom(mx, my))
+            {
+                stage5[1].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    /* pause */
+                }
+            }
+            else
+            {
+                stage5[1].setstate(0);
+            }
+
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            for (int i = 0; i < stage5.size(); i++)
+            {
+                stage5[i].draw();
+            }
+            FsSwapBuffers();
+        }
     }
 }
 
@@ -365,11 +509,26 @@ void menu::start()
     stage2.push_back(buttom8);
     stage2.push_back(buttom9);
     stage2.push_back(buttom10);
-    
+    std::vector<buttom> stage3;
+    buttom buttom11(50.0f, 50.0f, 50.0f, 50.0f, "EXIT");
+    buttom buttom12(1225.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
+    stage3.push_back(buttom11);
+    stage3.push_back(buttom12);
+    std::vector<buttom> stage4;
+    buttom buttom13(50.0f, 50.0f, 50.0f, 50.0f, "EXIT");
+    buttom buttom14(1225.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
+    stage4.push_back(buttom13);
+    stage4.push_back(buttom14);
+    std::vector<buttom> stage5;
+    buttom buttom15(50.0f, 50.0f, 50.0f, 50.0f, "EXIT");
+    buttom buttom16(1225.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
+    stage5.push_back(buttom15);
+    stage5.push_back(buttom16);
+    std::cout<<"Game Initialized"<<std::endl;
     /* main game loop*/
     for (;;)
     {
-        run(stage0, stage1, stage2);
+        run(stage0, stage1, stage2, stage3, stage4, stage5);
         FsPollDevice();
         auto key = FsInkey();
         if (key == FSKEY_ESC)
