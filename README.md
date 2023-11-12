@@ -9,8 +9,9 @@ cd ${Your Project Repo}
 git clone https://github.com/StopHere1/battlecitydemo.git
 git clone http://github.com/captainys/public.git
 cd battlecitydemo
-cmake .
+cmake ..
 mkdir build
+cd build
 cmake --build . --target battle_city_demo
 ```
 
@@ -19,19 +20,20 @@ run the executable in the terminal:
 ```shell
 ./battle_city_demo.app/Contents/MacOS/battle_city_demo (For MacOS)
 or
-./battle_city_demo
+../debug/battle_city_demo (For win)
 ```
 
 Source Tree:
 
 ```
 --battlecitydemo
--build
--include
--src
--CMakeLists.txt
--LICENSE
--README.md
+ -build
+ -include
+ -src
+ -CMakeLists.txt
+ -LICENSE
+ -README.md
+ -.gitignore
 --public
 ```
 
