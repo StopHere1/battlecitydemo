@@ -37,7 +37,7 @@ class menu{
     void start();
     void drawBackground();
     void setstage(int input);
-    void run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2, std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5);
+    void run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2, std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5, YsRawPngDecoder &background);
 };
 
 #endif

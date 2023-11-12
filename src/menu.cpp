@@ -114,7 +114,8 @@ public:
     void start();
     void drawBackground();
     void setstage(int input);
-    void run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2, std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5);
+    void run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2,
+     std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5, YsRawPngDecoder &background);
 };
 menu::menu()
 {
@@ -130,7 +131,7 @@ void menu::drawBackground(){
 void menu::setstage(int input){
     stage = input;
 }
-void menu::run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2, std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5)
+void menu::run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2, std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5, YsRawPngDecoder &background)
 {
     if (stage == 0)
     {
@@ -174,8 +175,12 @@ void menu::run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::ve
             {
                 stage0[1].setstate(0);
             }
-
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glEnable(GL_BLEND);
+            glRasterPos2f(0.1f,719.0f);
+            glDrawPixels(background.wid,background.hei,GL_RGBA,GL_UNSIGNED_BYTE,background.rgba);
+            glDisable(GL_BLEND);
             for (int i = 0; i < stage0.size(); i++)
             {
                 stage0[i].draw();
@@ -251,8 +256,12 @@ void menu::run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::ve
             {
                 stage1[3].setstate(0);
             }
-
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glEnable(GL_BLEND);
+            glRasterPos2f(0.1f,719.0f);
+            glDrawPixels(background.wid,background.hei,GL_RGBA,GL_UNSIGNED_BYTE,background.rgba);
+            glDisable(GL_BLEND);
             for (int i = 0; i < stage1.size(); i++)
             {
                 stage1[i].draw();
@@ -327,8 +336,12 @@ void menu::run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::ve
             {
                 stage2[3].setstate(0);
             }
-
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glEnable(GL_BLEND);
+            glRasterPos2f(0.1f,719.0f);
+            glDrawPixels(background.wid,background.hei,GL_RGBA,GL_UNSIGNED_BYTE,background.rgba);
+            glDisable(GL_BLEND);
             for (int i = 0; i < stage2.size(); i++)
             {
                 stage2[i].draw();
@@ -485,6 +498,14 @@ void menu::run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::ve
 void menu::start() 
 {
     FsOpenWindow(0, 0, 1280, 720, 1);
+    FsChangeToProgramDir();
+    YsRawPngDecoder background;
+    if(YSOK!=background.Decode("../src/background.png"))
+    {
+        std::cout << "PNG load error." << std::endl;
+    }
+    background.Flip();
+    
     /* initialization */
     std::vector<buttom> stage0;
     buttom buttom1(640.0f, 400.0f, 150.0f, 50.0f, " START ");
@@ -492,9 +513,9 @@ void menu::start()
     stage0.push_back(buttom1);
     stage0.push_back(buttom2);
     std::vector<buttom> stage1;
-    buttom buttom3(640.0f, 300.0f, 150.0f, 50.0f, "DEATHBATTLE");
-    buttom buttom4(640.0f, 400.0f, 150.0f, 50.0f, "OCCUPATION");
-    buttom buttom5(640.0f, 500.0f, 150.0f, 50.0f, "TIMELIMITED");
+    buttom buttom3(640.0f, 400.0f, 150.0f, 50.0f, "DEATHBATTLE");
+    buttom buttom4(640.0f, 500.0f, 150.0f, 50.0f, "OCCUPATION");
+    buttom buttom5(640.0f, 600.0f, 150.0f, 50.0f, "TIMELIMITED");
     buttom buttom6(50.0f, 50.0f, 50.0f, 50.0f, "BACK");
     stage1.push_back(buttom3);
     stage1.push_back(buttom4);
@@ -528,7 +549,7 @@ void menu::start()
     /* main game loop*/
     for (;;)
     {
-        run(stage0, stage1, stage2, stage3, stage4, stage5);
+        run(stage0, stage1, stage2, stage3, stage4, stage5, background);
         FsPollDevice();
         auto key = FsInkey();
         if (key == FSKEY_ESC)
