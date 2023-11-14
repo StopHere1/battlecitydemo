@@ -9,18 +9,28 @@ cd ${Your Project Repo}
 git clone https://github.com/StopHere1/battlecitydemo.git
 git clone http://github.com/captainys/public.git
 cd battlecitydemo
-cmake ..
 mkdir build
 cd build
+```
+Run one of the following sets of cmake command to compile the code and generate executable file
+Make sure to run cmake inside build folder to ensure the file path is correct.
+```shell
+cmake ..
+make
+```
+or
+```shell
 cmake --build . --target battle_city_demo
 ```
 
 run the executable in the terminal:
-
+For MacOS:
 ```shell
-./battle_city_demo.app/Contents/MacOS/battle_city_demo (For MacOS)
-or
-../debug/battle_city_demo (For win)
+./battle_city_demo.app/Contents/MacOS/battle_city_demo
+```
+For windows
+```shell
+../debug/battle_city_demo
 ```
 
 Source Tree:

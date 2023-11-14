@@ -113,7 +113,7 @@ public:
     menu();
     void test();
     void start();
-    void drawBackground();
+    void drawBackground(YsRawPngDecoder &background);
     void setstage(int input);
     void run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2,
      std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5, YsRawPngDecoder &background);
@@ -126,12 +126,25 @@ void menu::test()
 {
     std::cout << "hello world from menu!" << std::endl;
 }
-void menu::drawBackground(){
-
+void menu::drawBackground(YsRawPngDecoder &background){
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glRasterPos2f(0.1f,719.0f);
+    glDrawPixels(background.wid,background.hei,GL_RGBA,GL_UNSIGNED_BYTE,background.rgba);
+    glDisable(GL_BLEND);
 }
 void menu::setstage(int input){
     stage = input;
 }
+/*
+stages:
+stage0: home menu
+stage1: game mode selection
+stage2: setting
+stage3: deathbattle
+stage4: occupation
+stage5: timelimited occupation
+*/
 void menu::run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2, std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5, YsRawPngDecoder &background)
 {
     if (stage == 0)
@@ -177,11 +190,7 @@ void menu::run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::ve
                 stage0[1].setstate(0);
             }
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            glEnable(GL_BLEND);
-            glRasterPos2f(0.1f,719.0f);
-            glDrawPixels(background.wid,background.hei,GL_RGBA,GL_UNSIGNED_BYTE,background.rgba);
-            glDisable(GL_BLEND);
+            drawBackground(background);
             for (int i = 0; i < stage0.size(); i++)
             {
                 stage0[i].draw();
@@ -258,11 +267,7 @@ void menu::run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::ve
                 stage1[3].setstate(0);
             }
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            glEnable(GL_BLEND);
-            glRasterPos2f(0.1f,719.0f);
-            glDrawPixels(background.wid,background.hei,GL_RGBA,GL_UNSIGNED_BYTE,background.rgba);
-            glDisable(GL_BLEND);
+            drawBackground(background);
             for (int i = 0; i < stage1.size(); i++)
             {
                 stage1[i].draw();
@@ -338,11 +343,7 @@ void menu::run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::ve
                 stage2[3].setstate(0);
             }
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            glEnable(GL_BLEND);
-            glRasterPos2f(0.1f,719.0f);
-            glDrawPixels(background.wid,background.hei,GL_RGBA,GL_UNSIGNED_BYTE,background.rgba);
-            glDisable(GL_BLEND);
+            drawBackground(background);
             for (int i = 0; i < stage2.size(); i++)
             {
                 stage2[i].draw();
@@ -499,6 +500,8 @@ void menu::run(std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::ve
 void menu::start() 
 {
     FsOpenWindow(0, 0, 1280, 720, 1);
+
+    /* loading files */
     FsChangeToProgramDir();
     YsRawPngDecoder background;
     if(YSOK!=background.Decode("../src/background.png"))
@@ -547,6 +550,7 @@ void menu::start()
     stage5.push_back(buttom15);
     stage5.push_back(buttom16);
     std::cout<<"Game Initialized"<<std::endl;
+
     /* main game loop*/
     for (;;)
     {
