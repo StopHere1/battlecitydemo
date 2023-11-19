@@ -47,11 +47,11 @@ class polygon{
         vector2f center = vector2f(0.0f,0.0f);
         std::vector<vector2f> vertex;
     public:
-        virtual bool checkCollisionDetection(polygon target);
+        virtual bool checkCollision(polygon target);
 
 };
 
-bool polygon::checkCollisionDetection(polygon target){
+bool polygon::checkCollision(polygon target){
     std::vector<vector2f> axis;
     for(size_t index = 0; index < target.vertex.size(); ++index){
         if(axis.size()==0){

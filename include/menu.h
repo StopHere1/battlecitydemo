@@ -25,7 +25,7 @@ class polygon{
         vector2f center;
         std::vector<vector2f> vertex;
     public:
-        virtual bool checkCollisionDetection(polygon target);
+        virtual bool checkCollision(polygon target);
 };
 
 class buttom{
