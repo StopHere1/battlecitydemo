@@ -7,6 +7,27 @@
 #include "../../public/src/ysbitmap/src/yspng.h"
 #include "../../public/src/yssimplesound/src/yssimplesound.h"
 
+class vector2f {
+protected:
+   float x ;
+   float y ;
+public:
+    vector2f(float x, float y);
+    bool checkColinearity(vector2f a);
+    float getx();
+    float gety();
+    float getLen();
+    float dot(vector2f input);
+};
+
+class polygon{
+    protected:
+        vector2f center;
+        std::vector<vector2f> vertex;
+    public:
+        virtual bool checkCollisionDetection(polygon target);
+};
+
 class buttom{
     protected:
         float x ;
