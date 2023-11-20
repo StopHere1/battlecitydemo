@@ -1,10 +1,124 @@
 #define GL_SILENCE_DEPRECATION
 #include <iostream>
 #include <string.h>
+#include <cmath>
 #include "../../public/src/fssimplewindow/src/fssimplewindow.h"
 #include "../../public/src/ysbitmapfont/src/ysglfontdata.h"
 #include "../../public/src/ysbitmap/src/yspng.h"
 #include "../../public/src/yssimplesound/src/yssimplesound.h"
+
+class vector2f {
+protected:
+   float x = 0;
+   float y = 0;
+public:
+    vector2f(float x, float y);
+    bool checkColinearity(vector2f a);
+    float getx(){
+        return x;
+    }
+    float gety(){
+        return y;
+    }
+    float getLen(){
+        return sqrt(x*x+y*y);
+    }
+    float dot(vector2f input){
+        return this->x*input.x+this->y*input.y;
+    }
+    
+};
+
+vector2f::vector2f(float x, float y){
+    this->x = x;
+    this->y = y;
+}
+bool vector2f::checkColinearity(vector2f a){
+    if(a.x/this->x == a.y/this->y){
+        return true;
+    }else if(a.x/this->x == -a.y/this->y){
+        return true;
+    }
+    return false;
+}
+
+class polygon{
+    protected:
+        vector2f center = vector2f(0.0f,0.0f);
+        std::vector<vector2f> vertex;
+    public:
+        virtual bool checkCollision(polygon target);
+
+};
+
+bool polygon::checkCollision(polygon target){
+    std::vector<vector2f> axis;
+    for(size_t index = 0; index < target.vertex.size(); ++index){
+        if(axis.size()==0){
+            axis.push_back(vector2f(vertex[(index+1)%target.vertex.size()].getx()-target.vertex[index].getx(),vertex[(index+1)%target.vertex.size()].gety()-target.vertex[index].gety()));
+        }
+        else{
+            bool flag = false;
+            for (size_t i = 0; i < axis.size(); i++)
+            {
+                if(vector2f(vertex[(index+1)%target.vertex.size()].getx()-target.vertex[index].getx(),vertex[(index+1)%target.vertex.size()].gety()-target.vertex[index].gety()).checkColinearity(axis[i])){
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag)
+            {
+                axis.push_back(vector2f(vertex[(index+1)%target.vertex.size()].getx()-target.vertex[index].getx(),vertex[(index+1)%target.vertex.size()].gety()-target.vertex[index].gety()));
+            }
+            
+        }
+        
+    }
+    for(size_t index = 0; index < this->vertex.size(); ++index){
+        if(axis.size()==0){
+            axis.push_back(vector2f(vertex[(index+1)%this->vertex.size()].getx()-this->vertex[index].getx(),vertex[(index+1)%target.vertex.size()].gety()-this->vertex[index].gety()));
+        }
+        else{
+            bool flag = false;
+            for (size_t i = 0; i < axis.size(); i++)
+            {
+                if(vector2f(vertex[(index+1)%this->vertex.size()].getx()-this->vertex[index].getx(),vertex[(index+1)%this->vertex.size()].gety()-this->vertex[index].gety()).checkColinearity(axis[i])){
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag)
+            {
+                axis.push_back(vector2f(vertex[(index+1)%this->vertex.size()].getx()-this->vertex[index].getx(),vertex[(index+1)%this->vertex.size()].gety()-this->vertex[index].gety()));
+            }
+        }
+    }
+    for(size_t idx = 0; idx <= axis.size(); ++idx){
+        float targetMin = INFINITY;
+        float targetMax = -INFINITY;
+        for(size_t index = 0; index < target.vertex.size(); ++index){
+            if(targetMin > target.vertex[index].dot(axis[idx])/axis[idx].getLen()){
+                targetMin = target.vertex[index].dot(axis[idx])/axis[idx].getLen();
+            }else if(targetMax < target.vertex[index].dot(axis[idx])/axis[idx].getLen()){
+                targetMax = target.vertex[index].dot(axis[idx])/axis[idx].getLen();
+            }
+        }
+        float thisMin = INFINITY;
+        float thisMax = -INFINITY;
+        for(size_t index = 0; index < this->vertex.size(); ++index){
+            if(thisMin > this->vertex[index].dot(axis[idx])/axis[idx].getLen()){
+                thisMin = this->vertex[index].dot(axis[idx])/axis[idx].getLen();
+            }else if(thisMax < this->vertex[index].dot(axis[idx])/axis[idx].getLen()){
+                thisMax = this->vertex[index].dot(axis[idx])/axis[idx].getLen();
+            }
+        }
+        if(targetMax<thisMin||thisMax<targetMin){
+            return false;
+        }
+    }
+    return true;
+}
+
 /* begin of bottom class*/
 class buttom
 {
@@ -75,7 +189,7 @@ void buttom::setstate(int input)
 void buttom::draw()
 {
     glBegin(GL_QUADS);
-    glColor3ub(0,0,0);
+    glColor3ub(120,0,0);
     glVertex2f(x - width / 2.0f-10.0f, y - height / 2.0f-10.0f);
     glVertex2f(x + width / 2.0f+10.0f, y - height / 2.0f-10.0f);
     glVertex2f(x + width / 2.0f+10.0f, y + height / 2.0f+10.0f);
@@ -85,11 +199,11 @@ void buttom::draw()
     glBegin(GL_QUADS);
     if (state == 0)
     {
-        glColor3ub(230, 230, 230);
+        glColor3ub(230, 120, 120);
     }
     else
     {
-        glColor3ub(120, 120, 120);
+        glColor3ub(120, 20, 20);
     }
     glVertex2f(x - width / 2.0f, y - height / 2.0f);
     glVertex2f(x + width / 2.0f, y - height / 2.0f);
