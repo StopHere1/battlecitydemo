@@ -101,7 +101,8 @@ float Sound::volumeDown()
 void Sound::BGM()
 {
     // load BGM
-    std::string bgmName = "../soundlib/0bgm.wav";
+    // std::string bgmName = "../soundlib/0bgm.wav";
+    std::string bgmName = "../soundlib/0bgm1.wav";
     loadSound(bgm, bgmName);
     bgmPlayer.MakeCurrent();
     bgmPlayer.Start();
