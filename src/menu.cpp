@@ -8,6 +8,7 @@
 #include <ctype.h>
 #include <time.h>
 #include <fstream>
+#include "../include/sound.h"
 #include "../../public/src/fssimplewindow/src/fssimplewindow.h"
 #include "../../public/src/ysbitmapfont/src/ysglfontdata.h"
 #include "../../public/src/ysbitmap/src/yspng.h"
@@ -1111,13 +1112,14 @@ void menu::start()
     stage7.push_back(buttom16);
 
     /* initialize your parameters*/
-
-    
+    Sound soundplayer;
+    soundplayer.BGM();
     std::cout<<"Game Initialized"<<std::endl;
 
     /* main game loop*/
     for (;;)
     {
+        
         run(manager,stage0, stage1, stage2, stage3, stage4, stage5, stage6, stage7, background);
         FsPollDevice();
         auto key = FsInkey();
