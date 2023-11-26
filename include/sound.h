@@ -27,6 +27,8 @@ public:
     ~Sound();
     float getBGMVolume();
     float setBGMVolume(float input);
+    float volumeUp(); // if the "Volume Up" button is clicked
+    float volumeDown(); // if the "Volume Down" button is clicked
 
     //load BGM and play in the background
     void BGM(); 

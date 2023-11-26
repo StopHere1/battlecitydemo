@@ -74,6 +74,30 @@ float Sound::setBGMVolume(float input)
     this->bgmVolumeLevel = input;
 }
 
+float Sound::volumeUp()
+{
+    if (bgmVolumeLevel <= 1.0)
+    {
+        this->bgmVolumeLevel += 0.1;
+    }
+    else
+    {
+        this->bgmVolumeLevel = 1.0;
+    }
+}
+
+float Sound::volumeDown()
+{
+    if (bgmVolumeLevel >= 0.0)
+    {
+        this->bgmVolumeLevel -= 0.1;
+    }
+    else
+    {
+        this->bgmVolumeLevel = 0.0;
+    }
+}
+
 void Sound::BGM()
 {
     // load BGM
