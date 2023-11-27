@@ -9,6 +9,7 @@
 #include <time.h>
 #include <fstream>
 #include "../include/sound.h"
+// #include "../include/map.h"
 #include "../../public/src/fssimplewindow/src/fssimplewindow.h"
 #include "../../public/src/ysbitmapfont/src/ysglfontdata.h"
 #include "../../public/src/ysbitmap/src/yspng.h"
@@ -902,6 +903,8 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
             FsSwapBuffers();
         }
     }else if(stage == 5){
+        // Map mapmanager;
+        // mapmanager.choosemap(mapmanager.choice);
         for (;;)
         {
             FsPollDevice();
@@ -914,7 +917,6 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
             int lb, mb, rb, mx, my;
             int mouseEvent;
             mouseEvent = FsGetMouseEvent(lb, mb, rb, mx, my);
-
             if (stage5[0].isinsidebuttom(mx, my))
             {
                 stage5[0].setstate(1);
@@ -941,13 +943,15 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
             {
                 stage5[1].setstate(0);
             }
-
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            
+            // mapmanager.print_map(mapmanager.mapf);
             for (int i = 0; i < stage5.size(); i++)
             {
                 stage5[i].draw();
             }
             FsSwapBuffers();
+           
         }
     }else if(stage == 6){
         for (;;)
@@ -1097,17 +1101,17 @@ void menu::start()
     stage4.push_back(buttom10);
     std::vector<buttom> stage5;
     buttom buttom11(50.0f, 50.0f, 50.0f, 50.0f, "EXIT");
-    buttom buttom12(1225.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
+    buttom buttom12(150.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
     stage5.push_back(buttom11);
     stage5.push_back(buttom12);
     std::vector<buttom> stage6;
     buttom buttom13(50.0f, 50.0f, 50.0f, 50.0f, "EXIT");
-    buttom buttom14(1225.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
+    buttom buttom14(150.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
     stage6.push_back(buttom13);
     stage6.push_back(buttom14);
     std::vector<buttom> stage7;
     buttom buttom15(50.0f, 50.0f, 50.0f, 50.0f, "EXIT");
-    buttom buttom16(1225.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
+    buttom buttom16(150.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
     stage7.push_back(buttom15);
     stage7.push_back(buttom16);
 
@@ -1116,6 +1120,7 @@ void menu::start()
     soundplayer.BGM();
     std::cout<<"Game Initialized"<<std::endl;
 
+    
     /* main game loop*/
     for (;;)
     {

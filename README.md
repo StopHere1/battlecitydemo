@@ -39,6 +39,7 @@ Source Tree:
 --battlecitydemo
  -build
  -include
+ -soundlib
  -src
  -CMakeLists.txt
  -LICENSE
