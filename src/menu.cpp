@@ -501,7 +501,7 @@ public:
     void start();
     void drawBackground(YsRawPngDecoder &background);
     void setstage(int input);
-    void run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2,
+    void run(Sound &soundplayer,UserInfoManager &manager,std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2,
      std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5,std::vector<buttom> &stage6,std::vector<buttom> &stage7, YsRawPngDecoder &background);
 };
 menu::menu()
@@ -533,8 +533,8 @@ stage5: deathbattle
 stage6: occupation
 stage7: timelimited occupation
 */
-void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2, std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5,std::vector<buttom> &stage6,std::vector<buttom> &stage7, YsRawPngDecoder &background)
-{
+void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2, std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5,std::vector<buttom> &stage6,std::vector<buttom> &stage7, YsRawPngDecoder &background)
+{   
     if(stage == 0){
         auto t0=std::chrono::high_resolution_clock::now();
         for(;;){
@@ -554,6 +554,7 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
             if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
                     stage = 1;
+                    soundplayer.playButtonClick();
                     break;
                 }
             char *title = "Click Anywhere to Continue";
@@ -608,6 +609,7 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
                 stage1[0].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {   
+                    soundplayer.playButtonClick();
                     for(size_t index = 0; index < manager.getUsername().size();++index){
                         if(inputUserName.compare(manager.getUsername()[index])==0){
                             if(inputPassword.compare(manager.getPassword()[index])==0){
@@ -631,6 +633,7 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
                 stage1[1].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
+                    soundplayer.playButtonClick();
                     for(size_t index = 0; index < manager.getUsername().size();++index){
                         if(inputUserName.compare(manager.getUsername()[index])==0){
                             if(inputPassword.compare(manager.getPassword()[index])==0){
@@ -705,6 +708,7 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
                 stage2[0].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
+                    soundplayer.playButtonClick();
                     stage = 3;
                     break;
                 }
@@ -719,6 +723,7 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
                 stage2[1].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
+                    soundplayer.playButtonClick();
                     stage = 4;
                     break;
                 }
@@ -733,6 +738,7 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
                 stage2[2].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
+                    soundplayer.playButtonClick();
                     stage = 1;
                     break;
                 }
@@ -770,6 +776,7 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
                 stage3[0].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
+                    soundplayer.playButtonClick();
                     stage = 5;
                     break;
                 }
@@ -784,6 +791,7 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
                 stage3[1].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
+                    soundplayer.playButtonClick();
                     stage = 6;
                     break;
                 }
@@ -797,6 +805,7 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
                 stage3[2].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
+                    soundplayer.playButtonClick();
                     stage = 7;
                     break;
                 }
@@ -811,6 +820,7 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
                 stage3[3].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
+                    soundplayer.playButtonClick();
                     stage = 2;
                     break;
                 }
@@ -847,7 +857,8 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
                 stage4[0].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
-                    /*  increase the volumn */
+                    soundplayer.playButtonClick();
+                    soundplayer.volumeUp();
 
                 }
             }
@@ -861,7 +872,8 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
                 stage4[1].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
-                    /*  decrease the volumn */
+                    soundplayer.playButtonClick();
+                    soundplayer.volumeDown();
                 }
             }
             else
@@ -873,6 +885,7 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
                 stage4[2].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
+                    soundplayer.playButtonClick();
                    /*set winning condition*/
                 }
             }
@@ -886,6 +899,7 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
                 stage4[3].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
+                    soundplayer.playButtonClick();
                     stage = 2;
                     break;
                 }
@@ -922,6 +936,7 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
                 stage5[0].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
+                    soundplayer.playButtonClick();
                     stage = 3;
                     break;
                 }
@@ -936,6 +951,7 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
                 stage5[1].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
+                    soundplayer.playButtonClick();
                     /* pause */
                 }
             }
@@ -972,6 +988,7 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
                 stage6[0].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
+                    soundplayer.playButtonClick();
                     stage = 3;
                     break;
                 }
@@ -986,6 +1003,7 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
                 stage6[1].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
+                    soundplayer.playButtonClick();
                     /* pause */
                 }
             }
@@ -1020,6 +1038,7 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
                 stage7[0].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
+                    soundplayer.playButtonClick();
                     stage = 3;
                     break;
                 }
@@ -1034,6 +1053,7 @@ void menu::run(UserInfoManager &manager,std::vector<buttom> &stage0, std::vector
                 stage7[1].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
+                    soundplayer.playButtonClick();
                     /* pause */
                 }
             }
@@ -1117,6 +1137,7 @@ void menu::start()
 
     /* initialize your parameters*/
     Sound soundplayer;
+    soundplayer.loadEffects();
     soundplayer.BGM();
     std::cout<<"Game Initialized"<<std::endl;
 
@@ -1124,8 +1145,7 @@ void menu::start()
     /* main game loop*/
     for (;;)
     {
-        
-        run(manager,stage0, stage1, stage2, stage3, stage4, stage5, stage6, stage7, background);
+        run(soundplayer ,manager,stage0, stage1, stage2, stage3, stage4, stage5, stage6, stage7, background);
         FsPollDevice();
         auto key = FsInkey();
         if (key == FSKEY_ESC)

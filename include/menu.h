@@ -2,6 +2,7 @@
 #define MENU_23341234124341
 #define GL_SILENCE_DEPRECATION
 #include <iostream>
+#include "../include/sound.h"
 #include "../../public/src/fssimplewindow/src/fssimplewindow.h"
 #include "../../public/src/ysbitmapfont/src/ysglfontdata.h"
 #include "../../public/src/ysbitmap/src/yspng.h"
@@ -106,7 +107,7 @@ class menu{
     void start();
     void drawBackground(YsRawPngDecoder &background);
     void setstage(int input);
-    void run(UserInfoManager &manager, std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2, std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5,std::vector<buttom> &stage6,std::vector<buttom> &stage7, YsRawPngDecoder &background);
+    void run(Sound &soundplayer, UserInfoManager &manager, std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2, std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5,std::vector<buttom> &stage6,std::vector<buttom> &stage7, YsRawPngDecoder &background);
 };
 
 #endif
