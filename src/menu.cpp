@@ -9,7 +9,7 @@
 #include <time.h>
 #include <fstream>
 #include "../include/sound.h"
-// #include "../include/map.h"
+#include "../include/map.h"
 #include "../../public/src/fssimplewindow/src/fssimplewindow.h"
 #include "../../public/src/ysbitmapfont/src/ysglfontdata.h"
 #include "../../public/src/ysbitmap/src/yspng.h"
@@ -917,8 +917,8 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             FsSwapBuffers();
         }
     }else if(stage == 5){
-        // Map mapmanager;
-        // mapmanager.choosemap(mapmanager.choice);
+        Map mapmanager;
+        mapmanager.choosemap(3);
         for (;;)
         {
             FsPollDevice();
@@ -961,7 +961,7 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             }
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             
-            // mapmanager.print_map(mapmanager.mapf);
+            mapmanager.print_map(mapmanager.mapf);
             for (int i = 0; i < stage5.size(); i++)
             {
                 stage5[i].draw();
