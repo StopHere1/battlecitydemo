@@ -10,6 +10,7 @@
 #include <fstream>
 #include "../include/sound.h"
 #include "../include/map.h"
+#include "../include/tank.h"
 #include "../../public/src/fssimplewindow/src/fssimplewindow.h"
 #include "../../public/src/ysbitmapfont/src/ysglfontdata.h"
 #include "../../public/src/ysbitmap/src/yspng.h"
@@ -919,6 +920,34 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
     }else if(stage == 5){
         Map mapmanager;
         mapmanager.choosemap(3);
+        tank testTank1;
+        Bullet testBullet1 = Bullet(1);
+        Bullet testBullet2 = Bullet(2);
+        Bullet testBullet3 = Bullet(3);
+        std::list<Bullet> bulletPack1;
+        for(int i = 0; i<5; ++i){
+            bulletPack1.push_back(testBullet1);
+        }
+        std::list<Bullet> bulletPack2;
+        for(int i = 0; i<5; ++i){
+            bulletPack2.push_back(testBullet2);
+        }
+        std::list<Bullet> bulletPack3;
+        for(int i = 0; i<5; ++i){
+            bulletPack3.push_back(testBullet3);
+        }
+        testTank1.init(tank::type1);//magSize = 10
+        testTank1.pickUpBullet(bulletPack1);
+        testTank1.pickUpBullet(bulletPack2);
+        testTank1.pickUpBullet(bulletPack3);//pick up 15 bullets
+    //    testTank1.pickUpHealth(healthPack);
+        testTank1.singleReload();//reload 1 bullet
+        testTank1.reload();//reload 10 bullets
+        testTank1.singleReload();//reload 1 bullet again
+
+        testTank1.printBulletMag();
+        testTank1.printBulletLoad();//should be 4 bullets in the load
+        // testTank1.checkLoad();
         for (;;)
         {
             FsPollDevice();
@@ -960,7 +989,10 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                 stage5[1].setstate(0);
             }
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            
+            testTank1.move(key);
+            testTank1.checkFire(key);//fire if space is pressed
+            testTank1.draw(40);//default size is 40
+            testTank1.rotate(key);
             mapmanager.print_map(mapmanager.mapf);
             for (int i = 0; i < stage5.size(); i++)
             {
@@ -1142,6 +1174,9 @@ void menu::start()
     std::cout<<"Game Initialized"<<std::endl;
 
     
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0, 1280, 720, 0);
     /* main game loop*/
     for (;;)
     {

@@ -1,3 +1,4 @@
+#define GL_SILENCE_DEPRECATION
 #include "../include/Bullet.h"
 
 //Public

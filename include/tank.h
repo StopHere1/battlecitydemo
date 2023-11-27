@@ -14,7 +14,7 @@
 
 class tank {
 public:
-    tank() { posX = 0; posY = 0; armor = 0; health = 0; load = 0; speed = 0; power = 0; weight = 0; state = 0; magSize = 0; bulletMag = {}; bulletLoad = {}; healthLoad = {};};
+    tank() { posX = 0; posY = 0; armor = 0; health = 0; load = 0; speed = 0; power = 0; weight = 0; state = 0; magSize = 0; std::list<Bullet> bulletMag; std::list<Bullet> bulletLoad ;};
     enum Type {type1, type2, type3, type4};// tank Type
     float getPosX();
     float getPosY();
@@ -47,12 +47,12 @@ public:
     void reload();
     void fire();
     void checkFire(int key);
-    void checkLoad();
+    // void checkLoad();
     void printBulletMag();
     void printBulletLoad();
-    void heal();//heal tank
+    // void heal();//heal tank
     void pickUpBullet(std::list<Bullet> bulletPack);//pick up bullet package
-    void pickUpHealth(std::list<Tool> healthPack);//pick up health package
+    // void pickUpHealth(std::list<Tool> healthPack);//pick up health package
     void draw(float size);//draw tank according to its Type and size, location is determined by posX and posY
     void rotate(int key);//rotate tank aiming direction
 
@@ -78,7 +78,7 @@ protected:
 //    std::list<Bullet> bulletShot; // list for storing bullet shot
     Bullet bulletShot; // bullet shot only one at a time
     std::list<Bullet> bulletLoad; // list for storing bullet packages
-    std::list<Tool> healthLoad; // list for storing health packages
+    // std::list<Tool> healthLoad; // list for storing health packages
 };
 
 

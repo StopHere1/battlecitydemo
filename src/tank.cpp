@@ -1,6 +1,7 @@
 //
 // Created by anthonyshen on 11/13/23.
 //
+#define GL_SILENCE_DEPRECATION
 #include "../include/tank.h"
 #include <iostream>
 #include <cstring>
@@ -197,18 +198,18 @@ void tank::fire() {
     }
 }
 
-void tank::checkLoad() {//check the bulletLoad and healthLoad
-    if(!bulletLoad.empty()){
-        std::cout << "Bullet Pack Remains: " << bulletLoad.size() << std::endl;
-    } else {
-        std::cout << "Error: Bullet Load Empty!" << std::endl;
-    }
-    if(!healthLoad.empty()){
-        std::cout << "Health Pack Remains: " << healthLoad.size() << std::endl;
-    } else {
-        std::cout << "Error: Health Load Empty!" << std::endl;
-    }
-}
+// void tank::checkLoad() {//check the bulletLoad and healthLoad
+//     if(!bulletLoad.empty()){
+//         std::cout << "Bullet Pack Remains: " << bulletLoad.size() << std::endl;
+//     } else {
+//         std::cout << "Error: Bullet Load Empty!" << std::endl;
+//     }
+//     if(!healthLoad.empty()){
+//         std::cout << "Health Pack Remains: " << healthLoad.size() << std::endl;
+//     } else {
+//         std::cout << "Error: Health Load Empty!" << std::endl;
+//     }
+// }
 
 void tank::printBulletMag() {//print the bullets in the mag
     if(bulletMag.empty()){
@@ -223,19 +224,19 @@ void tank::printBulletMag() {//print the bullets in the mag
     }
 }
 
-void tank::heal() {//heal the tank
-    if(!healthLoad.empty()){
-        if(health + 50 <= healthMax){
-            health += 50;
-            healthLoad.pop_front();
-        } else {
-            health = healthMax;
-            healthLoad.pop_front();
-        }
-    } else {
-        std::cout << "Error: Health Load Empty!" << std::endl;
-    }
-}
+// void tank::heal() {//heal the tank
+//     if(!healthLoad.empty()){
+//         if(health + 50 <= healthMax){
+//             health += 50;
+//             healthLoad.pop_front();
+//         } else {
+//             health = healthMax;
+//             healthLoad.pop_front();
+//         }
+//     } else {
+//         std::cout << "Error: Health Load Empty!" << std::endl;
+//     }
+// }
 
 void tank::pickUpBullet(std::list<Bullet> bulletPack) {//pick up bullet package to bulletLoad
     if(bulletLoad.size() >= load){
@@ -250,18 +251,18 @@ void tank::pickUpBullet(std::list<Bullet> bulletPack) {//pick up bullet package 
     }
 }
 
-void tank::pickUpHealth(std::list<Tool> healthPack) {//pick up health package to healthLoad
-    if(healthLoad.size() >= load){
-        std::cout << "Error: Health Load Full!" << std::endl;
-    }
-    else {
-        while (!healthPack.empty() && healthLoad.size() < load) {
-            //use splice to move the first element of healthPack to the end of healthLoad
-            healthLoad.splice(healthLoad.end(), healthPack, healthPack.begin());
-        }
-        std::cout << "Health Resupply Success!" << std::endl;
-    }
-}
+// void tank::pickUpHealth(std::list<Tool> healthPack) {//pick up health package to healthLoad
+//     if(healthLoad.size() >= load){
+//         std::cout << "Error: Health Load Full!" << std::endl;
+//     }
+//     else {
+//         while (!healthPack.empty() && healthLoad.size() < load) {
+//             //use splice to move the first element of healthPack to the end of healthLoad
+//             healthLoad.splice(healthLoad.end(), healthPack, healthPack.begin());
+//         }
+//         std::cout << "Health Resupply Success!" << std::endl;
+//     }
+// }
 
 void tank::printBulletLoad() {//print the bullets in the bulletLoad
     if(bulletLoad.empty()){
