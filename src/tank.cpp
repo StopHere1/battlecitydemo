@@ -42,6 +42,9 @@ int tank::getMagSize() {
 float tank::getFireAngle() {
     return fireAngle;
 }
+int tank::getDirection() {
+    return direction;
+}
 void tank::setPosX(float input) {
     posX = input;
 }
@@ -78,6 +81,9 @@ void tank::setMagSize(int input) {
 void tank::setFireAngle(float input) {
     fireAngle = input;
 }
+void tank::setDirection(int input) {
+    direction = input;
+}
 float calSpeed(float power, int load, float weight) {
     return power/(load+weight);
 }
@@ -94,6 +100,7 @@ int tank::init(Type type) {
         this->load = 100;
         this->magSize = 10;
         this->fireAngle = 0;
+        this->direction = 0;
         this->power = 100;
         this->speed = 10;
         return 0;
@@ -107,6 +114,7 @@ int tank::init(Type type) {
         this->healthMax = 100;
         this->load = 50;
         this->magSize = 5;
+        this->direction = 0;
         this->fireAngle = 0;
         this->power = 100;
         this->speed = 20;
@@ -122,6 +130,7 @@ int tank::init(Type type) {
         this->load = 100;
         this->magSize = 20;
         this->fireAngle = 0;
+        this->direction = 0;
         this->power = 200;
         this->speed = 5;
         return 0;
@@ -136,6 +145,7 @@ int tank::init(Type type) {
         this->load = 200;
         this->magSize = 10;
         this->fireAngle = 0;
+        this->direction = 0;
         this->power = 200;
         this->speed = 10;
         return 0;
@@ -147,18 +157,21 @@ int tank::init(Type type) {
 
 void tank::move(int key)
 {
-
     if(key == FSKEY_W || key == FSKEY_UP){
         this->posY -= speed;
+        this->direction = 0;
     }
     if(key == FSKEY_S || key == FSKEY_DOWN){
         this->posY += speed;
+        this->direction = 0;
     }
     if(key == FSKEY_A || key == FSKEY_LEFT){
         this->posX -= speed;
+        this->direction = 1;
     }
     if(key == FSKEY_D || key == FSKEY_RIGHT){
         this->posX += speed;
+        this->direction = 1;
     }
 }
 
@@ -191,25 +204,24 @@ void tank::fire() {
         bulletShot = bulletMag.front();
         bulletMag.pop_front();
         bulletShot.ShootBullet();
-        bulletShot.Draw(posX, posY, fireAngle);
         std::cout << "Fire Success!" << std::endl;
     } else {
         std::cout << "Error: Need Reload!" << std::endl;
     }
 }
 
-// void tank::checkLoad() {//check the bulletLoad and healthLoad
-//     if(!bulletLoad.empty()){
-//         std::cout << "Bullet Pack Remains: " << bulletLoad.size() << std::endl;
-//     } else {
-//         std::cout << "Error: Bullet Load Empty!" << std::endl;
-//     }
-//     if(!healthLoad.empty()){
-//         std::cout << "Health Pack Remains: " << healthLoad.size() << std::endl;
-//     } else {
-//         std::cout << "Error: Health Load Empty!" << std::endl;
-//     }
-// }
+//void tank::checkLoad() {//check the bulletLoad and healthLoad
+//    if(!bulletLoad.empty()){
+//        std::cout << "Bullet Pack Remains: " << bulletLoad.size() << std::endl;
+//    } else {
+//        std::cout << "Error: Bullet Load Empty!" << std::endl;
+//    }
+//    if(!healthLoad.empty()){
+//        std::cout << "Health Pack Remains: " << healthLoad.size() << std::endl;
+//    } else {
+//        std::cout << "Error: Health Load Empty!" << std::endl;
+//    }
+//}
 
 void tank::printBulletMag() {//print the bullets in the mag
     if(bulletMag.empty()){
@@ -224,19 +236,19 @@ void tank::printBulletMag() {//print the bullets in the mag
     }
 }
 
-// void tank::heal() {//heal the tank
-//     if(!healthLoad.empty()){
-//         if(health + 50 <= healthMax){
-//             health += 50;
-//             healthLoad.pop_front();
-//         } else {
-//             health = healthMax;
-//             healthLoad.pop_front();
-//         }
-//     } else {
-//         std::cout << "Error: Health Load Empty!" << std::endl;
-//     }
-// }
+//void tank::heal() {//heal the tank
+//    if(!healthLoad.empty()){
+//        if(health + 50 <= healthMax){
+//            health += 50;
+//            healthLoad.pop_front();
+//        } else {
+//            health = healthMax;
+//            healthLoad.pop_front();
+//        }
+//    } else {
+//        std::cout << "Error: Health Load Empty!" << std::endl;
+//    }
+//}
 
 void tank::pickUpBullet(std::list<Bullet> bulletPack) {//pick up bullet package to bulletLoad
     if(bulletLoad.size() >= load){
@@ -251,18 +263,18 @@ void tank::pickUpBullet(std::list<Bullet> bulletPack) {//pick up bullet package 
     }
 }
 
-// void tank::pickUpHealth(std::list<Tool> healthPack) {//pick up health package to healthLoad
-//     if(healthLoad.size() >= load){
-//         std::cout << "Error: Health Load Full!" << std::endl;
-//     }
-//     else {
-//         while (!healthPack.empty() && healthLoad.size() < load) {
-//             //use splice to move the first element of healthPack to the end of healthLoad
-//             healthLoad.splice(healthLoad.end(), healthPack, healthPack.begin());
-//         }
-//         std::cout << "Health Resupply Success!" << std::endl;
-//     }
-// }
+//void tank::pickUpHealth(std::list<Tool> healthPack) {//pick up health package to healthLoad
+//    if(healthLoad.size() >= load){
+//        std::cout << "Error: Health Load Full!" << std::endl;
+//    }
+//    else {
+//        while (!healthPack.empty() && healthLoad.size() < load) {
+//            //use splice to move the first element of healthPack to the end of healthLoad
+//            healthLoad.splice(healthLoad.end(), healthPack, healthPack.begin());
+//        }
+//        std::cout << "Health Resupply Success!" << std::endl;
+//    }
+//}
 
 void tank::printBulletLoad() {//print the bullets in the bulletLoad
     if(bulletLoad.empty()){
@@ -277,15 +289,25 @@ void tank::printBulletLoad() {//print the bullets in the bulletLoad
     }
 }
 
-void drawBlk(float x, float y, float width) {//draw black block, standard size 40, posX, posY is the center of the block
-    float ratio = width/40;
+void drawBlk(float x, float y, float width, int direction) {//draw black block, standard size 40, posX, posY is the center of the block
+    float ratio = width / 40;
     glColor3ub(0, 0, 0);
-    glBegin(GL_QUADS);
-    glVertex2f(x-4*ratio, y-2*ratio);
-    glVertex2f(x+4*ratio, y-2*ratio);
-    glVertex2f(x+4*ratio, y+2*ratio);
-    glVertex2f(x-4*ratio, y+2*ratio);
-    glEnd();
+    if (direction == 0) {
+        glBegin(GL_QUADS);
+        glVertex2f(x - 4 * ratio, y - 2 * ratio);
+        glVertex2f(x + 4 * ratio, y - 2 * ratio);
+        glVertex2f(x + 4 * ratio, y + 2 * ratio);
+        glVertex2f(x - 4 * ratio, y + 2 * ratio);
+        glEnd();
+    }
+    else {
+        glBegin(GL_QUADS);
+        glVertex2f(x - 2 * ratio, y - 4 * ratio);
+        glVertex2f(x + 2 * ratio, y - 4 * ratio);
+        glVertex2f(x + 2 * ratio, y + 4 * ratio);
+        glVertex2f(x - 2 * ratio, y + 4 * ratio);
+        glEnd();
+    }
 }
 
 void drawAim(float x, float y, float width, float angle) {//draw aim, standard size 40, posX, posY is the center of the aim
@@ -306,79 +328,142 @@ void drawAim(float x, float y, float width, float angle) {//draw aim, standard s
     glPopMatrix();
 }
 
-void drawBody(float x, float y, float width) {//draw tank body, standard size 40, posX, posY is the center of the tank
-    float ratio = width/40;
-    glBegin(GL_QUADS);
-    glVertex2f(x-20*ratio, y-20*ratio);
-    glVertex2f(x-12*ratio, y-20*ratio);
-    glVertex2f(x-12*ratio, y+20*ratio);
-    glVertex2f(x-20*ratio, y+20*ratio);
-    glEnd();
-    glBegin(GL_QUADS);
-    glVertex2f(x+20*ratio, y-20*ratio);
-    glVertex2f(x+12*ratio, y-20*ratio);
-    glVertex2f(x+12*ratio, y+20*ratio);
-    glVertex2f(x+20*ratio, y+20*ratio);
-    glEnd();
-    //draw the tank body with red color
-    glBegin(GL_QUADS);
-    glVertex2f(x-12*ratio, y-13*ratio);
-    glVertex2f(x+12*ratio, y-13*ratio);
-    glVertex2f(x+12*ratio, y+13*ratio);
-    glVertex2f(x-12*ratio, y+13*ratio);
-    glEnd();
+void drawBody(float x, float y, float width, int direction) {//draw tank body, standard size 40, posX, posY is the center of the tank
+    float ratio = width / 40;
+    if (direction == 1) {//horizontal
+        glBegin(GL_QUADS);
+        glVertex2f(x - 20 * ratio, y - 20 * ratio);
+        glVertex2f(x - 20 * ratio, y - 12 * ratio);
+        glVertex2f(x + 20 * ratio, y - 12 * ratio);
+        glVertex2f(x + 20 * ratio, y - 20 * ratio);
+        glEnd();
+        glBegin(GL_QUADS);
+        glVertex2f(x + 20 * ratio, y + 20 * ratio);
+        glVertex2f(x + 20 * ratio, y + 12 * ratio);
+        glVertex2f(x - 20 * ratio, y + 12 * ratio);
+        glVertex2f(x - 20 * ratio, y + 20 * ratio);
+        glEnd();
+        //draw the tank body with red color
+        glBegin(GL_QUADS);
+        glVertex2f(x - 13 * ratio, y - 12 * ratio);
+        glVertex2f(x + 13 * ratio, y - 12 * ratio);
+        glVertex2f(x + 13 * ratio, y + 12 * ratio);
+        glVertex2f(x - 13 * ratio, y + 12 * ratio);
+        glEnd();
+    }
+    else if(direction == 0){//vertical
+        glBegin(GL_QUADS);
+        glVertex2f(x-20*ratio, y-20*ratio);
+        glVertex2f(x-12*ratio, y-20*ratio);
+        glVertex2f(x-12*ratio, y+20*ratio);
+        glVertex2f(x-20*ratio, y+20*ratio);
+        glEnd();
+        glBegin(GL_QUADS);
+        glVertex2f(x+20*ratio, y-20*ratio);
+        glVertex2f(x+12*ratio, y-20*ratio);
+        glVertex2f(x+12*ratio, y+20*ratio);
+        glVertex2f(x+20*ratio, y+20*ratio);
+        glEnd();
+        //draw the tank body with red color
+        glBegin(GL_QUADS);
+        glVertex2f(x-12*ratio, y-13*ratio);
+        glVertex2f(x+12*ratio, y-13*ratio);
+        glVertex2f(x+12*ratio, y+13*ratio);
+        glVertex2f(x-12*ratio, y+13*ratio);
+        glEnd();
+    }
 }
 
 void tank::draw(float width) {//draw tank according to its Type, standard size 40, posX, posY is the center of the tank
     float ratio = width/40;
     bulletShot.Draw(posX, posY, fireAngle);
-    if(this->tankType == type1){
+    if(this->tankType == type1) {
         //draw the tank wheel with red color
         glColor3ub(128, 30, 0);
-        drawBody(posX, posY, width);
+        drawBody(posX, posY, width, this->direction);
         //draw the wheel gap with black color
-        for(int i= 0; i < 5; i++){
-            drawBlk(posX-16*ratio, posY-16*ratio+8*ratio*i, width);
+        if (this->direction == 0) {
+            for (int i = 0; i < 5; i++) {
+                drawBlk(posX - 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
+            }
+            for (int i = 0; i < 5; i++) {
+                drawBlk(posX + 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
+            }
         }
-        for(int i= 0; i < 5; i++){
-            drawBlk(posX+16*ratio, posY-16*ratio+8*ratio*i, width);
+        else {
+            for (int i = 0; i < 5; i++) {
+                drawBlk(posX - 16 * ratio + 8 * ratio * i, posY - 16 * ratio, width, this->direction);
+            }
+            for (int i = 0; i < 5; i++) {
+                drawBlk(posX - 16 * ratio + 8 * ratio * i, posY + 16 * ratio, width, this->direction);
+            }
         }
         //draw the tank head with red color
         glColor3ub(255, 30, 0);
         drawAim(posX, posY, width, fireAngle);
     } else if(this->tankType == type2){
         glColor3ub(30,128,0);
-        drawBody(posX, posY, width);
+        drawBody(posX, posY, width, this->direction);
         //draw the wheel gap with black color
-        for(int i= 0; i < 5; i++){
-            drawBlk(posX-16*ratio, posY-16*ratio+8*ratio*i, width);
+        if (this->direction == 0) {
+            for (int i = 0; i < 5; i++) {
+                drawBlk(posX - 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
+            }
+            for (int i = 0; i < 5; i++) {
+                drawBlk(posX + 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
+            }
         }
-        for(int i= 0; i < 5; i++){
-            drawBlk(posX+16*ratio, posY-16*ratio+8*ratio*i, width);
+        else {
+            for (int i = 0; i < 5; i++) {
+                drawBlk(posX - 16 * ratio + 8 * ratio * i, posY - 16 * ratio, width, this->direction);
+            }
+            for (int i = 0; i < 5; i++) {
+                drawBlk(posX - 16 * ratio + 8 * ratio * i, posY + 16 * ratio, width, this->direction);
+            }
         }
         glColor3ub(30,255,0);
         drawAim(posX, posY, width, fireAngle);
     } else if(this->tankType == type3){
         glColor3ub(0,30,128);
-        drawBody(posX, posY, width);
+        drawBody(posX, posY, width, this->direction);
         //draw the wheel gap with black color
-        for(int i= 0; i < 5; i++){
-            drawBlk(posX-16*ratio, posY-16*ratio+8*ratio*i, width);
+        if (this->direction == 0) {
+            for (int i = 0; i < 5; i++) {
+                drawBlk(posX - 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
+            }
+            for (int i = 0; i < 5; i++) {
+                drawBlk(posX + 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
+            }
         }
-        for(int i= 0; i < 5; i++){
-            drawBlk(posX+16*ratio, posY-16*ratio+8*ratio*i, width);
+        else {
+            for (int i = 0; i < 5; i++) {
+                drawBlk(posX - 16 * ratio + 8 * ratio * i, posY - 16 * ratio, width, this->direction);
+            }
+            for (int i = 0; i < 5; i++) {
+                drawBlk(posX - 16 * ratio + 8 * ratio * i, posY + 16 * ratio, width, this->direction);
+            }
         }
         glColor3ub(0,30,255);
         drawAim(posX, posY, width, fireAngle);
     } else if(this->tankType == type4){
         glColor3ub(128,128,0);
-        drawBody(posX, posY, width);
+        drawBody(posX, posY, width, this->direction);
         //draw the wheel gap with black color
-        for(int i= 0; i < 5; i++){
-            drawBlk(posX-16*ratio, posY-16*ratio+8*ratio*i, width);
+        if (this->direction == 0) {
+            for (int i = 0; i < 5; i++) {
+                drawBlk(posX - 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
+            }
+            for (int i = 0; i < 5; i++) {
+                drawBlk(posX + 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
+            }
         }
-        for(int i= 0; i < 5; i++){
-            drawBlk(posX+16*ratio, posY-16*ratio+8*ratio*i, width);
+        else {
+            for (int i = 0; i < 5; i++) {
+                drawBlk(posX - 16 * ratio + 8 * ratio * i, posY - 16 * ratio, width, this->direction);
+            }
+            for (int i = 0; i < 5; i++) {
+                drawBlk(posX - 16 * ratio + 8 * ratio * i, posY + 16 * ratio, width, this->direction);
+            }
         }
         glColor3ub(200,200,0);
         drawAim(posX, posY, width, fireAngle);
@@ -408,14 +493,9 @@ void tank::rotate(int key) {
     }
 }
 
-void tank::checkFire(int key) {
+void tank::checkFire(int key) {//TODO:check the bulletShot whether hit the target
     if(key == FSKEY_SPACE){
-        if(!bulletShot.GetIsHit()){
-            this->fire();
-        }
-        else {
-            std::cout << "Error: Bullet Is Still Alive" << std::endl;
-        }
+        this->fire();
     }
 }
 
