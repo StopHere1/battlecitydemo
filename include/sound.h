@@ -30,10 +30,10 @@ public:
     float volumeUp(); // if the "Volume Up" button is clicked
     float volumeDown(); // if the "Volume Down" button is clicked
 
-    //load BGM and play in the background
+    //play BGM in the background
     void BGM(); 
     
-    // load sound effects and start the effectPlayer
+    // load BGM and all sound effects, and start the effectPlayer
     void loadEffects(); 
     // play one shot of respective sound effects //
     void playButtonClick(); // click on the menu button

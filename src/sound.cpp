@@ -33,6 +33,10 @@ Sound::~Sound()
 
 void Sound::loadEffects()
 {
+    // load BGM
+    // std::string bgmName = "../soundlib/0bgm.wav";
+    std::string bgmName = "../soundlib/0bgm1.wav";
+    loadSound(bgm, bgmName);
     // load Sound Effects
     loadSound(selection[0], "../soundlib/1buttonClicked.wav");
     loadSound(selection[1], "../soundlib/2loadSelected.wav");
@@ -106,10 +110,6 @@ float Sound::volumeDown()
 
 void Sound::BGM()
 {
-    // load BGM
-    // std::string bgmName = "../soundlib/0bgm.wav";
-    std::string bgmName = "../soundlib/0bgm1.wav";
-    loadSound(bgm, bgmName);
     printf("volume = %f", bgmVolumeLevel);
     bgmPlayer.MakeCurrent();
     bgmPlayer.Start();
