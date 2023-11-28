@@ -1,7 +1,9 @@
 #ifndef MAP_H
 #define MAP_H
-//#include"fssimplewindow.h"
-#include "../../public/src/fssimplewindow/src/fssimplewindow.h"
+
+#include"fssimplewindow.h"
+//#include "../../public/src/fssimplewindow/src/fssimplewindow.h"
+
 #include<chrono>
 
 //block:
@@ -38,6 +40,7 @@ public:
 	bool checkCollision2(int boxX, int boxY, int wallI, int wallJ);
 	void deleteWall(int i, int j);
 	void do_delete(int& x, int& y, int mapp[wid][len]);
+	void do_delete2(int& x, int& y, int mapp[wid][len]);
 
 
 	using Clock = std::chrono::high_resolution_clock;
@@ -47,8 +50,10 @@ public:
 	void change_block(int& x, int& y,  int mapp[wid][len]);
 	void change_block2(int& x, int& y, int mapp[wid][len]);
 	bool not_move(int& x, int& y, int& prex, int& prey);
+	bool not_move2(int& x, int& y, int& prex, int& prey);
 	void copymap(int mapp[wid][len]);
 	void testbox(int& x, int& y);
+	void testbullet(int& x, int& y);
 	void choosemap(int choice);
 
 	TimePoint t0 = Clock::now();  //
@@ -56,6 +61,5 @@ public:
 
 	~Map();
 };
-
 
 #endif
