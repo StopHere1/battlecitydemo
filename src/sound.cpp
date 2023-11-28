@@ -73,12 +73,12 @@ float Sound::getBGMVolume()
     return bgmVolumeLevel;
 }
 
-float Sound::setBGMVolume(float input)
+void Sound::setBGMVolume(float input)
 {
     this->bgmVolumeLevel = input;
 }
 
-float Sound::volumeUp()
+void Sound::volumeUp()
 {
     bgmPlayer.Stop(bgm);
     if (bgmVolumeLevel < 1.0)
@@ -93,7 +93,7 @@ float Sound::volumeUp()
     BGM();
 }
 
-float Sound::volumeDown()
+void Sound::volumeDown()
 {
     bgmPlayer.Stop(bgm);
     if (bgmVolumeLevel > 0.0)
