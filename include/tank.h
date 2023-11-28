@@ -14,7 +14,7 @@
 
 class tank {
 public:
-    tank() { posX = 0; posY = 0; armor = 0; health = 0; load = 0; speed = 0; power = 0; weight = 0; state = 0; magSize = 0; fireAngle = 0; direction =0 ;healthMax = 100; tankType = type1; }
+    tank() { posX = 0; posY = 0; armor = 0; health = 0; load = 0; speed = 0; power = 0; weight = 0; state = 0; magSize = 0; fireAngle = 0; direction =0 ;healthMax = 100; tankType = type1; user = 0;}
     enum Type {type1, type2, type3, type4};// tank Type
     float getPosX();
     float getPosY();
@@ -29,6 +29,7 @@ public:
     int getMagSize();
     int getDirection();
     float getFireAngle();
+    int getUser();
     void setPosX(float input);
     void setPosY(float input);
     void setArmor(float input);
@@ -42,11 +43,12 @@ public:
     void setMagSize(int input);
     void setFireAngle(float input);
     void setDirection(int input);
+    void setUser(int input);
 
-    int init(Type type);
+    int init(Type type, int user);
     void move(int key);
-    void singleReload();
-    void reload();
+    void singleReload(int key);
+    void reload(int key);
     void fire();
     void checkFire(int key);
 //    void checkLoad();
@@ -63,6 +65,7 @@ public:
 
     ~tank()= default;
 protected:
+    int user; //0 for player 1, 1 for player2
     float posX; // position x of tank
     float posY; // position y of tank
     float armor; // armor of tank

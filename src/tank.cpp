@@ -45,6 +45,9 @@ float tank::getFireAngle() {
 int tank::getDirection() {
     return direction;
 }
+int tank::getUser() {
+    return user;
+}
 void tank::setPosX(float input) {
     posX = input;
 }
@@ -87,8 +90,15 @@ void tank::setDirection(int input) {
 float calSpeed(float power, int load, float weight) {
     return power/(load+weight);
 }
+void tank::setUser(int input) {
+    if(input == 0 || input == 1){
+        user = input;
+    } else {
+        printf("Error: User Type not found");
+    }
+}
 
-int tank::init(Type type) {
+int tank::init(Type type, int user) {
     if(type == type1){//standard tank
         this->tankType = type1;
         this->posX = 0;
@@ -103,6 +113,7 @@ int tank::init(Type type) {
         this->direction = 0;
         this->power = 100;
         this->speed = 10;
+        this->user = user;
         return 0;
     } else if (type == type2){//fast tank
         this->tankType = type2;
@@ -118,6 +129,7 @@ int tank::init(Type type) {
         this->fireAngle = 0;
         this->power = 100;
         this->speed = 20;
+        this->user = user;
         return 0;
     } else if (type == type3){//heavy tank
         this->tankType = type3;
@@ -133,6 +145,7 @@ int tank::init(Type type) {
         this->direction = 0;
         this->power = 200;
         this->speed = 5;
+        this->user = user;
         return 0;
     } else if (type == type4){//Load tank
         this->tankType = type4;
@@ -148,6 +161,7 @@ int tank::init(Type type) {
         this->direction = 0;
         this->power = 200;
         this->speed = 10;
+        this->user = user;
         return 0;
     } else {
         printf("Error: tank Type not found");
@@ -157,44 +171,68 @@ int tank::init(Type type) {
 
 void tank::move(int key)
 {
-    if(key == FSKEY_W || key == FSKEY_UP){
-        this->posY -= speed;
-        this->direction = 0;
+    if(this->user == 0){
+        if(key == FSKEY_W){
+            this->posY -= speed;
+            this->direction = 0;
+        }
+        if(key == FSKEY_S ){
+            this->posY += speed;
+            this->direction = 0;
+        }
+        if(key == FSKEY_A ){
+            this->posX -= speed;
+            this->direction = 1;
+        }
+        if(key == FSKEY_D ){
+            this->posX += speed;
+            this->direction = 1;
+        }
     }
-    if(key == FSKEY_S || key == FSKEY_DOWN){
-        this->posY += speed;
-        this->direction = 0;
-    }
-    if(key == FSKEY_A || key == FSKEY_LEFT){
-        this->posX -= speed;
-        this->direction = 1;
-    }
-    if(key == FSKEY_D || key == FSKEY_RIGHT){
-        this->posX += speed;
-        this->direction = 1;
+    else if(this->user == 1){
+        if(key == FSKEY_UP){
+            this->posY -= speed;
+            this->direction = 0;
+        }
+        if(key == FSKEY_DOWN){
+            this->posY += speed;
+            this->direction = 0;
+        }
+        if(key == FSKEY_LEFT){
+            this->posX -= speed;
+            this->direction = 1;
+        }
+        if(key == FSKEY_RIGHT){
+            this->posX += speed;
+            this->direction = 1;
+        }
     }
 }
 
-void tank::singleReload(){//load one bullet from bulletLoad to bulletMag, less time cost
+void tank::singleReload(int key){//load one bullet from bulletLoad to bulletMag, less time cost
     //use splice to move the first element of bulletLoad to the end of bulletMag
-    if(bulletMag.size() < magSize) {
-        while (!bulletLoad.empty() && bulletMag.size() < magSize) {
-            bulletMag.splice(bulletMag.end(), bulletLoad, bulletLoad.begin());
+    if((key == FSKEY_T && user ==0) || (key == FSKEY_9 && user == 1)) {
+        if(bulletMag.size() < magSize) {
+            while (!bulletLoad.empty() && bulletMag.size() < magSize) {
+                bulletMag.splice(bulletMag.end(), bulletLoad, bulletLoad.begin());
+            }
+            std::cout << "Reload Success!" << std::endl;
+        } else {
+            std::cout << "Error: Mag Is Full!" << std::endl;
         }
-        std::cout << "Reload Success!" << std::endl;
-    } else {
-        std::cout << "Error: Mag Is Full!" << std::endl;
     }
 }
 
-void tank::reload() {//load a full mag from bulletLoad to bulletMag, more time cost
-    if(bulletMag.size() < magSize){
-        while(!bulletLoad.empty() && bulletMag.size() < magSize){
-            bulletMag.splice(bulletMag.end(), bulletLoad, bulletLoad.begin());
+void tank::reload(int key) {//load a full mag from bulletLoad to bulletMag, more time cost
+    if((key == FSKEY_R && user ==0) || (key == FSKEY_8 && user == 1)) {
+        if (bulletMag.size() < magSize) {
+            while (!bulletLoad.empty() && bulletMag.size() < magSize) {
+                bulletMag.splice(bulletMag.end(), bulletLoad, bulletLoad.begin());
+            }
+            std::cout << "Reload Success!" << std::endl;
+        } else {
+            std::cout << "Error: Mag Is Full!" << std::endl;
         }
-        std::cout << "Reload Success!" << std::endl;
-    } else {
-        std::cout << "Error: Mag Is Full!" << std::endl;
     }
 }
 
@@ -484,17 +522,17 @@ void wrap2pi(float &angle) {
 
 void tank::rotate(int key) {
     float stepAngle = 45*PI/180;
-    if(key == FSKEY_J || key == FSKEY_5){//clockwise
+    if((key == FSKEY_J && user == 0) || (key == FSKEY_5 && user == 1)){//clockwise
         this->fireAngle -= stepAngle;
         wrap2pi(this->fireAngle);
-    } else if (key == FSKEY_K || key == FSKEY_6){//counter-clockwise
+    } else if ((key == FSKEY_K && user == 0) || (key == FSKEY_6 && user == 1)){//counter-clockwise
         this->fireAngle += stepAngle;
         wrap2pi(this->fireAngle);
     }
 }
 
 void tank::checkFire(int key) {//TODO:check the bulletShot whether hit the target
-    if(key == FSKEY_SPACE){
+    if((key == FSKEY_SPACE && this->user == 0) || (key == FSKEY_0 && this->user == 1)){
         this->fire();
     }
 }
