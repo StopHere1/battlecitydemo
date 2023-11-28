@@ -928,35 +928,17 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
         }
     }else if(stage == 5){
         Map mapmanager;
-        mapmanager.choosemap(3);
+        mapmanager.choosemap(1);
         tank testTank1;
-        Bullet testBullet1 = Bullet(1);
-        Bullet testBullet2 = Bullet(2);
-        Bullet testBullet3 = Bullet(3);
-        std::list<Bullet> bulletPack1;
-        soundplayer.playGameStart();
-        for(int i = 0; i<5; ++i){
-            bulletPack1.push_back(testBullet1);
-        }
-        std::list<Bullet> bulletPack2;
-        for(int i = 0; i<5; ++i){
-            bulletPack2.push_back(testBullet2);
-        }
-        std::list<Bullet> bulletPack3;
-        for(int i = 0; i<5; ++i){
-            bulletPack3.push_back(testBullet3);
-        }
+        tank testTank2;
         testTank1.init(tank::type1);//magSize = 10
-        testTank1.pickUpBullet(bulletPack1);
-        testTank1.pickUpBullet(bulletPack2);
-        testTank1.pickUpBullet(bulletPack3);//pick up 15 bullets
-    //    testTank1.pickUpHealth(healthPack);
-        testTank1.singleReload();//reload 1 bullet
-        testTank1.reload();//reload 10 bullets
-        testTank1.singleReload();//reload 1 bullet again
-
-        testTank1.printBulletMag();
-        testTank1.printBulletLoad();//should be 4 bullets in the load
+        testTank1.setPosX(1125.0f);
+        testTank1.setPosY(200.0f);
+        testTank2.init(tank::type1);//magSize = 10
+        testTank2.setPosX(1125.0f);
+        testTank2.setPosY(350.0f);
+        int user1select = 0;
+        int user2select = 0;
         // testTank1.checkLoad();
         for (;;)
         {
@@ -998,11 +980,146 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             {
                 stage5[1].setstate(0);
             }
+
+            if (stage5[2].isinsidebuttom(mx, my))
+            {
+                stage5[2].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    soundplayer.playGameStart();
+
+                }
+            }
+            else
+            {
+                stage5[2].setstate(0);
+            }
+
+            if (stage5[3].isinsidebuttom(mx, my))
+            {
+                stage5[3].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    if(user1select !=0){
+                        user1select -= 1;
+                        if(user1select==0){
+                            testTank1.setTankType(tank::type1);
+                        }
+                        else if(user1select==1){
+                            testTank1.setTankType(tank::type2);
+                        }
+                        else if(user1select==2){
+                            testTank1.setTankType(tank::type3);
+                        }
+                        else if(user1select==3){
+                            testTank1.setTankType(tank::type4);
+                        }
+                        }
+                        soundplayer.playButtonClick();
+                    }
+                    
+                    
+            }
+            else
+            {
+                stage5[3].setstate(0);
+            }
+
+            if (stage5[4].isinsidebuttom(mx, my))
+            {
+                stage5[4].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    if(user1select !=3){
+                        user1select += 1;
+                        if(user1select==0){
+                            testTank1.setTankType(tank::type1);
+                        }
+                        else if(user1select==1){
+                            testTank1.setTankType(tank::type2);
+                        }
+                        else if(user1select==2){
+                            testTank1.setTankType(tank::type3);
+                        }
+                        else if(user1select==3){
+                            testTank1.setTankType(tank::type4);
+                        }
+                        }
+                        soundplayer.playButtonClick();
+                    }
+                  
+                   
+            }
+            else
+            {
+                stage5[4].setstate(0);
+            }
+            
+            if (stage5[5].isinsidebuttom(mx, my))
+            {
+                stage5[5].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    if(user2select !=0){
+                        user2select -= 1;
+                        if(user2select==0){
+                            testTank2.setTankType(tank::type1);
+                        }
+                        else if(user1select==1){
+                            testTank2.setTankType(tank::type2);
+                        }
+                        else if(user1select==2){
+                            testTank2.setTankType(tank::type3);
+                        }
+                        else if(user1select==3){
+                            testTank2.setTankType(tank::type4);
+                        }
+                        }
+                        soundplayer.playButtonClick();
+                    }
+                    
+            }
+            else
+            {
+                stage5[5].setstate(0);
+            }
+
+            if (stage5[6].isinsidebuttom(mx, my))
+            {
+                stage5[6].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    if(user2select !=3){
+                        user2select += 1;
+                        if(user2select==0){
+                            testTank2.setTankType(tank::type1);
+                        }
+                        else if(user2select==1){
+                            testTank2.setTankType(tank::type2);
+                        }
+                        else if(user2select==2){
+                            testTank2.setTankType(tank::type3);
+                        }
+                        else if(user2select==3){
+                            testTank2.setTankType(tank::type4);
+                        }
+                        }
+                        soundplayer.playButtonClick();
+                    }
+                  
+                   
+            }
+            else
+            {
+                stage5[6].setstate(0);
+            }
+
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            testTank1.move(key);
-            testTank1.checkFire(key);//fire if space is pressed
-            testTank1.draw(40);//default size is 40
-            testTank1.rotate(key);
+            
+            testTank1.draw(60);//default size is 40
+            
+            testTank2.draw(60);//default size is 40
+
             mapmanager.print_map(mapmanager.mapf);
             for (int i = 0; i < stage5.size(); i++)
             {
@@ -1012,6 +1129,8 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
            
         }
     }else if(stage == 6){
+        Map mapmanager;
+        mapmanager.choosemap(2);
         for (;;)
         {
             FsPollDevice();
@@ -1055,6 +1174,7 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             }
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            mapmanager.print_map(mapmanager.mapf);
             for (int i = 0; i < stage6.size(); i++)
             {
                 stage6[i].draw();
@@ -1062,6 +1182,8 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             FsSwapBuffers();
         }
     }else if(stage == 7){
+        Map mapmanager;
+        mapmanager.choosemap(3);
         for (;;)
         {
             FsPollDevice();
@@ -1105,6 +1227,7 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             }
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            mapmanager.print_map(mapmanager.mapf);
             for (int i = 0; i < stage7.size(); i++)
             {
                 stage7[i].draw();
@@ -1164,8 +1287,18 @@ void menu::start()
     std::vector<buttom> stage5;
     buttom buttom11(1050.0f, 50.0f, 50.0f, 50.0f, "EXIT");
     buttom buttom12(1150.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
+    buttom buttom20(1100.0f, 500.0f, 60.0f, 50.0f, "START");
+    buttom buttom21(1050.0f, 200.0f, 50.0f, 50.0f, "PREV");
+    buttom buttom22(1200.0f, 200.0f, 50.0f, 50.0f, "NEXT");
+    buttom buttom23(1050.0f, 350.0f, 50.0f, 50.0f, "PREV");
+    buttom buttom24(1200.0f, 350.0f, 50.0f, 50.0f, "NEXT");
     stage5.push_back(buttom11);
     stage5.push_back(buttom12);
+    stage5.push_back(buttom20);
+    stage5.push_back(buttom21);
+    stage5.push_back(buttom22);
+    stage5.push_back(buttom23);
+    stage5.push_back(buttom24);
     std::vector<buttom> stage6;
     buttom buttom13(1050.0f, 50.0f, 50.0f, 50.0f, "EXIT");
     buttom buttom14(1150.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
