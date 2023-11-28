@@ -1,5 +1,5 @@
-#include"fssimplewindow.h"
-//#include "../../public/src/fssimplewindow/src/fssimplewindow.h"
+//#include"fssimplewindow.h"
+#include "../../public/src/fssimplewindow/src/fssimplewindow.h"
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -8,8 +8,8 @@
 #include<time.h>
 #include<chrono>
 
-#include"map.h"
-//#include"../include/map.h"
+//#include"map.h"
+#include"../include/map.h"
 
 int Map::map0[wid][len] = {  //test map
 	{0,0,0,0,  0,0,0,0,  0,0,0,0,  0,0,0,0,  0,0,0,0,  0,0,0,0,  4,0,0,0,  0,0,0,0 },
@@ -341,7 +341,7 @@ void Map::do_delete2(int& x, int& y, int mapp[18][32]) {   // bullet
 		}
 	}
 }
-bool Map::not_move(int& x, int& y, int& prex, int& prey) {  // for non-destructive //ĞèÒªÊµÊ±Êı¾İ £¨ÔÚmainÀï£© // tank
+bool Map::not_move(int& x, int& y, int& prex, int& prey) {  // for non-destructive //éœ€è¦å®æ—¶æ•°æ® ï¼ˆåœ¨mainé‡Œï¼‰ // tank
 	for (int j = 0; j < wid; ++j) {
 		for (int i = 0; i < len; ++i) {
 			if (mapf[j][i] != 0 && checkCollision(x, y, i, j)) {
@@ -354,7 +354,7 @@ bool Map::not_move(int& x, int& y, int& prex, int& prey) {  // for non-destructi
 	}
 	return true;
 }
-bool Map::not_move2(int& x, int& y, int& prex, int& prey) {  // for non-destructive //ĞèÒªÊµÊ±Êı¾İ £¨ÔÚmainÀï£© // bullet
+bool Map::not_move2(int& x, int& y, int& prex, int& prey) {  // for non-destructive //éœ€è¦å®æ—¶æ•°æ® ï¼ˆåœ¨mainé‡Œï¼‰ // bullet
 	for (int j = 0; j < wid; ++j) {
 		for (int i = 0; i < len; ++i) {
 			if (mapf[j][i] != 0 && checkCollision(x, y, i, j)) {
