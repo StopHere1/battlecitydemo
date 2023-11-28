@@ -1,5 +1,5 @@
-#include"fssimplewindow.h"
-//#include "../../public/src/fssimplewindow/src/fssimplewindow.h"
+//#include"fssimplewindow.h"
+#include "../../public/src/fssimplewindow/src/fssimplewindow.h"
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -7,8 +7,8 @@
 #include<string.h>
 #include<time.h>
 #include<chrono>
-#include"map.h"
-//#include"../include/map.h"
+//#include"map.h"
+#include"../include/map.h"
 
 int Map::map0[wid][len] = {  //test map
 		{1,2,3,4,  5,6,7,1,  1,1,1,1,  1,1,1,1,  1,1,1,1,  1,1,1,1,  0,0,0,0,  0,0,0,0 },
@@ -327,7 +327,7 @@ void Map::do_delete(int& x, int& y, int mapp[18][32]) {
 		}
 	}
 }
-bool Map::not_move(int& x, int& y, int& prex, int& prey) {  // for non-destructive //需要实时数据 （在main里）
+bool Map::not_move(int& x, int& y, int& prex, int& prey) {  // for non-destructive //脨猫脪陋脢碌脢卤脢媒戮脻 拢篓脭脷main脌茂拢漏
 	for (int j = 0; j < wid; ++j) {
 		for (int i = 0; i < len; ++i) {
 			if (mapf[j][i] != 0 && checkCollision(x, y, i, j)) {
