@@ -266,7 +266,15 @@ public:
         glColor3ub(0,0,0);
         glRasterPos2f(640.0f - 8.0f*(float)(strlen(title.c_str())/2),380.0f + 6.0f);
         YsGlDrawFontBitmap8x12(title.c_str());
-		auto cpy=str;
+        TextString cpy;
+        if(strcmp(this->title.c_str(),"Please Enter User Name" )==0){
+            cpy=str;
+        }else{
+            for(size_t i = 0; i < str.size(); i++){
+                cpy.push_back('*');
+            }
+        }
+		
 		if(0==time(NULL)%2)
 		{
 			cpy.push_back('|');
@@ -597,6 +605,7 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                     inputPassword = textInput.GetString().c_str();
                     textInput.clearStr();
                     textInput.SetTitle("Please Enter User Name");
+                    
                 }
             }
             auto c=FsInkeyChar();
@@ -925,6 +934,7 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
         Bullet testBullet2 = Bullet(2);
         Bullet testBullet3 = Bullet(3);
         std::list<Bullet> bulletPack1;
+        soundplayer.playGameStart();
         for(int i = 0; i<5; ++i){
             bulletPack1.push_back(testBullet1);
         }
@@ -1117,7 +1127,7 @@ void menu::start()
     }
     background.Flip();
     
-    /* initialization */
+    /* initialization for stages*/
     std::vector<buttom> stage0;
     
     std::vector<buttom> stage1;
@@ -1152,18 +1162,18 @@ void menu::start()
     stage4.push_back(buttom9);
     stage4.push_back(buttom10);
     std::vector<buttom> stage5;
-    buttom buttom11(50.0f, 50.0f, 50.0f, 50.0f, "EXIT");
-    buttom buttom12(150.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
+    buttom buttom11(1050.0f, 50.0f, 50.0f, 50.0f, "EXIT");
+    buttom buttom12(1150.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
     stage5.push_back(buttom11);
     stage5.push_back(buttom12);
     std::vector<buttom> stage6;
-    buttom buttom13(50.0f, 50.0f, 50.0f, 50.0f, "EXIT");
-    buttom buttom14(150.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
+    buttom buttom13(1050.0f, 50.0f, 50.0f, 50.0f, "EXIT");
+    buttom buttom14(1150.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
     stage6.push_back(buttom13);
     stage6.push_back(buttom14);
     std::vector<buttom> stage7;
-    buttom buttom15(50.0f, 50.0f, 50.0f, 50.0f, "EXIT");
-    buttom buttom16(150.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
+    buttom buttom15(1050.0f, 50.0f, 50.0f, 50.0f, "EXIT");
+    buttom buttom16(1150.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
     stage7.push_back(buttom15);
     stage7.push_back(buttom16);
 
@@ -1173,7 +1183,7 @@ void menu::start()
     soundplayer.BGM();
     std::cout<<"Game Initialized"<<std::endl;
 
-    
+    /* initializa rotation matirx*/
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(0, 1280, 720, 0);
