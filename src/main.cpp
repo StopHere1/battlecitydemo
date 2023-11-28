@@ -1,5 +1,5 @@
-#include"fssimplewindow.h"
-//#include "../../public/src/fssimplewindow/src/fssimplewindow.h"
+//#include"fssimplewindow.h"
+#include "../../public/src/fssimplewindow/src/fssimplewindow.h"
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -9,10 +9,10 @@
 #include<chrono>
 #include<iostream>
 
-#include"map.h"
-#include"menu.h"
-//#include"../include/map.h"
-//#include"../include/menu.h"
+//#include"map.h"
+//#include"menu.h"
+#include"../include/map.h"
+#include"../include/menu.h"
 
 
 int main() {
