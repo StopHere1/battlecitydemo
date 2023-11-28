@@ -33,6 +33,10 @@ Sound::~Sound()
 
 void Sound::loadEffects()
 {
+    // load BGM
+    // std::string bgmName = "../soundlib/0bgm.wav";
+    std::string bgmName = "../soundlib/0bgm1.wav";
+    loadSound(bgm, bgmName);
     // load Sound Effects
     loadSound(selection[0], "../soundlib/1buttonClicked.wav");
     loadSound(selection[1], "../soundlib/2loadSelected.wav");
@@ -49,7 +53,7 @@ void Sound::loadEffects()
     loadSound(hit[0], "../soundlib/6hitTank.wav");
     loadSound(hit[1], "../soundlib/6hitArmor.wav");
     loadSound(hit[2], "../soundlib/6hitProp.wav");
-    loadSound(hit[3], "../soundlib/6hittWall.wav");
+    loadSound(hit[3], "../soundlib/6hitWall.wav");
     loadSound(hit[4], "../soundlib/6hitRebound.wav");
 
     loadSound(occupy[0], "../soundlib/7occupying.wav");
@@ -69,14 +73,15 @@ float Sound::getBGMVolume()
     return bgmVolumeLevel;
 }
 
-float Sound::setBGMVolume(float input)
+void Sound::setBGMVolume(float input)
 {
     this->bgmVolumeLevel = input;
 }
 
-float Sound::volumeUp()
+void Sound::volumeUp()
 {
-    if (bgmVolumeLevel <= 1.0)
+    bgmPlayer.Stop(bgm);
+    if (bgmVolumeLevel < 1.0)
     {
         this->bgmVolumeLevel += 0.1;
     }
@@ -84,11 +89,14 @@ float Sound::volumeUp()
     {
         this->bgmVolumeLevel = 1.0;
     }
+    bgmPlayer.SetVolume(bgm, bgmVolumeLevel);
+    BGM();
 }
 
-float Sound::volumeDown()
+void Sound::volumeDown()
 {
-    if (bgmVolumeLevel >= 0.0)
+    bgmPlayer.Stop(bgm);
+    if (bgmVolumeLevel > 0.0)
     {
         this->bgmVolumeLevel -= 0.1;
     }
@@ -96,17 +104,15 @@ float Sound::volumeDown()
     {
         this->bgmVolumeLevel = 0.0;
     }
+    bgmPlayer.SetVolume(bgm, bgmVolumeLevel);
+    BGM();
 }
 
 void Sound::BGM()
 {
-    // load BGM
-    // std::string bgmName = "../soundlib/0bgm.wav";
-    std::string bgmName = "../soundlib/0bgm1.wav";
-    loadSound(bgm, bgmName);
+    printf("volume = %f", bgmVolumeLevel);
     bgmPlayer.MakeCurrent();
     bgmPlayer.Start();
-    bgmPlayer.SetVolume(bgm, bgmVolumeLevel);
     bgmPlayer.PlayBackground(bgm);
 }
 
