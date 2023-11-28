@@ -1,8 +1,8 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include"fssimplewindow.h"
-//#include "../../public/src/fssimplewindow/src/fssimplewindow.h"
+//#include"fssimplewindow.h"
+#include "../../public/src/fssimplewindow/src/fssimplewindow.h"
 
 #include<chrono>
 
