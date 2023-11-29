@@ -931,14 +931,15 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
         mapmanager.choosemap(1);
         tank testTank1;
         tank testTank2;
-        testTank1.init(tank::type1);//magSize = 10
+        testTank1.init(tank::type1,0);//magSize = 10
         testTank1.setPosX(1125.0f);
         testTank1.setPosY(200.0f);
-        testTank2.init(tank::type1);//magSize = 10
+        testTank2.init(tank::type1,1);//magSize = 10
         testTank2.setPosX(1125.0f);
         testTank2.setPosY(350.0f);
         int user1select = 0;
         int user2select = 0;
+        bool flag = false;
         // testTank1.checkLoad();
         for (;;)
         {
@@ -980,21 +981,21 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             {
                 stage5[1].setstate(0);
             }
-
+            if(!flag){
             if (stage5[2].isinsidebuttom(mx, my))
             {
                 stage5[2].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
                     soundplayer.playGameStart();
-
+                    flag = true;
                 }
             }
             else
             {
                 stage5[2].setstate(0);
             }
-
+            
             if (stage5[3].isinsidebuttom(mx, my))
             {
                 stage5[3].setstate(1);
@@ -1113,17 +1114,23 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             {
                 stage5[6].setstate(0);
             }
-
+            }
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            
+            if(!flag){
             testTank1.draw(60);//default size is 40
-            
             testTank2.draw(60);//default size is 40
-
+            }
             mapmanager.print_map(mapmanager.mapf);
+            if (!flag){
             for (int i = 0; i < stage5.size(); i++)
-            {
+            {   
                 stage5[i].draw();
+            }
+            }else{
+                for (int i = 0; i < 2; i++)
+            {   
+                stage5[i].draw();
+            }
             }
             FsSwapBuffers();
            
