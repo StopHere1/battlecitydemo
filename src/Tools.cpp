@@ -117,14 +117,13 @@ void Tool::DrawFireRateTool() const {
 }
 
 void Tool::DrawLandMineTool() const {
-    const unsigned char color[3] = {0, 0, 0};
-    int size = 25;
+    int size = std::min(this->power, 25);
+
     int halfSize = size / 2;
     int quarterSize = size / 4;
-    int dotRadius = size / 10;
-
-    glColor3ubv(color);
-    DrawCircle(this->x, this->y, halfSize, color);
+    const unsigned char black[3] = {0, 0, 0};
+    glColor3ubv(black);
+    DrawCircle(this->x, this->y, halfSize, black);
 
     glBegin(GL_TRIANGLES);
     for (int i = 0; i < 8; ++i) {
@@ -135,8 +134,22 @@ void Tool::DrawLandMineTool() const {
     }
     glEnd();
 
-    DrawCircle(this->x, this->y, quarterSize, color);
-    DrawCircle(this->x, this->y, dotRadius, color);
+    DrawCircle(this->x, this->y, quarterSize, black);
+    int dotRadius = size / 10;
+    DrawCircle(this->x, this->y, dotRadius, black);
+
+    int tinyTriangleSize = 5;
+    glBegin(GL_TRIANGLES);
+    for (int i = 0; i < 8; ++i) {
+        double angle = i * M_PI / 4.0;
+        int outerRadius = halfSize + 2;
+        int tipX = this->x + (outerRadius + tinyTriangleSize) * cos(angle);
+        int tipY = this->y + (outerRadius + tinyTriangleSize) * sin(angle);
+        glVertex2i(tipX, tipY);
+        glVertex2i(this->x + outerRadius * cos(angle + M_PI / 16), this->y + outerRadius * sin(angle + M_PI / 16));
+        glVertex2i(this->x + outerRadius * cos(angle - M_PI / 16), this->y + outerRadius * sin(angle - M_PI / 16));
+    }
+    glEnd();
 }
 
 void Tool::DrawShieldTool() const {
