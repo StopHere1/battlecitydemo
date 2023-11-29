@@ -1,4 +1,5 @@
-#include "GameJudge.h"
+#define GL_SILENCE_DEPRECATION
+#include "../include/GameJudge.h"
 #include <iostream>
 
 // ... [Other GameJudge methods] ...

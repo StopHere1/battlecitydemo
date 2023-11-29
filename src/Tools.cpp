@@ -4,10 +4,10 @@
 //
 //  Created by Jingxia Zhong on 11/13/23.
 //
-
+#define GL_SILENCE_DEPRECATION
 #include <cmath>
 #include <string>
-#include "tool.h"
+#include "../include/tool.h"
 #include "../../public/src/fssimplewindow/src/fssimplewindow.h"
 
 Tool::Tool() : x(0), y(0), type(TOOL_HEALTH), isVisible(false), respawnTimer(0), power(0)
