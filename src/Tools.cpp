@@ -7,8 +7,55 @@
 
 #include <cmath>
 #include <string>
-#include "tool.hpp"
-#include "fssimplewindow.h"
+#include "tool.h"
+#include "../../public/src/fssimplewindow/src/fssimplewindow.h"
+
+Tool::Tool() : x(0), y(0), type(TOOL_HEALTH), isVisible(false), respawnTimer(0), power(0)
+{
+}
+
+Tool::Tool(int x, int y, ToolType type, bool isVisible, int respawnTimer, int power) :
+    x(x), y(y), type(type), isVisible(isVisible), respawnTimer(respawnTimer), power(power) 
+    {
+    }
+
+int Tool::getX() const {
+    return x;
+}
+int Tool::getY() const {
+    return y;
+}
+ToolType Tool::getType() const {
+    return type;
+}
+bool Tool::getIsVisible() const {
+    return isVisible;
+}
+int Tool::getRespawnTimer() const {
+    return respawnTimer;
+}
+int Tool::getPower() const {
+    return power;
+}
+
+void Tool::setX(int newX) {
+    x = newX;
+}
+void Tool::setY(int newY) {
+    y = newY;
+}
+void Tool::setType(ToolType newType) {
+    type = newType;
+}
+void Tool::setIsVisible(bool newIsVisible) {
+    isVisible = newIsVisible;
+}
+void Tool::setRespawnTimer(int newRespawnTimer) {
+    respawnTimer = newRespawnTimer;
+}
+void Tool::setPower(int newPower) {
+    power = newPower;
+}
 
 // Helper function to draw a circle
 void DrawCircle(int centerX, int centerY, int radius, const unsigned char color[3]) {
@@ -24,27 +71,14 @@ void DrawCircle(int centerX, int centerY, int radius, const unsigned char color[
 }
 
 void DrawHealthTool(int x, int y) {
-    // Red heart shape
-    const unsigned char black[3] = {0, 0, 0};
     const unsigned char red[3] = {255, 0, 0};
 
-    // Increase the size of the heart's circles and triangle
-    int circleRadius = 7; // Adjusted radius for the circles of the heart
-    int triangleSize = 15; // Adjusted size for the triangle of the heart
+    int circleRadius = 7;
+    int triangleSize = 15;
 
-    DrawCircle(x - circleRadius, y, circleRadius, red); // Left circle of the heart
-    DrawCircle(x + circleRadius, y, circleRadius, red); // Right circle of the heart
-
-    int squareSize = 30; // Adjusted size for the square
-    glColor3ubv(black); // Set color to black for the square
-    glBegin(GL_LINE_LOOP);
-    glVertex2i(x - squareSize / 2, y - squareSize / 2);
-    glVertex2i(x + squareSize / 2, y - squareSize / 2);
-    glVertex2i(x + squareSize / 2, y + squareSize / 2);
-    glVertex2i(x - squareSize / 2, y + squareSize / 2);
-    glEnd();
+    DrawCircle(x - circleRadius, y, circleRadius, red);
+    DrawCircle(x + circleRadius, y, circleRadius, red);
     
-    // Adjusted triangle part of the heart
     glColor3ubv(red);
     glBegin(GL_TRIANGLES);
     glVertex2i(x - triangleSize, y);
@@ -57,30 +91,17 @@ void DrawFireRateTool(int x, int y) {
     const unsigned char black[3] = {0, 0, 0};
     const unsigned char gold[3] = {255, 215, 0};
 
-    // Draw square around the tool
-    int squareSize = 30; // Adjust size as needed
-    glColor3ubv(black); // Set color to black for the square
-    glBegin(GL_LINE_LOOP);
-    glVertex2i(x - squareSize / 2, y - squareSize / 2);
-    glVertex2i(x + squareSize / 2, y - squareSize / 2);
-    glVertex2i(x + squareSize / 2, y + squareSize / 2);
-    glVertex2i(x - squareSize / 2, y + squareSize / 2);
-    glEnd();
+    glColor3ubv(gold);
 
-    // Draw the bullet (rectangle with a triangle on top)
-    glColor3ubv(gold); // Set color to gold for the bullet
-
-    // Bullet triangle (tip)
-    int bulletWidth = 6;
-    int bulletHeight = 10;
-    int triangleHeight = 5;
+    int bulletWidth = 9;
+    int bulletHeight = 15;
+    int triangleHeight = 7.5;
     glBegin(GL_TRIANGLES);
-    glVertex2i(x, y - triangleHeight); // Top vertex of the triangle
-    glVertex2i(x - bulletWidth / 2, y); // Bottom left vertex of the triangle
-    glVertex2i(x + bulletWidth / 2, y); // Bottom right vertex of the triangle
+    glVertex2i(x, y - triangleHeight);
+    glVertex2i(x - bulletWidth / 2, y);
+    glVertex2i(x + bulletWidth / 2, y);
     glEnd();
-    
-    // Bullet rectangle
+
     glBegin(GL_QUADS);
     glVertex2i(x - bulletWidth / 2, y);
     glVertex2i(x + bulletWidth / 2, y);
@@ -88,24 +109,28 @@ void DrawFireRateTool(int x, int y) {
     glVertex2i(x - bulletWidth / 2, y + bulletHeight);
     glEnd();
 
-    // Draw the "+" sign to the right of the bullet
-    int plusSize = 10;
-    glColor3ubv(black); // Black color for the "+" sign
+    int plusSize = 15;
+    glColor3ubv(black);
     glBegin(GL_LINES);
-    // Horizontal line of "+"
-    glVertex2i(x + bulletWidth / 2 + 3, y - bulletHeight / 2);
-    glVertex2i(x + bulletWidth / 2 + 3 + plusSize, y - bulletHeight / 2);
-    // Vertical line of "+"
-    glVertex2i(x + bulletWidth / 2 + 3 + plusSize / 2, y - bulletHeight / 2 - plusSize / 2);
-    glVertex2i(x + bulletWidth / 2 + 3 + plusSize / 2, y - bulletHeight / 2 + plusSize / 2);
+
+    glVertex2i(x + bulletWidth / 2 + 4.5, y - bulletHeight / 2);
+    glVertex2i(x + bulletWidth / 2 + 4.5 + plusSize, y - bulletHeight / 2);
+ 
+    glVertex2i(x + bulletWidth / 2 + 4.5 + plusSize / 2, y - bulletHeight / 2 - plusSize / 2);
+    glVertex2i(x + bulletWidth / 2 + 4.5 + plusSize / 2, y - bulletHeight / 2 + plusSize / 2);
     glEnd();
 }
 
 void DrawLandMineTool(int centerX, int centerY, int size, const unsigned char color[3]) {
+    size = std::min(size, 25);
+
     int halfSize = size / 2;
     int quarterSize = size / 4;
-    glColor3ubv(color);
-    DrawCircle(centerX, centerY, halfSize, color);
+    const unsigned char black[3] = {0, 0, 0};
+
+    glColor3ubv(black);
+    DrawCircle(centerX, centerY, halfSize, black);
+
     glBegin(GL_TRIANGLES);
     for (int i = 0; i < 8; ++i) {
         double angle = i * M_PI / 4.0;
@@ -114,21 +139,50 @@ void DrawLandMineTool(int centerX, int centerY, int size, const unsigned char co
         glVertex2i(centerX + halfSize * cos(angle + M_PI / 8), centerY + halfSize * sin(angle + M_PI / 8));
     }
     glEnd();
-    DrawCircle(centerX, centerY, quarterSize, color);
+
+    DrawCircle(centerX, centerY, quarterSize, black);
     int dotRadius = size / 10;
-    DrawCircle(centerX, centerY, dotRadius, color);
+    DrawCircle(centerX, centerY, dotRadius, black);
+
+    int tinyTriangleSize = 5;
+    glBegin(GL_TRIANGLES);
+    for (int i = 0; i < 8; ++i) {
+        double angle = i * M_PI / 4.0;
+        int outerRadius = halfSize + 2;
+        int tipX = centerX + (outerRadius + tinyTriangleSize) * cos(angle);
+        int tipY = centerY + (outerRadius + tinyTriangleSize) * sin(angle);
+        glVertex2i(tipX, tipY);
+        glVertex2i(centerX + outerRadius * cos(angle + M_PI / 16), centerY + outerRadius * sin(angle + M_PI / 16));
+        glVertex2i(centerX + outerRadius * cos(angle - M_PI / 16), centerY + outerRadius * sin(angle - M_PI / 16));
+    }
+    glEnd();
 }
 
 void DrawShieldTool(int x, int y) {
-    // Green square
-    const unsigned char green[3] = {0, 255, 0};
-    glColor3ubv(green);
+    const unsigned char black[3] = {0, 0, 0};
+
+    int squareSide = 30;
+    int radius = squareSide / 2;
+
+    int topLeftX = x - radius;
+    int topLeftY = y - radius;
+
+    glColor3ubv(black);
     glBegin(GL_QUADS);
-    glVertex2i(x - 5, y - 5);
-    glVertex2i(x + 5, y - 5);
-    glVertex2i(x + 5, y + 5);
-    glVertex2i(x - 5, y + 5);
+    glVertex2i(topLeftX, topLeftY);
+    glVertex2i(topLeftX + squareSide, topLeftY);
+    glVertex2i(topLeftX + squareSide, topLeftY + squareSide);
+    glVertex2i(topLeftX, topLeftY + squareSide);
     glEnd();
+}
+
+void SetupGame(std::vector<Tool>& tools) {
+     tools.clear();
+
+     tools.emplace_back(120, 120, TOOL_HEALTH, true, 0, 20);
+     tools.emplace_back(560, 360, TOOL_FIRE_RATE, true, 0, 20);
+     tools.emplace_back(440, 400, TOOL_LAND_MINE, true, 0, 20);
+     tools.emplace_back(880, 640, TOOL_SHIELD, true, 0, 20);
 }
 
 void DisplayTools(const std::vector<Tool>& tools) {
@@ -153,19 +207,19 @@ void DisplayTools(const std::vector<Tool>& tools) {
     }
 }
 
-// Helper function for checking collision
 bool IsColliding(int tankX, int tankY, int toolX, int toolY) {
     // Define a collision range
     const int collisionRange = 10;
     return std::abs(tankX - toolX) <= collisionRange && std::abs(tankY - toolY) <= collisionRange;
 }
 
-void UpdateTools(std::vector<Tool>& tools, const SimulatedTank& tank, int& sharedRespawnTimer) {
+void UpdateTools(std::vector<Tool>& tools, const tank& playerTank, int& sharedRespawnTimer) {
     bool allToolsNotVisible = true;
 
-    // Check for collision and make tools disappear
+    tank& nonConstTank = const_cast<tank&>(playerTank);
+
     for (auto& tool : tools) {
-        if (IsColliding(tank.getX(), tank.getY(), tool.getX(), tool.getY()) && tool.getIsVisible()) {
+        if (IsColliding(static_cast<int>(nonConstTank.getPosX()), static_cast<int>(nonConstTank.getPosY()), tool.getX(), tool.getY()) && tool.getIsVisible()) {
             tool.setIsVisible(false);
         }
         if (tool.getIsVisible()) {
@@ -173,16 +227,13 @@ void UpdateTools(std::vector<Tool>& tools, const SimulatedTank& tank, int& share
         }
     }
 
-    // If all tools are not visible and the timer has not started, start it
     if (allToolsNotVisible && sharedRespawnTimer == 0) {
         sharedRespawnTimer = 1500; // example respawn time
     }
 
-    // Handle the shared respawn timer
     if (sharedRespawnTimer > 0) {
         sharedRespawnTimer--;
         if (sharedRespawnTimer <= 0) {
-            // Respawn all tools when the timer reaches zero
             for (auto& tool : tools) {
                 tool.setIsVisible(true);
             }
