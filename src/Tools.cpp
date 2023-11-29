@@ -15,7 +15,7 @@ Tool::Tool() : x(0), y(0), type(TOOL_HEALTH), isVisible(false), respawnTimer(0),
 }
 
 Tool::Tool(int x, int y, ToolType type, bool isVisible, int respawnTimer, int power) :
-    x(x), y(y), type(type), isVisible(isVisible), respawnTimer(respawnTimer), power(power) 
+    x(x), y(y), type(type), isVisible(isVisible), respawnTimer(respawnTimer), power(power)
     {
     }
 
@@ -70,113 +70,92 @@ void DrawCircle(int centerX, int centerY, int radius, const unsigned char color[
     glEnd();
 }
 
-void DrawHealthTool(int x, int y) {
+void Tool::DrawHealthTool() const {
     const unsigned char red[3] = {255, 0, 0};
-
     int circleRadius = 7;
     int triangleSize = 15;
-
-    DrawCircle(x - circleRadius, y, circleRadius, red);
-    DrawCircle(x + circleRadius, y, circleRadius, red);
+    DrawCircle(this->x - circleRadius, this->y, circleRadius, red);
+    DrawCircle(this->x + circleRadius, this->y, circleRadius, red);
     
     glColor3ubv(red);
     glBegin(GL_TRIANGLES);
-    glVertex2i(x - triangleSize, y);
-    glVertex2i(x + triangleSize, y);
-    glVertex2i(x, y + triangleSize);
+    glVertex2i(this->x - triangleSize, this->y);
+    glVertex2i(this->x + triangleSize, this->y);
+    glVertex2i(this->x, this->y + triangleSize);
     glEnd();
 }
 
-void DrawFireRateTool(int x, int y) {
+void Tool::DrawFireRateTool() const {
     const unsigned char black[3] = {0, 0, 0};
     const unsigned char gold[3] = {255, 215, 0};
 
     glColor3ubv(gold);
-
     int bulletWidth = 9;
     int bulletHeight = 15;
     int triangleHeight = 7.5;
     glBegin(GL_TRIANGLES);
-    glVertex2i(x, y - triangleHeight);
-    glVertex2i(x - bulletWidth / 2, y);
-    glVertex2i(x + bulletWidth / 2, y);
+    glVertex2i(this->x, this->y - triangleHeight);
+    glVertex2i(this->x - bulletWidth / 2, this->y);
+    glVertex2i(this->x + bulletWidth / 2, this->y);
     glEnd();
 
     glBegin(GL_QUADS);
-    glVertex2i(x - bulletWidth / 2, y);
-    glVertex2i(x + bulletWidth / 2, y);
-    glVertex2i(x + bulletWidth / 2, y + bulletHeight);
-    glVertex2i(x - bulletWidth / 2, y + bulletHeight);
+    glVertex2i(this->x - bulletWidth / 2, this->y);
+    glVertex2i(this->x + bulletWidth / 2, this->y);
+    glVertex2i(this->x + bulletWidth / 2, this->y + bulletHeight);
+    glVertex2i(this->x - bulletWidth / 2, this->y + bulletHeight);
     glEnd();
 
     int plusSize = 15;
     glColor3ubv(black);
     glBegin(GL_LINES);
-
-    glVertex2i(x + bulletWidth / 2 + 4.5, y - bulletHeight / 2);
-    glVertex2i(x + bulletWidth / 2 + 4.5 + plusSize, y - bulletHeight / 2);
- 
-    glVertex2i(x + bulletWidth / 2 + 4.5 + plusSize / 2, y - bulletHeight / 2 - plusSize / 2);
-    glVertex2i(x + bulletWidth / 2 + 4.5 + plusSize / 2, y - bulletHeight / 2 + plusSize / 2);
+    glVertex2i(this->x + bulletWidth / 2 + 4.5, this->y - bulletHeight / 2);
+    glVertex2i(this->x + bulletWidth / 2 + 4.5 + plusSize, this->y - bulletHeight / 2);
+    glVertex2i(this->x + bulletWidth / 2 + 4.5 + plusSize / 2, this->y - bulletHeight / 2 - plusSize / 2);
+    glVertex2i(this->x + bulletWidth / 2 + 4.5 + plusSize / 2, this->y - bulletHeight / 2 + plusSize / 2);
     glEnd();
 }
 
-void DrawLandMineTool(int centerX, int centerY, int size, const unsigned char color[3]) {
-    size = std::min(size, 25);
-
+void Tool::DrawLandMineTool() const {
+    const unsigned char color[3] = {0, 0, 0};
+    int size = 25;
     int halfSize = size / 2;
     int quarterSize = size / 4;
-    const unsigned char black[3] = {0, 0, 0};
-
-    glColor3ubv(black);
-    DrawCircle(centerX, centerY, halfSize, black);
-
-    glBegin(GL_TRIANGLES);
-    for (int i = 0; i < 8; ++i) {
-        double angle = i * M_PI / 4.0;
-        glVertex2i(centerX, centerY);
-        glVertex2i(centerX + halfSize * cos(angle - M_PI / 8), centerY + halfSize * sin(angle - M_PI / 8));
-        glVertex2i(centerX + halfSize * cos(angle + M_PI / 8), centerY + halfSize * sin(angle + M_PI / 8));
-    }
-    glEnd();
-
-    DrawCircle(centerX, centerY, quarterSize, black);
     int dotRadius = size / 10;
-    DrawCircle(centerX, centerY, dotRadius, black);
 
-    int tinyTriangleSize = 5;
+    glColor3ubv(color);
+    DrawCircle(this->x, this->y, halfSize, color);
+
     glBegin(GL_TRIANGLES);
     for (int i = 0; i < 8; ++i) {
         double angle = i * M_PI / 4.0;
-        int outerRadius = halfSize + 2;
-        int tipX = centerX + (outerRadius + tinyTriangleSize) * cos(angle);
-        int tipY = centerY + (outerRadius + tinyTriangleSize) * sin(angle);
-        glVertex2i(tipX, tipY);
-        glVertex2i(centerX + outerRadius * cos(angle + M_PI / 16), centerY + outerRadius * sin(angle + M_PI / 16));
-        glVertex2i(centerX + outerRadius * cos(angle - M_PI / 16), centerY + outerRadius * sin(angle - M_PI / 16));
+        glVertex2i(this->x, this->y);
+        glVertex2i(this->x + halfSize * cos(angle - M_PI / 8), this->y + halfSize * sin(angle - M_PI / 8));
+        glVertex2i(this->x + halfSize * cos(angle + M_PI / 8), this->y + halfSize * sin(angle + M_PI / 8));
     }
     glEnd();
+
+    DrawCircle(this->x, this->y, quarterSize, color);
+    DrawCircle(this->x, this->y, dotRadius, color);
 }
 
-void DrawShieldTool(int x, int y) {
+void Tool::DrawShieldTool() const {
     const unsigned char black[3] = {0, 0, 0};
-
     int squareSide = 30;
     int radius = squareSide / 2;
 
-    int topLeftX = x - radius;
-    int topLeftY = y - radius;
-
     glColor3ubv(black);
     glBegin(GL_QUADS);
-    glVertex2i(topLeftX, topLeftY);
-    glVertex2i(topLeftX + squareSide, topLeftY);
-    glVertex2i(topLeftX + squareSide, topLeftY + squareSide);
-    glVertex2i(topLeftX, topLeftY + squareSide);
+    glVertex2i(this->x - radius, this->y - radius);
+    glVertex2i(this->x + radius, this->y - radius);
+    glVertex2i(this->x + radius, this->y + radius);
+    glVertex2i(this->x - radius, this->y + radius);
     glEnd();
+
+    DrawCircle(this->x, this->y + radius, radius, black);
 }
 
-void SetupGame(std::vector<Tool>& tools) {
+void SetupTools(std::vector<Tool>& tools) {
      tools.clear();
 
      tools.emplace_back(120, 120, TOOL_HEALTH, true, 0, 20);
@@ -190,17 +169,16 @@ void DisplayTools(const std::vector<Tool>& tools) {
         if (tool.getIsVisible()) {
             switch (tool.getType()) {
                 case TOOL_HEALTH:
-                    DrawHealthTool(tool.getX(), tool.getY());
+                    tool.DrawHealthTool();
                     break;
                 case TOOL_FIRE_RATE:
-                    DrawFireRateTool(tool.getX(), tool.getY());
+                    tool.DrawFireRateTool();
                     break;
                 case TOOL_LAND_MINE:
-                    static const unsigned char blueColor[3] = {0, 0, 255};
-                    DrawLandMineTool(tool.getX(), tool.getY(), 10, blueColor);
+                    tool.DrawLandMineTool();
                     break;
                 case TOOL_SHIELD:
-                    DrawShieldTool(tool.getX(), tool.getY());
+                    tool.DrawShieldTool();
                     break;
             }
         }

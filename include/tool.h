@@ -44,13 +44,13 @@ public:
     void setRespawnTimer(int newRespawnTimer);
     void setPower(int newPower);
 
-    void drawHealthTool() const;
-    void drawFireRateTool() const;
-    void drawLandMineTool() const;
-    void drawShieldTool() const;
+    void DrawHealthTool() const;
+    void DrawFireRateTool() const;
+    void DrawLandMineTool() const;
+    void DrawShieldTool() const;
 };
 
-void SetupGame(std::vector<Tool>& tools);
+void SetupTools(std::vector<Tool>& tools);
 void DisplayTools(const std::vector<Tool>& tools);
 void UpdateTools(std::vector<Tool>& tools, const tank& playerTank, int& sharedRespawnTimer);
 
