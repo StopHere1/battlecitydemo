@@ -18,6 +18,8 @@
 #include "../../public/src/ysbitmap/src/yspng.h"
 #include "../../public/src/yssimplesound/src/yssimplesound.h"
 
+bool enabletest = true;
+
 std::vector <std::string> Parse(std::string incoming)
 {
 	int state=0;
@@ -564,7 +566,11 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             mouseEvent = FsGetMouseEvent(lb, mb, rb, mx, my);
             if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
-                    stage = 1;
+                    if(enabletest){
+                        stage = 2;
+                    }else{
+                        stage = 1;
+                    }
                     soundplayer.playButtonClick();
                     break;
                 }
@@ -991,6 +997,11 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                 stage5[2].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
+                    testTank1.setPosX(160.0f);
+                    testTank1.setPosY(360.0f);
+                    testTank2.setPosX(160.0f+16.0f*40.0f);
+                    testTank2.setPosY(360.0f);
+                    testTank2.setFireAngle(PI);
                     soundplayer.playGameStart();
                     flag = true;
                     t0=std::chrono::high_resolution_clock::now();
@@ -1071,13 +1082,13 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                         if(user2select==0){
                             testTank2.setTankType(tank::type1);
                         }
-                        else if(user1select==1){
+                        else if(user2select==1){
                             testTank2.setTankType(tank::type2);
                         }
-                        else if(user1select==2){
+                        else if(user2select==2){
                             testTank2.setTankType(tank::type3);
                         }
-                        else if(user1select==3){
+                        else if(user2select==3){
                             testTank2.setTankType(tank::type4);
                         }
                         }
@@ -1122,6 +1133,11 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             }
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             if(!flag){
+            glColor3ub(0, 0, 0);
+            glRasterPos2f(1020.0f,150.0f);
+            YsGlDrawFontBitmap8x12("Player 1");
+            glRasterPos2f(1020.0f,300.0f);
+            YsGlDrawFontBitmap8x12("Player 2");
             testTank1.draw(60);//default size is 40
             testTank2.draw(60);//default size is 40
             }else{
@@ -1221,6 +1237,11 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                 stage6[2].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
+                    testTank1.setPosX(160.0f);
+                    testTank1.setPosY(360.0f);
+                    testTank2.setPosX(160.0f+16.0f*40.0f);
+                    testTank2.setPosY(360.0f);
+                    testTank2.setFireAngle(PI);
                     soundplayer.playGameStart();
                     flag = true;
                     t0=std::chrono::high_resolution_clock::now();
@@ -1301,13 +1322,13 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                         if(user2select==0){
                             testTank2.setTankType(tank::type1);
                         }
-                        else if(user1select==1){
+                        else if(user2select==1){
                             testTank2.setTankType(tank::type2);
                         }
-                        else if(user1select==2){
+                        else if(user2select==2){
                             testTank2.setTankType(tank::type3);
                         }
-                        else if(user1select==3){
+                        else if(user2select==3){
                             testTank2.setTankType(tank::type4);
                         }
                         }
@@ -1353,6 +1374,11 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             if(!flag){
+            glColor3ub(0, 0, 0);
+            glRasterPos2f(1020.0f,150.0f);
+            YsGlDrawFontBitmap8x12("Player 1");
+            glRasterPos2f(1020.0f,300.0f);
+            YsGlDrawFontBitmap8x12("Player 2");
             testTank1.draw(60);//default size is 40
             testTank2.draw(60);//default size is 40
             }else{
@@ -1452,6 +1478,11 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                 stage7[2].setstate(1);
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
+                    testTank1.setPosX(160.0f);
+                    testTank1.setPosY(360.0f);
+                    testTank2.setPosX(160.0f+16.0f*40.0f);
+                    testTank2.setPosY(360.0f);
+                    testTank2.setFireAngle(PI);
                     soundplayer.playGameStart();
                     flag = true;
                     t0=std::chrono::high_resolution_clock::now();
@@ -1532,13 +1563,13 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                         if(user2select==0){
                             testTank2.setTankType(tank::type1);
                         }
-                        else if(user1select==1){
+                        else if(user2select==1){
                             testTank2.setTankType(tank::type2);
                         }
-                        else if(user1select==2){
+                        else if(user2select==2){
                             testTank2.setTankType(tank::type3);
                         }
-                        else if(user1select==3){
+                        else if(user2select==3){
                             testTank2.setTankType(tank::type4);
                         }
                         }
@@ -1583,6 +1614,11 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             }
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             if(!flag){
+            glColor3ub(0, 0, 0);
+            glRasterPos2f(1020.0f,150.0f);
+            YsGlDrawFontBitmap8x12("Player 1");
+            glRasterPos2f(1020.0f,300.0f);
+            YsGlDrawFontBitmap8x12("Player 2");
             testTank1.draw(60);//default size is 40
             testTank2.draw(60);//default size is 40
             }else{

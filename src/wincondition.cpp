@@ -5,12 +5,12 @@
 // ... [Other GameJudge methods] ...
 
 void GameJudge::updateGameState(int p1HP, int p2HP, int p1OccupationPoints, int p2OccupationPoints, int elapsed) {
-    std::cout << "Updating game state: "
-        << "Player 1 HP: " << p1HP
-        << ", Player 2 HP: " << p2HP
-        << ", Player 1 Occupation Points: " << p1OccupationPoints
-        << ", Player 2 Occupation Points: " << p2OccupationPoints
-        << ", Elapsed Time: " << elapsed << std::endl;
+    // std::cout << "Updating game state: "
+    //     << "Player 1 HP: " << p1HP
+    //     << ", Player 2 HP: " << p2HP
+    //     << ", Player 1 Occupation Points: " << p1OccupationPoints
+    //     << ", Player 2 Occupation Points: " << p2OccupationPoints
+    //     << ", Elapsed Time: " << elapsed << std::endl;
 
     player1HP = p1HP;
     player2HP = p2HP;
