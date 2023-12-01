@@ -34,6 +34,7 @@ private:
     bool reboundable;
     int count;
     int CollisionCase = 0;
+    int count_rebound = 10;
 
 protected:
     double x, y;//bullet position
