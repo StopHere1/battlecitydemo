@@ -548,6 +548,7 @@ stage7: timelimited occupation
 */
 void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2, std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5,std::vector<buttom> &stage6,std::vector<buttom> &stage7, YsRawPngDecoder &background)
 {   
+     char *tankDes[] = {"standard","faster, reduced armor and load","more shield, reduced speed","more load,reduced armor"};
     if(stage == 0){
         auto t0=std::chrono::high_resolution_clock::now();
         for(;;){
@@ -1138,6 +1139,12 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             YsGlDrawFontBitmap8x12("Player 1");
             glRasterPos2f(1020.0f,300.0f);
             YsGlDrawFontBitmap8x12("Player 2");
+
+            glRasterPos2f(1020.0f,260.0f);
+            YsGlDrawFontBitmap8x12(tankDes[user1select]);
+            glRasterPos2f(1020.0f,410.0f);
+            YsGlDrawFontBitmap8x12(tankDes[user2select]);
+            
             testTank1.draw(60);//default size is 40
             testTank2.draw(60);//default size is 40
             }else{
@@ -1379,6 +1386,10 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             YsGlDrawFontBitmap8x12("Player 1");
             glRasterPos2f(1020.0f,300.0f);
             YsGlDrawFontBitmap8x12("Player 2");
+            glRasterPos2f(1020.0f,260.0f);
+            YsGlDrawFontBitmap8x12(tankDes[user1select]);
+            glRasterPos2f(1020.0f,410.0f);
+            YsGlDrawFontBitmap8x12(tankDes[user2select]);
             testTank1.draw(60);//default size is 40
             testTank2.draw(60);//default size is 40
             }else{
@@ -1619,6 +1630,10 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             YsGlDrawFontBitmap8x12("Player 1");
             glRasterPos2f(1020.0f,300.0f);
             YsGlDrawFontBitmap8x12("Player 2");
+            glRasterPos2f(1020.0f,260.0f);
+            YsGlDrawFontBitmap8x12(tankDes[user1select]);
+            glRasterPos2f(1020.0f,410.0f);
+            YsGlDrawFontBitmap8x12(tankDes[user2select]);
             testTank1.draw(60);//default size is 40
             testTank2.draw(60);//default size is 40
             }else{
