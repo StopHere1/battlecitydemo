@@ -55,6 +55,15 @@ void Bullet::Draw(double tankx, double tanky, double tankangle) {
     if (this->IsShot == 1) {
         if (this->FirstShoot == 1) {
             this->Initialize(tankx, tanky, tankangle);
+            if (this->BulletType == 0) {
+                sound->playShootBullet1(); // shoot bullet type 0
+            }
+            else if (this->BulletType == 1) {
+                sound->playShootBullet2(); // shoot bullet type 1
+            }
+            else if (this->BulletType == 2) {
+                sound->playShootBullet3(); // shoot bullet type 2
+            }
         }
         this->Motion();
         if (this->BulletType == 2) {
@@ -98,6 +107,7 @@ void Bullet::Draw(double tankx, double tanky, double tankangle) {
             case 1:
                 this->damage = DamageTankTable[this->BulletType];
                 //sound effect for hit tank
+                sound->playHitTank();
                 this->IsShot = 0;
                 this->IsHit = 1;
                 break;
@@ -105,6 +115,7 @@ void Bullet::Draw(double tankx, double tanky, double tankangle) {
                 if (this->MapDestructible == 1) {
                     this->damage = DamageMapTable[this->BulletType];
                     //sound effect for destroy map
+                    sound->playHitWall();
                     this->IsHit = 1;
                     this->IsShot = 0;
                     break;
@@ -112,6 +123,7 @@ void Bullet::Draw(double tankx, double tanky, double tankangle) {
                 else {
                     if (this->reboundable == 1 && this->count_rebound != 0) {
                         //sound effect for rebound
+                        sound->playHitRebound();
                         this->vx = - this->vx;
                         CollisionCase = 0;
                         MapDestructible = 0;
@@ -120,6 +132,7 @@ void Bullet::Draw(double tankx, double tanky, double tankangle) {
                     }
                     else {
                         //sound effect for destroy bullet
+                        sound->playHitWall();
                         this->IsHit = 1;
                         this->IsShot = 0;
                     }
@@ -129,6 +142,7 @@ void Bullet::Draw(double tankx, double tanky, double tankangle) {
                 if (this->MapDestructible == 1) {
                     this->damage = DamageMapTable[this->BulletType];
                     //sound effect for destroy map
+                    sound->playHitWall();
                     this->IsHit = 1;
                     this->IsShot = 0;
                     break;
@@ -136,6 +150,7 @@ void Bullet::Draw(double tankx, double tanky, double tankangle) {
                 else {
                     if (this->reboundable == 1 && this->count_rebound != 0) {
                         //sound effect for rebound
+                        sound->playHitRebound();
                         this->vy = - this->vy;
                         CollisionCase = 0;
                         MapDestructible = 0;
@@ -145,6 +160,7 @@ void Bullet::Draw(double tankx, double tanky, double tankangle) {
                     }
                     else {
                         //sound effect for destroy bullet
+                        sound->playHitWall();
                         this->IsHit = 1;
                         this->IsShot = 0;
                         break;
@@ -226,6 +242,10 @@ void Bullet::IsMapDestructible(void) {
 bool Bullet::GetIsHit() {
     return this->IsHit;
 }
+
+void Bullet::setSoundPlayer(Sound* s) {
+    this->sound = s;
+};
 
 //Protected
 void Bullet::Initialize(double tankx, double tanky, double tankangle) {
