@@ -6,6 +6,7 @@
 #define BATTLECITYDEMO_TANK_H
 #include <list>
 #include "../include/Bullet.h"
+#include "../include/sound.h"
 #include "../../public/src/fssimplewindow/src/fssimplewindow.h"
 #include "../../public/src/ysbitmapfont/src/ysglfontdata.h"
 #include "../../public/src/ysbitmap/src/yspng.h"
@@ -45,6 +46,7 @@ public:
     void setFireAngle(float input);
     void setDirection(int input);
     void setUser(int input);
+    void setSoundPlayer(Sound *soundplayer);
 
     int init(Type type, int user);
     void move(int key);
@@ -64,6 +66,8 @@ public:
     void checkBulletCount();//check the count of each type of bullet
     void changeFireBullet(int key);//change the type of bullet to fire
     void newPickUpBullet(std::vector<int> bulletPack);//pick up bullet package
+    void passSoundPlayer();//pass the sound player to the bullet
+    bool checkTankHealth();//check if the tank is dead
 
     Type getTankType() const { return tankType; }
     void setTankType(Type type) { tankType = type; }
@@ -93,6 +97,7 @@ protected:
     Bullet tankBullet = Bullet(0); // bullet for tank
     std::vector<int> BulletCount = {5, 5, 5}; // count of each type of bullet
     int currentBulletType = 0; // current bullet type
+    Sound *soundPlayer;
 };
 
 
