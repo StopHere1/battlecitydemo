@@ -9,6 +9,7 @@
 #include "../../public/src/ysbitmapfont/src/ysglfontdata.h"
 #include "../../public/src/ysbitmap/src/yspng.h"
 #include "../../public/src/yssimplesound/src/yssimplesound.h"
+#include "../../battlecitydemo/include/sound.h"
 
 const double PI = 3.1415926;
 const double DamageTankTable[3] = { 3,1,2 };
@@ -45,6 +46,7 @@ protected:
     int BulletType = 0;
     bool IsShot = 0, IsHit = 0;
     bool CollideBullet, CollideTank, CollideMapX, CollideMapY, MapDestructible;
+    Sound *sound;
 
     void Rotate(double& x, double& y, double theta);
     void Initialize(double tankx, double tanky, double tankangle);
@@ -76,6 +78,7 @@ public:
     void ShootBullet(void);
     void IsCollideBullet(void);
     void IsMapDestructible(void);
+    void setSoundPlayer(Sound *s);
 };
 
 #endif //BATTLECITYDEMO_BULLET_H
