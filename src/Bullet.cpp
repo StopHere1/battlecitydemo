@@ -243,9 +243,9 @@ bool Bullet::GetIsHit() {
     return this->IsHit;
 }
 
-void Bullet::setSoundPlayer(Sound* s) {
-    this->sound = s;
-};
+void Bullet::setSoundPlayer(Sound *soundPlayer) {//setter
+    this->sound = soundPlayer;
+}
 
 //Protected
 void Bullet::Initialize(double tankx, double tanky, double tankangle) {
@@ -393,10 +393,6 @@ void Bullet::Rotate(double& x, double& y, double theta) {
 
 bool Bullet::GetIsShot() {//add
     return this->IsShot;
-}
-
-void Bullet::setSoundPlayer(Sound *soundPlayer) {//setter
-    this->soundPlayer = soundPlayer;
 }
 
 
