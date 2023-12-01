@@ -98,74 +98,76 @@ void tank::setUser(int input) {
     }
 }
 
-int tank::init(Type type, int user) {
-    if(type == type1){//standard tank
-        this->tankType = type1;
-        this->posX = 0;
-        this->posY = 0;
-        this->armor = 100;
-        this->weight = 100;
-        this->health = 100;
-        this->healthMax = 100;
-        this->load = 100;
-        this->magSize = 10;
-        this->fireAngle = 0;
-        this->direction = 0;
-        this->power = 100;
-        this->speed = 10;
-        this->user = user;
-        return 0;
-    } else if (type == type2){//fast tank
-        this->tankType = type2;
-        this->posX = 0;
-        this->posY = 0;
-        this->armor = 50;
-        this->weight = 50;
-        this->health = 100;
-        this->healthMax = 100;
-        this->load = 50;
-        this->magSize = 5;
-        this->direction = 0;
-        this->fireAngle = 0;
-        this->power = 100;
-        this->speed = 20;
-        this->user = user;
-        return 0;
-    } else if (type == type3){//heavy tank
-        this->tankType = type3;
-        this->posX = 0;
-        this->posY = 0;
-        this->armor = 200;
-        this->weight = 200;
-        this->health = 100;
-        this->healthMax = 100;
-        this->load = 100;
-        this->magSize = 20;
-        this->fireAngle = 0;
-        this->direction = 0;
-        this->power = 200;
-        this->speed = 5;
-        this->user = user;
-        return 0;
-    } else if (type == type4){//Load tank
-        this->tankType = type4;
-        this->posX = 0;
-        this->posY = 0;
-        this->armor = 80;
-        this->weight = 150;
-        this->health = 100;
-        this->healthMax = 100;
-        this->load = 200;
-        this->magSize = 10;
-        this->fireAngle = 0;
-        this->direction = 0;
-        this->power = 200;
-        this->speed = 10;
-        this->user = user;
-        return 0;
-    } else {
-        printf("Error: tank Type not found");
+int tank::init(Type type, int User) {
+    if(User != 0 && User != 1){
+        printf("Error: User Type not found");
         return 1;
+    } else {
+        this->user = User;
+        if (type == type1) {//standard tank
+            this->tankType = type1;
+            this->posX = 0;
+            this->posY = 0;
+            this->armor = 100;
+            this->weight = 100;
+            this->health = 100;
+            this->healthMax = 100;
+            this->load = 100;
+            this->magSize = 10;
+            this->fireAngle = 0;
+            this->direction = 0;
+            this->power = 100;
+            this->speed = 10;
+            return 0;
+        } else if (type == type2) {//fast tank
+            this->tankType = type2;
+            this->posX = 0;
+            this->posY = 0;
+            this->armor = 50;
+            this->weight = 50;
+            this->health = 100;
+            this->healthMax = 100;
+            this->load = 50;
+            this->magSize = 5;
+            this->direction = 0;
+            this->fireAngle = 0;
+            this->power = 100;
+            this->speed = 20;
+            return 0;
+        } else if (type == type3) {//heavy tank
+            this->tankType = type3;
+            this->posX = 0;
+            this->posY = 0;
+            this->armor = 200;
+            this->weight = 200;
+            this->health = 100;
+            this->healthMax = 100;
+            this->load = 100;
+            this->magSize = 20;
+            this->fireAngle = 0;
+            this->direction = 0;
+            this->power = 200;
+            this->speed = 5;
+            return 0;
+        } else if (type == type4) {//Load tank
+            this->tankType = type4;
+            this->posX = 0;
+            this->posY = 0;
+            this->armor = 80;
+            this->weight = 150;
+            this->health = 100;
+            this->healthMax = 100;
+            this->load = 200;
+            this->magSize = 10;
+            this->fireAngle = 0;
+            this->direction = 0;
+            this->power = 200;
+            this->speed = 10;
+            return 0;
+        } else {
+            printf("Error: tank Type not found");
+            return 1;
+        }
     }
 }
 
@@ -414,7 +416,8 @@ void drawBody(float x, float y, float width, int direction) {//draw tank body, s
 
 void tank::draw(float width) {//draw tank according to its Type, standard size 40, posX, posY is the center of the tank
     float ratio = width/40;
-    bulletShot.Draw(posX, posY, fireAngle);
+//    bulletShot.Draw(posX, posY, fireAngle);
+    tankBullet.Draw(posX, posY, fireAngle);
     if(this->tankType == type1) {
         //draw the tank wheel with red color
         glColor3ub(128, 30, 0);
@@ -535,5 +538,46 @@ void tank::checkFire(int key) {//TODO:check the bulletShot whether hit the targe
     if((key == FSKEY_SPACE && this->user == 0) || (key == FSKEY_0 && this->user == 1)){
         this->fire();
     }
+}
+
+void tank::newFire(int key) {
+    if((key == FSKEY_SPACE && this->user == 0) || (key == FSKEY_0 && this->user == 1)){
+        if (BulletCount[currentBulletType] > 0) {
+            if (!tankBullet.GetIsHit() && tankBullet.GetIsShot()) {
+                std::cout << "Error: Bullet Not Hit!" << std::endl;
+            } else {
+                BulletCount[currentBulletType]--;
+                tankBullet.ChangeBulletType(currentBulletType);
+                tankBullet.ShootBullet();
+                std::cout << "Fire Success!" << std::endl;
+            }
+        } else {
+            std::cout << "Error: No More Bullets!" << std::endl;
+        }
+    }
+}
+
+void tank::checkBulletCount() {
+    std::cout << "Bullet Count: ";
+    for(int i = 0; i < 3; i++){
+        std::cout <<"BulletType" << i << ": " << BulletCount[i] << " ";
+    }
+    std::cout << std::endl;
+}
+
+void tank::changeFireBullet(int key) {
+    if((key == FSKEY_B && this->user == 0) || (key == FSKEY_7 && this->user == 1)){
+        currentBulletType = (currentBulletType + 1) % 3;
+        tankBullet.ChangeBulletType(currentBulletType);
+        std::cout << "Current Bullet Type: " << currentBulletType << std::endl;
+        checkBulletCount();
+    }
+}
+
+void tank::newPickUpBullet(std::vector<int> bulletPack) {
+    for(int i = 0; i < 3; i++){
+        BulletCount[i] += bulletPack[i];
+    }
+    checkBulletCount();
 }
 

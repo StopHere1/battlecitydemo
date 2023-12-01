@@ -14,7 +14,8 @@
 
 class tank {
 public:
-    tank() { posX = 0; posY = 0; armor = 0; health = 0; load = 0; speed = 0; power = 0; weight = 0; state = 0; magSize = 0; fireAngle = 0; direction =0 ;healthMax = 100; tankType = type1; user = 0;}
+    tank() { posX = 0; posY = 0; armor = 0; health = 0; load = 0; speed = 0; power = 0;
+        weight = 0; state = 0; magSize = 0; fireAngle = 0; direction =0 ;healthMax = 100; tankType = type1; user = 0; currentBulletType = 0;}
     enum Type {type1, type2, type3, type4};// tank Type
     float getPosX();
     float getPosY();
@@ -59,6 +60,10 @@ public:
 //    void pickUpHealth(std::list<Tool> healthPack);//pick up health package
     void draw(float size);//draw tank according to its Type and size, location is determined by posX and posY
     void rotate(int key);//rotate tank aiming direction
+    void newFire(int key);//fire a new bullet
+    void checkBulletCount();//check the count of each type of bullet
+    void changeFireBullet(int key);//change the type of bullet to fire
+    void newPickUpBullet(std::vector<int> bulletPack);//pick up bullet package
 
     Type getTankType() const { return tankType; }
     void setTankType(Type type) { tankType = type; }
@@ -85,6 +90,9 @@ protected:
     Bullet bulletShot; // bullet shot only one at a time
     std::list<Bullet> bulletLoad; // list for storing bullet packages
 //    std::list<Tool> healthLoad; // list for storing health packages
+    Bullet tankBullet = Bullet(0); // bullet for tank
+    std::vector<int> BulletCount = {0, 0, 0}; // count of each type of bullet
+    int currentBulletType = 0; // current bullet type
 };
 
 

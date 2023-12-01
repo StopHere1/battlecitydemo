@@ -1,7 +1,6 @@
 #define GL_SILENCE_DEPRECATION
 #include "../include/Bullet.h"
 
-//Public
 Bullet::Bullet(double x, double y, double angle) {
     this->Initialize(x, y, angle);
     this->FirstShoot = 1;
@@ -188,11 +187,11 @@ double Bullet::GetDamage(void) {
     }
 }
 
-void Bullet::ChangeBulletType(void) {
+void Bullet::ChangeBulletType(int type) {//Make a Change
     if (this->IsShot == 0) {
-        this->BulletType += 1;
-        if (BulletType > 2) {
-            BulletType = 0;
+        this->BulletType = type;
+        if (type > 2 || type<0) {
+            printf("BulletType Error!\n");
         }
     }
 }
@@ -364,6 +363,10 @@ void Bullet::Rotate(double& x, double& y, double theta) {
     newy = sin(theta) * x + cos(theta) * y;
     x = newx;
     y = newy;
+}
+
+bool Bullet::GetIsShot() {//add
+    return this->IsShot;
 }
 
 
