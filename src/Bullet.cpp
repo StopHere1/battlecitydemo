@@ -47,6 +47,7 @@ Bullet::~Bullet() {
     ax = 0;
     ay = 0;
     count = 0;
+    count_rebound = 0;
 }
 
 void Bullet::Draw(double tankx, double tanky, double tankangle) {
@@ -109,12 +110,13 @@ void Bullet::Draw(double tankx, double tanky, double tankangle) {
                     break;
                 }
                 else {
-                    if (this->reboundable == 1) {
+                    if (this->reboundable == 1 && this->count_rebound != 0) {
                         //sound effect for rebound
                         this->vx = - this->vx;
                         CollisionCase = 0;
                         MapDestructible = 0;
                         CollideMapX = 0;
+                        count_rebound -= 1;
                     }
                     else {
                         //sound effect for destroy bullet
@@ -132,12 +134,13 @@ void Bullet::Draw(double tankx, double tanky, double tankangle) {
                     break;
                 }
                 else {
-                    if (this->reboundable == 1) {
+                    if (this->reboundable == 1 && this->count_rebound != 0) {
                         //sound effect for rebound
                         this->vy = - this->vy;
                         CollisionCase = 0;
                         MapDestructible = 0;
                         CollideMapY = 0;
+                        count_rebound -= 1;
                         break;
                     }
                     else {
@@ -249,6 +252,7 @@ void Bullet::Initialize(double tankx, double tanky, double tankangle) {
     this->MapDestructible = 0;
     this->count = 0;
     this->damage = 0;
+    this->count_rebound = 10;
 }
 
 void Bullet::Initialize(void) {
@@ -272,6 +276,7 @@ void Bullet::Initialize(void) {
     this->MapDestructible = 0;
     this->count = 0;
     this->damage = 0;
+    this->count_rebound = 10;
 
 }
 
@@ -288,6 +293,7 @@ void Bullet::Reset(void) {
     this->CollideBullet = 0;
     this->MapDestructible = 0;
     this->damage = 0;
+    this->count_rebound = 10;
 }
 
 void Bullet::ShootBullet(void) {
