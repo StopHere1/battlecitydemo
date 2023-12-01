@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include "../include/sound.h"
 #include "../../public/src/fssimplewindow/src/fssimplewindow.h"
 #include "../../public/src/ysbitmapfont/src/ysglfontdata.h"
 #include "../../public/src/ysbitmap/src/yspng.h"
@@ -34,6 +35,7 @@ private:
     bool reboundable;
     int count;
     int CollisionCase = 0;
+    Sound *soundPlayer;//SHY: pointer to the sound player
     int count_rebound = 10;
 
 protected:
@@ -76,6 +78,7 @@ public:
     void ShootBullet(void);
     void IsCollideBullet(void);
     void IsMapDestructible(void);
+    void setSoundPlayer(Sound *soundplayer);//SHY: pass the sound player to the bullet
 };
 
 #endif //BATTLECITYDEMO_BULLET_H

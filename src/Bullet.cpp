@@ -375,4 +375,8 @@ bool Bullet::GetIsShot() {//add
     return this->IsShot;
 }
 
+void Bullet::setSoundPlayer(Sound *soundPlayer) {//setter
+    this->soundPlayer = soundPlayer;
+}
+
 

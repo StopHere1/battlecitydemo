@@ -104,6 +104,7 @@ int tank::init(Type type, int User) {
         return 1;
     } else {
         this->user = User;
+        this->passSoundPlayer();
         if (type == type1) {//standard tank
             this->tankType = type1;
             this->posX = 0;
@@ -550,6 +551,19 @@ void tank::newFire(int key) {
                 tankBullet.ChangeBulletType(currentBulletType);
                 tankBullet.ShootBullet();
                 std::cout << "Fire Success!" << std::endl;
+                switch (currentBulletType) {
+                    case 0:
+                        this->soundPlayer->playShootBullet1();
+                        break;
+                    case 1:
+                        this->soundPlayer->playShootBullet2();
+                        break;
+                    case 2:
+                        this->soundPlayer->playShootBullet3();
+                        break;
+                    default:
+                        break;
+                }
             }
         } else {
             std::cout << "Error: No More Bullets!" << std::endl;
@@ -579,5 +593,22 @@ void tank::newPickUpBullet(std::vector<int> bulletPack) {
         BulletCount[i] += bulletPack[i];
     }
     checkBulletCount();
+}
+
+void tank::setSoundPlayer(Sound *sound) {
+    this->soundPlayer = sound;
+}
+
+void tank::passSoundPlayer() {
+    tankBullet.setSoundPlayer(this->soundPlayer);
+}
+
+bool tank::checkTankHealth() {
+    if(this->health > 0){
+        return true;//alive
+    } else {
+        this->soundPlayer->playDie();
+        return false;//dead
+    }
 }
 
