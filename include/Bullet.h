@@ -36,7 +36,7 @@ private:
     bool reboundable;
     int count;
     int CollisionCase = 0;
-    Sound *soundPlayer;//SHY: pointer to the sound player
+    Sound *sound;//SHY: pointer to the sound player
     int count_rebound = 10;
 
 protected:
@@ -48,7 +48,6 @@ protected:
     int BulletType = 0;
     bool IsShot = 0, IsHit = 0;
     bool CollideBullet, CollideTank, CollideMapX, CollideMapY, MapDestructible;
-    Sound *sound;
 
     void Rotate(double& x, double& y, double theta);
     void Initialize(double tankx, double tanky, double tankangle);
