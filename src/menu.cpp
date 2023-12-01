@@ -943,7 +943,9 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
         testTank1.init(tank::type1,0);//magSize = 10
         testTank1.setPosX(1125.0f);
         testTank1.setPosY(200.0f);
+        testTank1.setSoundPlayer(&soundplayer);
         testTank2.init(tank::type1,1);//magSize = 10
+        testTank2.setSoundPlayer(&soundplayer);
         testTank2.setPosX(1125.0f);
         testTank2.setPosY(350.0f);
         GameJudge gamejudger = GameJudge(GameMode::DeathBattle,120);
@@ -1191,7 +1193,9 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
         testTank1.init(tank::type1,0);//magSize = 10
         testTank1.setPosX(1125.0f);
         testTank1.setPosY(200.0f);
+        testTank1.setSoundPlayer(&soundplayer);
         testTank2.init(tank::type1,1);//magSize = 10
+        testTank2.setSoundPlayer(&soundplayer);
         testTank2.setPosX(1125.0f);
         testTank2.setPosY(350.0f);
         GameJudge gamejudger = GameJudge(GameMode::Occupation,120);
@@ -1438,7 +1442,9 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
         testTank1.init(tank::type1,0);//magSize = 10
         testTank1.setPosX(1125.0f);
         testTank1.setPosY(200.0f);
+        testTank1.setSoundPlayer(&soundplayer);
         testTank2.init(tank::type1,1);//magSize = 10
+        testTank2.setSoundPlayer(&soundplayer);
         testTank2.setPosX(1125.0f);
         testTank2.setPosY(350.0f);
         GameJudge gamejudger = GameJudge(GameMode::Occupation,120);
