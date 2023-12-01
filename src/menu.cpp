@@ -1158,11 +1158,13 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             }
             
             testTank1.move(key);
-            testTank1.checkFire(key);//fire if space is pressed
+            testTank1.changeFireBullet(key);
+            testTank1.newFire(key);
             testTank1.draw(40);//default size is 40
             testTank1.rotate(key);
             testTank2.move(key);
-            testTank2.checkFire(key);//fire if space is pressed
+            testTank2.changeFireBullet(key);
+            testTank2.newFire(key);
             testTank2.draw(40);//default size is 40
             testTank2.rotate(key);
             }
@@ -1403,11 +1405,13 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                 }
             
             testTank1.move(key);
-            testTank1.checkFire(key);//fire if space is pressed
+            testTank1.changeFireBullet(key);
+            testTank1.newFire(key);
             testTank1.draw(40);//default size is 40
             testTank1.rotate(key);
             testTank2.move(key);
-            testTank2.checkFire(key);//fire if space is pressed
+            testTank2.changeFireBullet(key);
+            testTank2.newFire(key);
             testTank2.draw(40);//default size is 40
             testTank2.rotate(key);
             }
@@ -1646,11 +1650,13 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                 break;
             }
             testTank1.move(key);
-            testTank1.checkFire(key);//fire if space is pressed
+            testTank1.changeFireBullet(key);
+            testTank1.newFire(key);
             testTank1.draw(40);//default size is 40
             testTank1.rotate(key);
             testTank2.move(key);
-            testTank2.checkFire(key);//fire if space is pressed
+            testTank2.changeFireBullet(key);
+            testTank2.newFire(key);
             testTank2.draw(40);//default size is 40
             testTank2.rotate(key);
             }
