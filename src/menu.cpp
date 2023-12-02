@@ -1,3 +1,4 @@
+/* created by Yixuan Xia*/
 #define GL_SILENCE_DEPRECATION
 #include <iostream>
 #include <string.h>
@@ -11,10 +12,15 @@
 #include "../include/sound.h"
 #include "../include/map.h"
 #include "../include/tank.h"
+#include "../include/GameJudge.h"
+#include "../include/tool.h"
 #include "../../public/src/fssimplewindow/src/fssimplewindow.h"
 #include "../../public/src/ysbitmapfont/src/ysglfontdata.h"
 #include "../../public/src/ysbitmap/src/yspng.h"
 #include "../../public/src/yssimplesound/src/yssimplesound.h"
+
+bool enabletest = true;
+
 
 std::vector <std::string> Parse(std::string incoming)
 {
@@ -266,7 +272,15 @@ public:
         glColor3ub(0,0,0);
         glRasterPos2f(640.0f - 8.0f*(float)(strlen(title.c_str())/2),380.0f + 6.0f);
         YsGlDrawFontBitmap8x12(title.c_str());
-		auto cpy=str;
+        TextString cpy;
+        if(strcmp(this->title.c_str(),"Please Enter User Name" )==0){
+            cpy=str;
+        }else{
+            for(size_t i = 0; i < str.size(); i++){
+                cpy.push_back('*');
+            }
+        }
+		
 		if(0==time(NULL)%2)
 		{
 			cpy.push_back('|');
@@ -536,6 +550,7 @@ stage7: timelimited occupation
 */
 void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2, std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5,std::vector<buttom> &stage6,std::vector<buttom> &stage7, YsRawPngDecoder &background)
 {   
+     char *tankDes[] = {"standard","faster, reduced armor and load","more shield, reduced speed","more load,reduced armor"};
     if(stage == 0){
         auto t0=std::chrono::high_resolution_clock::now();
         for(;;){
@@ -554,7 +569,11 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             mouseEvent = FsGetMouseEvent(lb, mb, rb, mx, my);
             if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
-                    stage = 1;
+                    if(enabletest){
+                        stage = 2;
+                    }else{
+                        stage = 1;
+                    }
                     soundplayer.playButtonClick();
                     break;
                 }
@@ -597,6 +616,7 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                     inputPassword = textInput.GetString().c_str();
                     textInput.clearStr();
                     textInput.SetTitle("Please Enter User Name");
+                    
                 }
             }
             auto c=FsInkeyChar();
@@ -918,35 +938,28 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             FsSwapBuffers();
         }
     }else if(stage == 5){
+        std::vector<Tool> tools;
+        SetupTools(tools);
         Map mapmanager;
-        mapmanager.choosemap(3);
+        mapmanager.choosemap(1);
         tank testTank1;
-        Bullet testBullet1 = Bullet(1);
-        Bullet testBullet2 = Bullet(2);
-        Bullet testBullet3 = Bullet(3);
-        std::list<Bullet> bulletPack1;
-        for(int i = 0; i<5; ++i){
-            bulletPack1.push_back(testBullet1);
-        }
-        std::list<Bullet> bulletPack2;
-        for(int i = 0; i<5; ++i){
-            bulletPack2.push_back(testBullet2);
-        }
-        std::list<Bullet> bulletPack3;
-        for(int i = 0; i<5; ++i){
-            bulletPack3.push_back(testBullet3);
-        }
-        testTank1.init(tank::type1);//magSize = 10
-        testTank1.pickUpBullet(bulletPack1);
-        testTank1.pickUpBullet(bulletPack2);
-        testTank1.pickUpBullet(bulletPack3);//pick up 15 bullets
-    //    testTank1.pickUpHealth(healthPack);
-        testTank1.singleReload();//reload 1 bullet
-        testTank1.reload();//reload 10 bullets
-        testTank1.singleReload();//reload 1 bullet again
-
-        testTank1.printBulletMag();
-        testTank1.printBulletLoad();//should be 4 bullets in the load
+        tank testTank2;
+        testTank1.init(tank::type1,0);//magSize = 10
+        testTank1.setPosX(1125.0f);
+        testTank1.setPosY(200.0f);
+        testTank1.setSoundPlayer(&soundplayer);
+        testTank1.passSoundPlayer();
+        testTank2.init(tank::type1,1);//magSize = 10
+        testTank2.setSoundPlayer(&soundplayer);
+        testTank2.passSoundPlayer();
+        testTank2.setPosX(1125.0f);
+        testTank2.setPosY(350.0f);
+        // testTank2.passSoundPlayer();
+        GameJudge gamejudger = GameJudge(GameMode::DeathBattle,120);
+        decltype(std::chrono::high_resolution_clock::now()) t0;
+        int user1select = 0;
+        int user2select = 0;
+        bool flag = false;
         // testTank1.checkLoad();
         for (;;)
         {
@@ -988,20 +1001,243 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             {
                 stage5[1].setstate(0);
             }
+            if(!flag){
+            if (stage5[2].isinsidebuttom(mx, my))
+            {
+                stage5[2].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    testTank1.setPosX(160.0f);
+                    testTank1.setPosY(360.0f);
+                    testTank2.setPosX(160.0f+16.0f*40.0f);
+                    testTank2.setPosY(360.0f);
+                    testTank2.setFireAngle(PI);
+                    soundplayer.playGameStart();
+                    flag = true;
+                    t0=std::chrono::high_resolution_clock::now();
+                }
+            }
+            else
+            {
+                stage5[2].setstate(0);
+            }
+            
+            if (stage5[3].isinsidebuttom(mx, my))
+            {
+                stage5[3].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    if(user1select !=0){
+                        user1select -= 1;
+                        if(user1select==0){
+                            testTank1.setTankType(tank::type1);
+                        }
+                        else if(user1select==1){
+                            testTank1.setTankType(tank::type2);
+                        }
+                        else if(user1select==2){
+                            testTank1.setTankType(tank::type3);
+                        }
+                        else if(user1select==3){
+                            testTank1.setTankType(tank::type4);
+                        }
+                        }
+                        soundplayer.playButtonClick();
+                    }
+                    
+                    
+            }
+            else
+            {
+                stage5[3].setstate(0);
+            }
+
+            if (stage5[4].isinsidebuttom(mx, my))
+            {
+                stage5[4].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    if(user1select !=3){
+                        user1select += 1;
+                        if(user1select==0){
+                            testTank1.setTankType(tank::type1);
+                        }
+                        else if(user1select==1){
+                            testTank1.setTankType(tank::type2);
+                        }
+                        else if(user1select==2){
+                            testTank1.setTankType(tank::type3);
+                        }
+                        else if(user1select==3){
+                            testTank1.setTankType(tank::type4);
+                        }
+                        }
+                        soundplayer.playButtonClick();
+                    }
+                  
+                   
+            }
+            else
+            {
+                stage5[4].setstate(0);
+            }
+            
+            if (stage5[5].isinsidebuttom(mx, my))
+            {
+                stage5[5].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    if(user2select !=0){
+                        user2select -= 1;
+                        if(user2select==0){
+                            testTank2.setTankType(tank::type1);
+                        }
+                        else if(user2select==1){
+                            testTank2.setTankType(tank::type2);
+                        }
+                        else if(user2select==2){
+                            testTank2.setTankType(tank::type3);
+                        }
+                        else if(user2select==3){
+                            testTank2.setTankType(tank::type4);
+                        }
+                        }
+                        soundplayer.playButtonClick();
+                    }
+                    
+            }
+            else
+            {
+                stage5[5].setstate(0);
+            }
+
+            if (stage5[6].isinsidebuttom(mx, my))
+            {
+                stage5[6].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    if(user2select !=3){
+                        user2select += 1;
+                        if(user2select==0){
+                            testTank2.setTankType(tank::type1);
+                        }
+                        else if(user2select==1){
+                            testTank2.setTankType(tank::type2);
+                        }
+                        else if(user2select==2){
+                            testTank2.setTankType(tank::type3);
+                        }
+                        else if(user2select==3){
+                            testTank2.setTankType(tank::type4);
+                        }
+                        }
+                        soundplayer.playButtonClick();
+                    }
+                  
+                   
+            }
+            else
+            {
+                stage5[6].setstate(0);
+            }
+            }
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            if(!flag){
+            glColor3ub(0, 0, 0);
+            glRasterPos2f(1020.0f,150.0f);
+            YsGlDrawFontBitmap8x12("Player 1");
+            glRasterPos2f(1020.0f,300.0f);
+            YsGlDrawFontBitmap8x12("Player 2");
+
+            glRasterPos2f(1020.0f,260.0f);
+            YsGlDrawFontBitmap8x12(tankDes[user1select]);
+            glRasterPos2f(1020.0f,410.0f);
+            YsGlDrawFontBitmap8x12(tankDes[user2select]);
+            
+            testTank1.draw(60);//default size is 40
+            testTank2.draw(60);//default size is 40
+            }else{
+            auto t=std::chrono::high_resolution_clock::now();
+		    auto millisec=std::chrono::duration_cast<std::chrono::milliseconds>(t-t0).count();
+		    double dt=(double)millisec/1000.0;
+            gamejudger.updateGameState(testTank1.getHealth(),testTank2.getHealth(),0,0,dt);
+            if(gamejudger.checkWinCondition()){
+                soundplayer.playCelebration();
+                break;
+            }
+            glColor3ub(0, 0, 0);
+            glRasterPos2f(1020.0f,150.0f);
+            YsGlDrawFontBitmap8x12("Player 1");
+            glRasterPos2f(1020.0f,170.0f);
+            YsGlDrawFontBitmap8x12("Health: ");
+            char* health = new char[6];
+            snprintf(health,8, "%f", testTank1.getHealth());
+            glRasterPos2f(1080.0f,170.0f);
+            YsGlDrawFontBitmap8x12(health);
+
+            glRasterPos2f(1020.0f,190.0f);
+            YsGlDrawFontBitmap8x12("Armor : ");
+            char* armor = new char[6];
+            snprintf(armor,8, "%f", testTank1.getArmor());
+            glRasterPos2f(1080.0f,190.0f);
+            YsGlDrawFontBitmap8x12(armor);
+
+            glRasterPos2f(1020.0f,210.0f);
+            YsGlDrawFontBitmap8x12("Bullet Remain: ");
+            char* magsize = new char[6];
+            glRasterPos2f(1080.0f,210.0f);
+            YsGlDrawFontBitmap8x12(magsize);
+
+            glRasterPos2f(1020.0f,300.0f);
+            YsGlDrawFontBitmap8x12("Player 2");
+
+
+
             testTank1.move(key);
-            testTank1.checkFire(key);//fire if space is pressed
+            testTank1.changeFireBullet(key);
+            testTank1.newFire(key);
             testTank1.draw(40);//default size is 40
             testTank1.rotate(key);
+            testTank2.move(key);
+            testTank2.changeFireBullet(key);
+            testTank2.newFire(key);
+            testTank2.draw(40);//default size is 40
+            testTank2.rotate(key);
+            }
             mapmanager.print_map(mapmanager.mapf);
+            DisplayTools(tools);
+            if (!flag){
             for (int i = 0; i < stage5.size(); i++)
-            {
+            {   
                 stage5[i].draw();
+            }
+            }else{
+                for (int i = 0; i < 2; i++)
+            {   
+                stage5[i].draw();
+            }
             }
             FsSwapBuffers();
            
         }
     }else if(stage == 6){
+        Map mapmanager;
+        mapmanager.choosemap(2);
+        tank testTank1;
+        tank testTank2;
+        testTank1.init(tank::type1,0);//magSize = 10
+        testTank1.setPosX(1125.0f);
+        testTank1.setPosY(200.0f);
+        testTank1.setSoundPlayer(&soundplayer);
+        testTank2.init(tank::type1,1);//magSize = 10
+        testTank2.setSoundPlayer(&soundplayer);
+        testTank2.setPosX(1125.0f);
+        testTank2.setPosY(350.0f);
+        GameJudge gamejudger = GameJudge(GameMode::Occupation,120);
+        decltype(std::chrono::high_resolution_clock::now()) t0;
+        int user1select = 0;
+        int user2select = 0;
+        bool flag = false;
         for (;;)
         {
             FsPollDevice();
@@ -1043,15 +1279,214 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             {
                 stage6[1].setstate(0);
             }
+            if(!flag){
+            if (stage6[2].isinsidebuttom(mx, my))
+            {
+                stage6[2].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    testTank1.setPosX(160.0f);
+                    testTank1.setPosY(360.0f);
+                    testTank2.setPosX(160.0f+16.0f*40.0f);
+                    testTank2.setPosY(360.0f);
+                    testTank2.setFireAngle(PI);
+                    soundplayer.playGameStart();
+                    flag = true;
+                    t0=std::chrono::high_resolution_clock::now();
+                }
+            }
+            else
+            {
+                stage6[2].setstate(0);
+            }
+            
+            if (stage6[3].isinsidebuttom(mx, my))
+            {
+                stage6[3].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    if(user1select !=0){
+                        user1select -= 1;
+                        if(user1select==0){
+                            testTank1.setTankType(tank::type1);
+                        }
+                        else if(user1select==1){
+                            testTank1.setTankType(tank::type2);
+                        }
+                        else if(user1select==2){
+                            testTank1.setTankType(tank::type3);
+                        }
+                        else if(user1select==3){
+                            testTank1.setTankType(tank::type4);
+                        }
+                        }
+                        soundplayer.playButtonClick();
+                    }
+                    
+                    
+            }
+            else
+            {
+                stage6[3].setstate(0);
+            }
+
+            if (stage6[4].isinsidebuttom(mx, my))
+            {
+                stage6[4].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    if(user1select !=3){
+                        user1select += 1;
+                        if(user1select==0){
+                            testTank1.setTankType(tank::type1);
+                        }
+                        else if(user1select==1){
+                            testTank1.setTankType(tank::type2);
+                        }
+                        else if(user1select==2){
+                            testTank1.setTankType(tank::type3);
+                        }
+                        else if(user1select==3){
+                            testTank1.setTankType(tank::type4);
+                        }
+                        }
+                        soundplayer.playButtonClick();
+                    }
+                  
+                   
+            }
+            else
+            {
+                stage6[4].setstate(0);
+            }
+            
+            if (stage6[5].isinsidebuttom(mx, my))
+            {
+                stage6[5].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    if(user2select !=0){
+                        user2select -= 1;
+                        if(user2select==0){
+                            testTank2.setTankType(tank::type1);
+                        }
+                        else if(user2select==1){
+                            testTank2.setTankType(tank::type2);
+                        }
+                        else if(user2select==2){
+                            testTank2.setTankType(tank::type3);
+                        }
+                        else if(user2select==3){
+                            testTank2.setTankType(tank::type4);
+                        }
+                        }
+                        soundplayer.playButtonClick();
+                    }
+                    
+            }
+            else
+            {
+                stage6[5].setstate(0);
+            }
+
+            if (stage6[6].isinsidebuttom(mx, my))
+            {
+                stage6[6].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    if(user2select !=3){
+                        user2select += 1;
+                        if(user2select==0){
+                            testTank2.setTankType(tank::type1);
+                        }
+                        else if(user2select==1){
+                            testTank2.setTankType(tank::type2);
+                        }
+                        else if(user2select==2){
+                            testTank2.setTankType(tank::type3);
+                        }
+                        else if(user2select==3){
+                            testTank2.setTankType(tank::type4);
+                        }
+                        }
+                        soundplayer.playButtonClick();
+                    }
+                  
+                   
+            }
+            else
+            {
+                stage6[6].setstate(0);
+            }
+            }
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            for (int i = 0; i < stage6.size(); i++)
-            {
+            if(!flag){
+            glColor3ub(0, 0, 0);
+            glRasterPos2f(1020.0f,150.0f);
+            YsGlDrawFontBitmap8x12("Player 1");
+            glRasterPos2f(1020.0f,300.0f);
+            YsGlDrawFontBitmap8x12("Player 2");
+            glRasterPos2f(1020.0f,260.0f);
+            YsGlDrawFontBitmap8x12(tankDes[user1select]);
+            glRasterPos2f(1020.0f,410.0f);
+            YsGlDrawFontBitmap8x12(tankDes[user2select]);
+            testTank1.draw(60);//default size is 40
+            testTank2.draw(60);//default size is 40
+            }else{
+            auto t=std::chrono::high_resolution_clock::now();
+		    auto millisec=std::chrono::duration_cast<std::chrono::milliseconds>(t-t0).count();
+		    double dt=(double)millisec/1000.0;
+            gamejudger.updateGameState(testTank1.getHealth(),testTank2.getHealth(),0,0,dt);
+            if(gamejudger.checkWinCondition()){
+                soundplayer.playCelebration();
+                break;
+                }
+            
+            testTank1.move(key);
+            testTank1.changeFireBullet(key);
+            testTank1.newFire(key);
+            testTank1.draw(40);//default size is 40
+            testTank1.rotate(key);
+            testTank2.move(key);
+            testTank2.changeFireBullet(key);
+            testTank2.newFire(key);
+            testTank2.draw(40);//default size is 40
+            testTank2.rotate(key);
+            }
+            mapmanager.print_map(mapmanager.mapf);
+
+            if (!flag){
+            for (int i = 0; i < stage5.size(); i++)
+            {   
                 stage6[i].draw();
+            }
+            }else{
+                for (int i = 0; i < 2; i++)
+            {   
+                stage6[i].draw();
+            }
             }
             FsSwapBuffers();
         }
     }else if(stage == 7){
+        Map mapmanager;
+        mapmanager.choosemap(3);
+        tank testTank1;
+        tank testTank2;
+        testTank1.init(tank::type1,0);//magSize = 10
+        testTank1.setPosX(1125.0f);
+        testTank1.setPosY(200.0f);
+        testTank1.setSoundPlayer(&soundplayer);
+        testTank2.init(tank::type1,1);//magSize = 10
+        testTank2.setSoundPlayer(&soundplayer);
+        testTank2.setPosX(1125.0f);
+        testTank2.setPosY(350.0f);
+        GameJudge gamejudger = GameJudge(GameMode::Occupation,120);
+        decltype(std::chrono::high_resolution_clock::now()) t0;
+        int user1select = 0;
+        int user2select = 0;
+        bool flag = false;
         for (;;)
         {
             FsPollDevice();
@@ -1093,11 +1528,190 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             {
                 stage7[1].setstate(0);
             }
-
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            for (int i = 0; i < stage7.size(); i++)
+            if(!flag){
+            if (stage7[2].isinsidebuttom(mx, my))
             {
+                stage7[2].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    testTank1.setPosX(160.0f);
+                    testTank1.setPosY(360.0f);
+                    testTank2.setPosX(160.0f+16.0f*40.0f);
+                    testTank2.setPosY(360.0f);
+                    testTank2.setFireAngle(PI);
+                    soundplayer.playGameStart();
+                    flag = true;
+                    t0=std::chrono::high_resolution_clock::now();
+                }
+            }
+            else
+            {
+                stage7[2].setstate(0);
+            }
+            
+            if (stage7[3].isinsidebuttom(mx, my))
+            {
+                stage7[3].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    if(user1select !=0){
+                        user1select -= 1;
+                        if(user1select==0){
+                            testTank1.setTankType(tank::type1);
+                        }
+                        else if(user1select==1){
+                            testTank1.setTankType(tank::type2);
+                        }
+                        else if(user1select==2){
+                            testTank1.setTankType(tank::type3);
+                        }
+                        else if(user1select==3){
+                            testTank1.setTankType(tank::type4);
+                        }
+                        }
+                        soundplayer.playButtonClick();
+                    }
+                    
+                    
+            }
+            else
+            {
+                stage7[3].setstate(0);
+            }
+
+            if (stage7[4].isinsidebuttom(mx, my))
+            {
+                stage7[4].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    if(user1select !=3){
+                        user1select += 1;
+                        if(user1select==0){
+                            testTank1.setTankType(tank::type1);
+                        }
+                        else if(user1select==1){
+                            testTank1.setTankType(tank::type2);
+                        }
+                        else if(user1select==2){
+                            testTank1.setTankType(tank::type3);
+                        }
+                        else if(user1select==3){
+                            testTank1.setTankType(tank::type4);
+                        }
+                        }
+                        soundplayer.playButtonClick();
+                    }
+                  
+                   
+            }
+            else
+            {
+                stage7[4].setstate(0);
+            }
+            
+            if (stage7[5].isinsidebuttom(mx, my))
+            {
+                stage7[5].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    if(user2select !=0){
+                        user2select -= 1;
+                        if(user2select==0){
+                            testTank2.setTankType(tank::type1);
+                        }
+                        else if(user2select==1){
+                            testTank2.setTankType(tank::type2);
+                        }
+                        else if(user2select==2){
+                            testTank2.setTankType(tank::type3);
+                        }
+                        else if(user2select==3){
+                            testTank2.setTankType(tank::type4);
+                        }
+                        }
+                        soundplayer.playButtonClick();
+                    }
+                    
+            }
+            else
+            {
+                stage7[5].setstate(0);
+            }
+
+            if (stage7[6].isinsidebuttom(mx, my))
+            {
+                stage7[6].setstate(1);
+                if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
+                {
+                    if(user2select !=3){
+                        user2select += 1;
+                        if(user2select==0){
+                            testTank2.setTankType(tank::type1);
+                        }
+                        else if(user2select==1){
+                            testTank2.setTankType(tank::type2);
+                        }
+                        else if(user2select==2){
+                            testTank2.setTankType(tank::type3);
+                        }
+                        else if(user2select==3){
+                            testTank2.setTankType(tank::type4);
+                        }
+                        }
+                        soundplayer.playButtonClick();
+                    }
+                  
+                   
+            }
+            else
+            {
+                stage7[6].setstate(0);
+            }
+            }
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            if(!flag){
+            glColor3ub(0, 0, 0);
+            glRasterPos2f(1020.0f,150.0f);
+            YsGlDrawFontBitmap8x12("Player 1");
+            glRasterPos2f(1020.0f,300.0f);
+            YsGlDrawFontBitmap8x12("Player 2");
+            glRasterPos2f(1020.0f,260.0f);
+            YsGlDrawFontBitmap8x12(tankDes[user1select]);
+            glRasterPos2f(1020.0f,410.0f);
+            YsGlDrawFontBitmap8x12(tankDes[user2select]);
+            testTank1.draw(60);//default size is 40
+            testTank2.draw(60);//default size is 40
+            }else{
+            auto t=std::chrono::high_resolution_clock::now();
+		    auto millisec=std::chrono::duration_cast<std::chrono::milliseconds>(t-t0).count();
+		    double dt=(double)millisec/1000.0;
+            gamejudger.updateGameState(testTank1.getHealth(),testTank2.getHealth(),0,0,dt);
+            if(gamejudger.checkWinCondition()){
+                soundplayer.playCelebration();
+                break;
+            }
+            testTank1.move(key);
+            testTank1.changeFireBullet(key);
+            testTank1.newFire(key);
+            testTank1.draw(40);//default size is 40
+            testTank1.rotate(key);
+            testTank2.move(key);
+            testTank2.changeFireBullet(key);
+            testTank2.newFire(key);
+            testTank2.draw(40);//default size is 40
+            testTank2.rotate(key);
+            }
+            mapmanager.print_map(mapmanager.mapf);
+            if (!flag){
+            for (int i = 0; i < stage5.size(); i++)
+            {   
                 stage7[i].draw();
+            }
+            }else{
+                for (int i = 0; i < 2; i++)
+            {   
+                stage7[i].draw();
+            }
             }
             FsSwapBuffers();
         }
@@ -1117,7 +1731,7 @@ void menu::start()
     }
     background.Flip();
     
-    /* initialization */
+    /* initialization for stages*/
     std::vector<buttom> stage0;
     
     std::vector<buttom> stage1;
@@ -1152,20 +1766,50 @@ void menu::start()
     stage4.push_back(buttom9);
     stage4.push_back(buttom10);
     std::vector<buttom> stage5;
-    buttom buttom11(50.0f, 50.0f, 50.0f, 50.0f, "EXIT");
-    buttom buttom12(150.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
+    buttom buttom11(1050.0f, 50.0f, 50.0f, 50.0f, "EXIT");
+    buttom buttom12(1150.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
+    buttom buttom20(1100.0f, 500.0f, 60.0f, 50.0f, "START");
+    buttom buttom21(1050.0f, 200.0f, 50.0f, 50.0f, "PREV");
+    buttom buttom22(1200.0f, 200.0f, 50.0f, 50.0f, "NEXT");
+    buttom buttom23(1050.0f, 350.0f, 50.0f, 50.0f, "PREV");
+    buttom buttom24(1200.0f, 350.0f, 50.0f, 50.0f, "NEXT");
     stage5.push_back(buttom11);
     stage5.push_back(buttom12);
+    stage5.push_back(buttom20);
+    stage5.push_back(buttom21);
+    stage5.push_back(buttom22);
+    stage5.push_back(buttom23);
+    stage5.push_back(buttom24);
     std::vector<buttom> stage6;
-    buttom buttom13(50.0f, 50.0f, 50.0f, 50.0f, "EXIT");
-    buttom buttom14(150.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
+    buttom buttom13(1050.0f, 50.0f, 50.0f, 50.0f, "EXIT");
+    buttom buttom14(1150.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
+    buttom buttom25(1100.0f, 500.0f, 60.0f, 50.0f, "START");
+    buttom buttom26(1050.0f, 200.0f, 50.0f, 50.0f, "PREV");
+    buttom buttom27(1200.0f, 200.0f, 50.0f, 50.0f, "NEXT");
+    buttom buttom28(1050.0f, 350.0f, 50.0f, 50.0f, "PREV");
+    buttom buttom29(1200.0f, 350.0f, 50.0f, 50.0f, "NEXT");
     stage6.push_back(buttom13);
     stage6.push_back(buttom14);
+    stage6.push_back(buttom25);
+    stage6.push_back(buttom26);
+    stage6.push_back(buttom27);
+    stage6.push_back(buttom28);
+    stage6.push_back(buttom29);
     std::vector<buttom> stage7;
-    buttom buttom15(50.0f, 50.0f, 50.0f, 50.0f, "EXIT");
-    buttom buttom16(150.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
+    buttom buttom15(1050.0f, 50.0f, 50.0f, 50.0f, "EXIT");
+    buttom buttom16(1150.0f, 50.0f, 60.0f, 50.0f, "PAUSE");
+    buttom buttom30(1100.0f, 500.0f, 60.0f, 50.0f, "START");
+    buttom buttom31(1050.0f, 200.0f, 50.0f, 50.0f, "PREV");
+    buttom buttom32(1200.0f, 200.0f, 50.0f, 50.0f, "NEXT");
+    buttom buttom33(1050.0f, 350.0f, 50.0f, 50.0f, "PREV");
+    buttom buttom34(1200.0f, 350.0f, 50.0f, 50.0f, "NEXT");
     stage7.push_back(buttom15);
     stage7.push_back(buttom16);
+    stage7.push_back(buttom30);
+    stage7.push_back(buttom31);
+    stage7.push_back(buttom32);
+    stage7.push_back(buttom33);
+    stage7.push_back(buttom34);
 
     /* initialize your parameters*/
     Sound soundplayer;
@@ -1173,7 +1817,7 @@ void menu::start()
     soundplayer.BGM();
     std::cout<<"Game Initialized"<<std::endl;
 
-    
+    /* initializa rotation matirx*/
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(0, 1280, 720, 0);
