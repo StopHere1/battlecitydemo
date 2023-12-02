@@ -41,7 +41,7 @@ bool GameJudge::checkWinCondition() {
 }
 
 bool GameJudge::checkDeathBattleWin() {
-    std::cout << "Player 1 HP: " << player1HP << ", Player 2 HP: " << player2HP << std::endl;
+    // std::cout << "Player 1 HP: " << player1HP << ", Player 2 HP: " << player2HP << std::endl;
     if (player1HP <= 0 && player2HP > 0) {
         winner = 2;  // Player 2 wins
         return true;

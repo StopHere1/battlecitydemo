@@ -515,6 +515,7 @@ public:
     void test();
     void start();
     void drawBackground(YsRawPngDecoder &background);
+    void bulletTankCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, tank &testTank1, tank &testTank2);
     void setstage(int input);
     void run(Sound &soundplayer,UserInfoManager &manager,std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2,
      std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5,std::vector<buttom> &stage6,std::vector<buttom> &stage7, YsRawPngDecoder &background);
@@ -530,7 +531,7 @@ void menu::test()
 void menu::drawBackground(YsRawPngDecoder &background){
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
-    glRasterPos2f(0.1f,719.0f);
+    glRasterPos2f(0.1f,719.9f);
     glDrawPixels(background.wid,background.hei,GL_RGBA,GL_UNSIGNED_BYTE,background.rgba);
     glDisable(GL_BLEND);
 }
@@ -548,9 +549,15 @@ stage5: deathbattle
 stage6: occupation
 stage7: timelimited occupation
 */
+
+void menu::bulletTankCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, tank &testTank1, tank &testTank2){
+    
+    
+}
 void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2, std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5,std::vector<buttom> &stage6,std::vector<buttom> &stage7, YsRawPngDecoder &background)
 {   
-     char *tankDes[] = {"standard","faster, reduced armor and load","more shield, reduced speed","more load,reduced armor"};
+    char *tankDes[] = {"standard","faster, reduced armor and load","more shield, reduced speed","more load,reduced armor"};
+    bool pause = false;
     if(stage == 0){
         auto t0=std::chrono::high_resolution_clock::now();
         for(;;){
@@ -954,7 +961,7 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
         testTank2.passSoundPlayer();
         testTank2.setPosX(1125.0f);
         testTank2.setPosY(350.0f);
-        // testTank2.passSoundPlayer();
+        testTank2.passSoundPlayer();
         GameJudge gamejudger = GameJudge(GameMode::DeathBattle,120);
         decltype(std::chrono::high_resolution_clock::now()) t0;
         int user1select = 0;
@@ -994,7 +1001,7 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
                     soundplayer.playButtonClick();
-                    /* pause */
+                    pause = !pause;
                 }
             }
             else
@@ -1160,14 +1167,17 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             auto t=std::chrono::high_resolution_clock::now();
 		    auto millisec=std::chrono::duration_cast<std::chrono::milliseconds>(t-t0).count();
 		    double dt=(double)millisec/1000.0;
-            gamejudger.updateGameState(testTank1.getHealth(),testTank2.getHealth(),0,0,dt);
-            if(gamejudger.checkWinCondition()){
-                soundplayer.playCelebration();
-                break;
+            if(!pause){
+                gamejudger.updateGameState(testTank1.getHealth(),testTank2.getHealth(),0,0,dt);
+                if(gamejudger.checkWinCondition()){
+                    soundplayer.playCelebration();
+                    break;
+                }
             }
             glColor3ub(0, 0, 0);
             glRasterPos2f(1020.0f,150.0f);
             YsGlDrawFontBitmap8x12("Player 1");
+            
             glRasterPos2f(1020.0f,170.0f);
             YsGlDrawFontBitmap8x12("Health: ");
             char* health = new char[6];
@@ -1183,26 +1193,75 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             YsGlDrawFontBitmap8x12(armor);
 
             glRasterPos2f(1020.0f,210.0f);
-            YsGlDrawFontBitmap8x12("Bullet Remain: ");
+            YsGlDrawFontBitmap8x12("Type1 Bullet Remain: ");
             char* magsize = new char[6];
-            glRasterPos2f(1080.0f,210.0f);
+            snprintf(magsize,8, "%d", testTank1.getBulletCount()[0]);
+            glRasterPos2f(1180.0f,210.0f);
             YsGlDrawFontBitmap8x12(magsize);
 
+            glRasterPos2f(1020.0f,230.0f);
+            YsGlDrawFontBitmap8x12("Type2 Bullet Remain: ");
+            char* magsize2 = new char[6];
+            snprintf(magsize2,8, "%d", testTank1.getBulletCount()[1]);
+            glRasterPos2f(1180.0f,230.0f);
+            YsGlDrawFontBitmap8x12(magsize2);
+
+            glRasterPos2f(1020.0f,250.0f);
+            YsGlDrawFontBitmap8x12("Type3 Bullet Remain: ");
+            char* magsize3 = new char[6];
+            snprintf(magsize3,8, "%d", testTank1.getBulletCount()[2]);
+            glRasterPos2f(1180.0f,250.0f);
+            YsGlDrawFontBitmap8x12(magsize3);
+            
             glRasterPos2f(1020.0f,300.0f);
             YsGlDrawFontBitmap8x12("Player 2");
 
+            glRasterPos2f(1020.0f,320.0f);
+            YsGlDrawFontBitmap8x12("Health: ");
+            health = new char[6];
+            snprintf(health,8, "%f", testTank2.getHealth());
+            glRasterPos2f(1080.0f,320.0f);
+            YsGlDrawFontBitmap8x12(health);
 
+            glRasterPos2f(1020.0f,340.0f);
+            YsGlDrawFontBitmap8x12("Armor : ");
+            armor = new char[6];
+            snprintf(armor,8, "%f", testTank2.getArmor());
+            glRasterPos2f(1080.0f,340.0f);
+            YsGlDrawFontBitmap8x12(armor);
 
+            glRasterPos2f(1020.0f,360.0f);
+            YsGlDrawFontBitmap8x12("Type1 Bullet Remain: ");
+            magsize = new char[6];
+            snprintf(magsize,8, "%d", testTank2.getBulletCount()[0]);
+            glRasterPos2f(1180.0f,360.0f);
+            YsGlDrawFontBitmap8x12(magsize);
+
+            glRasterPos2f(1020.0f,380.0f);
+            YsGlDrawFontBitmap8x12("Type2 Bullet Remain: ");
+            magsize2 = new char[6];
+            snprintf(magsize2,8, "%d", testTank2.getBulletCount()[1]);
+            glRasterPos2f(1180.0f,380.0f);
+            YsGlDrawFontBitmap8x12(magsize2);
+
+            glRasterPos2f(1020.0f,400.0f);
+            YsGlDrawFontBitmap8x12("Type3 Bullet Remain: ");
+            magsize3 = new char[6];
+            snprintf(magsize3,8, "%d", testTank2.getBulletCount()[2]);
+            glRasterPos2f(1180.0f,400.0f);
+            YsGlDrawFontBitmap8x12(magsize3);
+            if(!pause){
             testTank1.move(key);
             testTank1.changeFireBullet(key);
             testTank1.newFire(key);
-            testTank1.draw(40);//default size is 40
             testTank1.rotate(key);
             testTank2.move(key);
             testTank2.changeFireBullet(key);
             testTank2.newFire(key);
-            testTank2.draw(40);//default size is 40
             testTank2.rotate(key);
+            }
+            testTank1.draw(40);//default size is 40
+            testTank2.draw(40);//default size is 40
             }
             mapmanager.print_map(mapmanager.mapf);
             DisplayTools(tools);
@@ -1272,6 +1331,7 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
                     soundplayer.playButtonClick();
+                    pause = !pause;
                     /* pause */
                 }
             }
@@ -1437,22 +1497,103 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             auto t=std::chrono::high_resolution_clock::now();
 		    auto millisec=std::chrono::duration_cast<std::chrono::milliseconds>(t-t0).count();
 		    double dt=(double)millisec/1000.0;
+            if(!pause){
             gamejudger.updateGameState(testTank1.getHealth(),testTank2.getHealth(),0,0,dt);
             if(gamejudger.checkWinCondition()){
                 soundplayer.playCelebration();
                 break;
                 }
+            }
+            glColor3ub(0, 0, 0);
+            glRasterPos2f(1020.0f,150.0f);
+            YsGlDrawFontBitmap8x12("Player 1");
             
+            glRasterPos2f(1020.0f,170.0f);
+            YsGlDrawFontBitmap8x12("Health: ");
+            char* health = new char[6];
+            snprintf(health,8, "%f", testTank1.getHealth());
+            glRasterPos2f(1080.0f,170.0f);
+            YsGlDrawFontBitmap8x12(health);
+
+            glRasterPos2f(1020.0f,190.0f);
+            YsGlDrawFontBitmap8x12("Armor : ");
+            char* armor = new char[6];
+            snprintf(armor,8, "%f", testTank1.getArmor());
+            glRasterPos2f(1080.0f,190.0f);
+            YsGlDrawFontBitmap8x12(armor);
+
+            glRasterPos2f(1020.0f,210.0f);
+            YsGlDrawFontBitmap8x12("Type1 Bullet Remain: ");
+            char* magsize = new char[6];
+            snprintf(magsize,8, "%d", testTank1.getBulletCount()[0]);
+            glRasterPos2f(1180.0f,210.0f);
+            YsGlDrawFontBitmap8x12(magsize);
+
+            glRasterPos2f(1020.0f,230.0f);
+            YsGlDrawFontBitmap8x12("Type2 Bullet Remain: ");
+            char* magsize2 = new char[6];
+            snprintf(magsize2,8, "%d", testTank1.getBulletCount()[1]);
+            glRasterPos2f(1180.0f,230.0f);
+            YsGlDrawFontBitmap8x12(magsize2);
+
+            glRasterPos2f(1020.0f,250.0f);
+            YsGlDrawFontBitmap8x12("Type3 Bullet Remain: ");
+            char* magsize3 = new char[6];
+            snprintf(magsize3,8, "%d", testTank1.getBulletCount()[2]);
+            glRasterPos2f(1180.0f,250.0f);
+            YsGlDrawFontBitmap8x12(magsize3);
+            
+            glRasterPos2f(1020.0f,300.0f);
+            YsGlDrawFontBitmap8x12("Player 2");
+
+            glRasterPos2f(1020.0f,320.0f);
+            YsGlDrawFontBitmap8x12("Health: ");
+            health = new char[6];
+            snprintf(health,8, "%f", testTank2.getHealth());
+            glRasterPos2f(1080.0f,320.0f);
+            YsGlDrawFontBitmap8x12(health);
+
+            glRasterPos2f(1020.0f,340.0f);
+            YsGlDrawFontBitmap8x12("Armor : ");
+            armor = new char[6];
+            snprintf(armor,8, "%f", testTank2.getArmor());
+            glRasterPos2f(1080.0f,340.0f);
+            YsGlDrawFontBitmap8x12(armor);
+
+            glRasterPos2f(1020.0f,360.0f);
+            YsGlDrawFontBitmap8x12("Type1 Bullet Remain: ");
+            magsize = new char[6];
+            snprintf(magsize,8, "%d", testTank2.getBulletCount()[0]);
+            glRasterPos2f(1180.0f,360.0f);
+            YsGlDrawFontBitmap8x12(magsize);
+
+            glRasterPos2f(1020.0f,380.0f);
+            YsGlDrawFontBitmap8x12("Type2 Bullet Remain: ");
+            magsize2 = new char[6];
+            snprintf(magsize2,8, "%d", testTank2.getBulletCount()[1]);
+            glRasterPos2f(1180.0f,380.0f);
+            YsGlDrawFontBitmap8x12(magsize2);
+
+            glRasterPos2f(1020.0f,400.0f);
+            YsGlDrawFontBitmap8x12("Type3 Bullet Remain: ");
+            magsize3 = new char[6];
+            snprintf(magsize3,8, "%d", testTank2.getBulletCount()[2]);
+            glRasterPos2f(1180.0f,400.0f);
+            YsGlDrawFontBitmap8x12(magsize3);
+
+
+            if(!pause){
             testTank1.move(key);
             testTank1.changeFireBullet(key);
             testTank1.newFire(key);
-            testTank1.draw(40);//default size is 40
             testTank1.rotate(key);
             testTank2.move(key);
             testTank2.changeFireBullet(key);
             testTank2.newFire(key);
-            testTank2.draw(40);//default size is 40
             testTank2.rotate(key);
+            }
+            testTank1.draw(40);//default size is 40
+            testTank2.draw(40);//default size is 40
             }
             mapmanager.print_map(mapmanager.mapf);
 
@@ -1521,6 +1662,7 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                 if (mouseEvent == FSMOUSEEVENT_LBUTTONUP)
                 {
                     soundplayer.playButtonClick();
+                    pause = !pause;
                     /* pause */
                 }
             }
@@ -1685,21 +1827,101 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             auto t=std::chrono::high_resolution_clock::now();
 		    auto millisec=std::chrono::duration_cast<std::chrono::milliseconds>(t-t0).count();
 		    double dt=(double)millisec/1000.0;
+            if(!pause){
             gamejudger.updateGameState(testTank1.getHealth(),testTank2.getHealth(),0,0,dt);
             if(gamejudger.checkWinCondition()){
                 soundplayer.playCelebration();
                 break;
             }
+            }
+            glColor3ub(0, 0, 0);
+            glRasterPos2f(1020.0f,150.0f);
+            YsGlDrawFontBitmap8x12("Player 1");
+            
+            glRasterPos2f(1020.0f,170.0f);
+            YsGlDrawFontBitmap8x12("Health: ");
+            char* health = new char[6];
+            snprintf(health,8, "%f", testTank1.getHealth());
+            glRasterPos2f(1080.0f,170.0f);
+            YsGlDrawFontBitmap8x12(health);
+
+            glRasterPos2f(1020.0f,190.0f);
+            YsGlDrawFontBitmap8x12("Armor : ");
+            char* armor = new char[6];
+            snprintf(armor,8, "%f", testTank1.getArmor());
+            glRasterPos2f(1080.0f,190.0f);
+            YsGlDrawFontBitmap8x12(armor);
+
+            glRasterPos2f(1020.0f,210.0f);
+            YsGlDrawFontBitmap8x12("Type1 Bullet Remain: ");
+            char* magsize = new char[6];
+            snprintf(magsize,8, "%d", testTank1.getBulletCount()[0]);
+            glRasterPos2f(1180.0f,210.0f);
+            YsGlDrawFontBitmap8x12(magsize);
+
+            glRasterPos2f(1020.0f,230.0f);
+            YsGlDrawFontBitmap8x12("Type2 Bullet Remain: ");
+            char* magsize2 = new char[6];
+            snprintf(magsize2,8, "%d", testTank1.getBulletCount()[1]);
+            glRasterPos2f(1180.0f,230.0f);
+            YsGlDrawFontBitmap8x12(magsize2);
+
+            glRasterPos2f(1020.0f,250.0f);
+            YsGlDrawFontBitmap8x12("Type3 Bullet Remain: ");
+            char* magsize3 = new char[6];
+            snprintf(magsize3,8, "%d", testTank1.getBulletCount()[2]);
+            glRasterPos2f(1180.0f,250.0f);
+            YsGlDrawFontBitmap8x12(magsize3);
+            
+            glRasterPos2f(1020.0f,300.0f);
+            YsGlDrawFontBitmap8x12("Player 2");
+
+            glRasterPos2f(1020.0f,320.0f);
+            YsGlDrawFontBitmap8x12("Health: ");
+            health = new char[6];
+            snprintf(health,8, "%f", testTank2.getHealth());
+            glRasterPos2f(1080.0f,320.0f);
+            YsGlDrawFontBitmap8x12(health);
+
+            glRasterPos2f(1020.0f,340.0f);
+            YsGlDrawFontBitmap8x12("Armor : ");
+            armor = new char[6];
+            snprintf(armor,8, "%f", testTank2.getArmor());
+            glRasterPos2f(1080.0f,340.0f);
+            YsGlDrawFontBitmap8x12(armor);
+
+            glRasterPos2f(1020.0f,360.0f);
+            YsGlDrawFontBitmap8x12("Type1 Bullet Remain: ");
+            magsize = new char[6];
+            snprintf(magsize,8, "%d", testTank2.getBulletCount()[0]);
+            glRasterPos2f(1180.0f,360.0f);
+            YsGlDrawFontBitmap8x12(magsize);
+
+            glRasterPos2f(1020.0f,380.0f);
+            YsGlDrawFontBitmap8x12("Type2 Bullet Remain: ");
+            magsize2 = new char[6];
+            snprintf(magsize2,8, "%d", testTank2.getBulletCount()[1]);
+            glRasterPos2f(1180.0f,380.0f);
+            YsGlDrawFontBitmap8x12(magsize2);
+
+            glRasterPos2f(1020.0f,400.0f);
+            YsGlDrawFontBitmap8x12("Type3 Bullet Remain: ");
+            magsize3 = new char[6];
+            snprintf(magsize3,8, "%d", testTank2.getBulletCount()[2]);
+            glRasterPos2f(1180.0f,400.0f);
+            YsGlDrawFontBitmap8x12(magsize3);
+            if(!pause){
             testTank1.move(key);
             testTank1.changeFireBullet(key);
             testTank1.newFire(key);
-            testTank1.draw(40);//default size is 40
             testTank1.rotate(key);
             testTank2.move(key);
             testTank2.changeFireBullet(key);
             testTank2.newFire(key);
-            testTank2.draw(40);//default size is 40
             testTank2.rotate(key);
+            }
+            testTank1.draw(40);//default size is 40
+            testTank2.draw(40);//default size is 40
             }
             mapmanager.print_map(mapmanager.mapf);
             if (!flag){
