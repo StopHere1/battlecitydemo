@@ -13,12 +13,14 @@
 #include "../include/map.h"
 #include "../include/tank.h"
 #include "../include/GameJudge.h"
+#include "../include/tool.h"
 #include "../../public/src/fssimplewindow/src/fssimplewindow.h"
 #include "../../public/src/ysbitmapfont/src/ysglfontdata.h"
 #include "../../public/src/ysbitmap/src/yspng.h"
 #include "../../public/src/yssimplesound/src/yssimplesound.h"
 
 bool enabletest = true;
+
 
 std::vector <std::string> Parse(std::string incoming)
 {
@@ -936,6 +938,8 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             FsSwapBuffers();
         }
     }else if(stage == 5){
+        std::vector<Tool> tools;
+        SetupTools(tools);
         Map mapmanager;
         mapmanager.choosemap(1);
         tank testTank1;
@@ -1158,7 +1162,18 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                 soundplayer.playCelebration();
                 break;
             }
-            
+            // glColor3ub(0, 0, 0);
+            // glRasterPos2f(1020.0f,150.0f);
+            // YsGlDrawFontBitmap8x12("Player 1");
+            // char* health = new char[6];
+            // snprintf(health,8, "%f", testTank1.getHealth());
+            // glRasterPos2f(1020.0f,170.0f);
+            // YsGlDrawFontBitmap8x12(health);
+            // glRasterPos2f(1020.0f,300.0f);
+            // YsGlDrawFontBitmap8x12("Player 2");
+
+
+
             testTank1.move(key);
             testTank1.changeFireBullet(key);
             testTank1.newFire(key);
@@ -1171,6 +1186,7 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             testTank2.rotate(key);
             }
             mapmanager.print_map(mapmanager.mapf);
+            DisplayTools(tools);
             if (!flag){
             for (int i = 0; i < stage5.size(); i++)
             {   
