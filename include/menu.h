@@ -3,6 +3,8 @@
 #define GL_SILENCE_DEPRECATION
 #include <iostream>
 #include "../include/sound.h"
+#include "../include/Bullet.h"
+#include "../include/tank.h"
 #include "../../public/src/fssimplewindow/src/fssimplewindow.h"
 #include "../../public/src/ysbitmapfont/src/ysglfontdata.h"
 #include "../../public/src/ysbitmap/src/yspng.h"
@@ -105,6 +107,7 @@ class menu{
     menu();
     void test();
     void start();
+    void bulletTankCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, tank &testTank1, tank &testTank2);
     void drawBackground(YsRawPngDecoder &background);
     void setstage(int input);
     void run(Sound &soundplayer, UserInfoManager &manager, std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2, std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5,std::vector<buttom> &stage6,std::vector<buttom> &stage7, YsRawPngDecoder &background);

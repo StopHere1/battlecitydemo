@@ -4,7 +4,7 @@
 //
 //  Created by Jingxia Zhong on 11/13/23.
 //
-
+#define GL_SILENCE_DEPRECATION
 #include <cmath>
 #include <string>
 #include "../include/tool.h"
