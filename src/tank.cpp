@@ -466,8 +466,7 @@ void tank::draw(float width) {//draw tank according to its Type, standard size 4
             }
             glColor3ub(30, 255, 0);
             drawAim(posX, posY, width, fireAngle);
-        } else if (this->tankType == type3) {
-        } else if (this->tankType == type3) {
+        }else if (this->tankType == type3) {
             glColor3ub(0, 30, 128);
             drawBody(posX, posY, width, this->direction);
             //draw the wheel gap with black color
