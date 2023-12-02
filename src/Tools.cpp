@@ -76,7 +76,7 @@ void Tool::DrawHealthTool() const {
     int triangleSize = 15*0.75;
     
     int offsetX = 4 * circleRadius;
-    int offsetY = 4 * circleRadius;
+    int offsetY = 4.2 * circleRadius;
     
     DrawCircle(this->x - circleRadius - offsetX, this->y - offsetY, circleRadius, red);
     DrawCircle(this->x + circleRadius - offsetX, this->y - offsetY, circleRadius, red);
@@ -98,8 +98,8 @@ void Tool::DrawFireRateTool() const {
     int bulletHeight = 15*0.9;
     int triangleHeight = 7.5*0.9;
     
-    int offsetX = 2.7 * bulletWidth;
-    int offsetY = 1.8 * bulletHeight;
+    int offsetX = 2.75 * bulletWidth;
+    int offsetY = 1.85 * bulletHeight;
     
     glBegin(GL_TRIANGLES);
     glVertex2i(this->x - offsetX, this->y - triangleHeight - offsetY);
@@ -122,8 +122,8 @@ void Tool::DrawLandMineTool() const {
     const unsigned char black[3] = {0, 0, 0};
     glColor3ubv(black);
     
-    int offsetX = 2.8 * halfSize;
-    int offsetY = 2.8 * halfSize;
+    int offsetX = 2.85 * halfSize;
+    int offsetY = 2.85 * halfSize;
     
     DrawCircle(this->x - offsetX, this->y - offsetY, halfSize, black);
 
@@ -159,8 +159,8 @@ void Tool::DrawShieldTool() const {
     int squareSide = 15;
     int radius = squareSide / 2;
     
-    int offsetX = 1.4 * squareSide;
-    int offsetY = 1.5 * squareSide;
+    int offsetX = 1.35 * squareSide;
+    int offsetY = 1.55 * squareSide;
 
     glColor3ubv(black);
     glBegin(GL_QUADS);
