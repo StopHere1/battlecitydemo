@@ -115,42 +115,42 @@ void Tool::DrawFireRateTool() const {
     glEnd();
 }
 
-void Tool::DrawLandMineTool() const {
-    int size = std::min(this->power, 25);
-    int halfSize = size / 2 * 0.75;
-    int quarterSize = size / 4 * 0.75;
-    const unsigned char black[3] = {0, 0, 0};
-    glColor3ubv(black);
-    
-    int offsetX = 2.9 * halfSize;
-    int offsetY = 2.9 * halfSize;
-    
-    DrawCircle(this->x - offsetX, this->y - offsetY, halfSize, black);
+void Tool::DrawAddSpeedTool() const {
+    const unsigned char lightBlue[3] = {173, 216, 230};
+    const unsigned char mediumBlue[3] = {0, 0, 205};
+    const unsigned char darkBlue[3] = {0, 0, 139};
 
+    int triangleBase = 10;
+    int triangleHeight = 17.5;
+    int offsetX = 1.85 * triangleHeight;
+    int offsetY = 2.8 * triangleBase;
+
+    int triangleOffsetX = triangleBase - 3; // Horizontal offset between triangles
+    int currentX = this->x;
+
+    glColor3ubv(lightBlue);
     glBegin(GL_TRIANGLES);
-    for (int i = 0; i < 8; ++i) {
-        double angle = i * M_PI / 4.0;
-        glVertex2i(this->x - offsetX, this->y - offsetY);
-        glVertex2i(this->x + halfSize * cos(angle - M_PI / 8) - offsetX, this->y + halfSize * sin(angle - M_PI / 8) - offsetY);
-        glVertex2i(this->x + halfSize * cos(angle + M_PI / 8) - offsetX, this->y + halfSize * sin(angle + M_PI / 8) - offsetY);
-    }
+    glVertex2i(currentX - offsetX, this->y - offsetY);
+    glVertex2i(currentX - offsetX, this->y + triangleHeight - offsetY);
+    glVertex2i(currentX + triangleBase - offsetX, this->y + (triangleHeight / 2) - offsetY);
     glEnd();
 
-    DrawCircle(this->x - offsetX, this->y - offsetY, quarterSize, black);
-    int dotRadius = size / 10;
-    DrawCircle(this->x - offsetX, this->y - offsetY, dotRadius, black);
+    currentX += triangleOffsetX;
 
-    int tinyTriangleSize = 5;
+    glColor3ubv(mediumBlue);
     glBegin(GL_TRIANGLES);
-    for (int i = 0; i < 8; ++i) {
-        double angle = i * M_PI / 4.0;
-        int outerRadius = halfSize + 2;
-        int tipX = this->x + (outerRadius + tinyTriangleSize) * cos(angle) - offsetX;
-        int tipY = this->y + (outerRadius + tinyTriangleSize) * sin(angle) - offsetY;
-        glVertex2i(tipX, tipY);
-        glVertex2i(this->x + outerRadius * cos(angle + M_PI / 16) - offsetX, this->y + outerRadius * sin(angle + M_PI / 16) - offsetY);
-        glVertex2i(this->x + outerRadius * cos(angle - M_PI / 16) - offsetX, this->y + outerRadius * sin(angle - M_PI / 16) - offsetY);
-    }
+    glVertex2i(currentX - offsetX, this->y - offsetY);
+    glVertex2i(currentX - offsetX, this->y + triangleHeight - offsetY);
+    glVertex2i(currentX + triangleBase - offsetX, this->y + (triangleHeight / 2) - offsetY);
+    glEnd();
+
+    currentX += triangleOffsetX;
+
+    glColor3ubv(darkBlue);
+    glBegin(GL_TRIANGLES);
+    glVertex2i(currentX - offsetX, this->y - offsetY);
+    glVertex2i(currentX - offsetX, this->y + triangleHeight - offsetY);
+    glVertex2i(currentX + triangleBase - offsetX, this->y + (triangleHeight / 2) - offsetY);
     glEnd();
 }
 
@@ -178,7 +178,7 @@ void SetupTools(std::vector<Tool>& tools) {
 
      tools.emplace_back(120, 120, TOOL_HEALTH, true, 0, 20);
      tools.emplace_back(560, 360, TOOL_FIRE_RATE, true, 0, 20);
-     tools.emplace_back(440, 400, TOOL_LAND_MINE, true, 0, 20);
+     tools.emplace_back(440, 400, TOOL_ADD_SPEED, true, 0, 20);
      tools.emplace_back(880, 640, TOOL_SHIELD, true, 0, 20);
 }
 
@@ -192,8 +192,8 @@ void DisplayTools(const std::vector<Tool>& tools) {
                 case TOOL_FIRE_RATE:
                     tool.DrawFireRateTool();
                     break;
-                case TOOL_LAND_MINE:
-                    tool.DrawLandMineTool();
+                case TOOL_ADD_SPEED:
+                    tool.DrawAddSpeedTool();
                     break;
                 case TOOL_SHIELD:
                     tool.DrawShieldTool();
