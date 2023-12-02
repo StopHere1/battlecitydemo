@@ -948,10 +948,13 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
         testTank1.setPosX(1125.0f);
         testTank1.setPosY(200.0f);
         testTank1.setSoundPlayer(&soundplayer);
+        testTank1.passSoundPlayer();
         testTank2.init(tank::type1,1);//magSize = 10
         testTank2.setSoundPlayer(&soundplayer);
+        testTank2.passSoundPlayer();
         testTank2.setPosX(1125.0f);
         testTank2.setPosY(350.0f);
+        // testTank2.passSoundPlayer();
         GameJudge gamejudger = GameJudge(GameMode::DeathBattle,120);
         decltype(std::chrono::high_resolution_clock::now()) t0;
         int user1select = 0;
@@ -1162,15 +1165,31 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                 soundplayer.playCelebration();
                 break;
             }
-            // glColor3ub(0, 0, 0);
-            // glRasterPos2f(1020.0f,150.0f);
-            // YsGlDrawFontBitmap8x12("Player 1");
-            // char* health = new char[6];
-            // snprintf(health,8, "%f", testTank1.getHealth());
-            // glRasterPos2f(1020.0f,170.0f);
-            // YsGlDrawFontBitmap8x12(health);
-            // glRasterPos2f(1020.0f,300.0f);
-            // YsGlDrawFontBitmap8x12("Player 2");
+            glColor3ub(0, 0, 0);
+            glRasterPos2f(1020.0f,150.0f);
+            YsGlDrawFontBitmap8x12("Player 1");
+            glRasterPos2f(1020.0f,170.0f);
+            YsGlDrawFontBitmap8x12("Health: ");
+            char* health = new char[6];
+            snprintf(health,8, "%f", testTank1.getHealth());
+            glRasterPos2f(1080.0f,170.0f);
+            YsGlDrawFontBitmap8x12(health);
+
+            glRasterPos2f(1020.0f,190.0f);
+            YsGlDrawFontBitmap8x12("Armor : ");
+            char* armor = new char[6];
+            snprintf(armor,8, "%f", testTank1.getArmor());
+            glRasterPos2f(1080.0f,190.0f);
+            YsGlDrawFontBitmap8x12(armor);
+
+            glRasterPos2f(1020.0f,210.0f);
+            YsGlDrawFontBitmap8x12("Bullet Remain: ");
+            char* magsize = new char[6];
+            glRasterPos2f(1080.0f,210.0f);
+            YsGlDrawFontBitmap8x12(magsize);
+
+            glRasterPos2f(1020.0f,300.0f);
+            YsGlDrawFontBitmap8x12("Player 2");
 
 
 

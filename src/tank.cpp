@@ -104,7 +104,7 @@ int tank::init(Type type, int User) {
         return 1;
     } else {
         this->user = User;
-        this->passSoundPlayer();
+        // this->passSoundPlayer();
         if (type == type1) {//standard tank
             this->tankType = type1;
             this->posX = 0;
