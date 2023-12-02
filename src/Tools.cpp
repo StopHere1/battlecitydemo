@@ -98,8 +98,8 @@ void Tool::DrawFireRateTool() const {
     int bulletHeight = 15*0.9;
     int triangleHeight = 7.5*0.9;
     
-    int offsetX = 2.9 * bulletWidth;
-    int offsetY = 1.5 * bulletHeight;
+    int offsetX = 3.1 * bulletWidth;
+    int offsetY = 1.3 * bulletHeight;
     
     glBegin(GL_TRIANGLES);
     glVertex2i(this->x - offsetX, this->y - triangleHeight - offsetY);
@@ -122,8 +122,8 @@ void Tool::DrawLandMineTool() const {
     const unsigned char black[3] = {0, 0, 0};
     glColor3ubv(black);
     
-    int offsetX = 2.3 * halfSize;
-    int offsetY = 2.3 * halfSize;
+    int offsetX = 2.5 * halfSize;
+    int offsetY = 2.5 * halfSize;
     
     DrawCircle(this->x - offsetX, this->y - offsetY, halfSize, black);
 
@@ -156,7 +156,7 @@ void Tool::DrawLandMineTool() const {
 
 void Tool::DrawShieldTool() const {
     const unsigned char black[3] = {0, 0, 0};
-    int squareSide = 20;
+    int squareSide = 15;
     int radius = squareSide / 2;
     
     int offsetX = 1 * squareSide;
