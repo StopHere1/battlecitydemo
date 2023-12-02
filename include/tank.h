@@ -2,8 +2,8 @@
 // Created by anthonyshen on 11/13/23.
 //
 
-#ifndef BATTLECITYDEMO_TANK_H
-#define BATTLECITYDEMO_TANK_H
+#ifndef TANK_H
+#define TANK_H
 #include <list>
 #include "../include/Bullet.h"
 #include "../include/sound.h"
@@ -32,6 +32,7 @@ public:
     int getDirection();
     float getFireAngle();
     int getUser();
+    std::vector<int> getBulletCount();
     void setPosX(float input);
     void setPosY(float input);
     void setArmor(float input);
@@ -101,4 +102,4 @@ protected:
 };
 
 
-#endif //BATTLECITYDEMO_TANK_H
+#endif //TANK_H

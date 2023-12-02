@@ -1,10 +1,9 @@
 //
 // Created by anthonyshen on 11/13/23.
 //
-#define GL_SILENCE_DEPRECATION
 #include "../include/tank.h"
 #include <iostream>
-#include <cstring>
+#include <cstdio>
 
 float tank::getPosX() {
     return posX;
@@ -47,6 +46,9 @@ int tank::getDirection() {
 }
 int tank::getUser() {
     return user;
+}
+std::vector<int> tank::getBulletCount() {
+    return BulletCount;
 }
 void tank::setPosX(float input) {
     posX = input;
@@ -104,7 +106,6 @@ int tank::init(Type type, int User) {
         return 1;
     } else {
         this->user = User;
-        // this->passSoundPlayer();
         if (type == type1) {//standard tank
             this->tankType = type1;
             this->posX = 0;
@@ -174,40 +175,41 @@ int tank::init(Type type, int User) {
 
 void tank::move(int key)
 {
-    if(this->user == 0){
-        if(key == FSKEY_W){
-            this->posY -= speed;
-            this->direction = 0;
-        }
-        if(key == FSKEY_S ){
-            this->posY += speed;
-            this->direction = 0;
-        }
-        if(key == FSKEY_A ){
-            this->posX -= speed;
-            this->direction = 1;
-        }
-        if(key == FSKEY_D ){
-            this->posX += speed;
-            this->direction = 1;
-        }
-    }
-    else if(this->user == 1){
-        if(key == FSKEY_UP){
-            this->posY -= speed;
-            this->direction = 0;
-        }
-        if(key == FSKEY_DOWN){
-            this->posY += speed;
-            this->direction = 0;
-        }
-        if(key == FSKEY_LEFT){
-            this->posX -= speed;
-            this->direction = 1;
-        }
-        if(key == FSKEY_RIGHT){
-            this->posX += speed;
-            this->direction = 1;
+    if(this->health > 0) {
+        if (this->user == 0) {
+            if (key == FSKEY_W) {
+                this->posY -= speed;
+                this->direction = 0;
+            }
+            if (key == FSKEY_S) {
+                this->posY += speed;
+                this->direction = 0;
+            }
+            if (key == FSKEY_A) {
+                this->posX -= speed;
+                this->direction = 1;
+            }
+            if (key == FSKEY_D) {
+                this->posX += speed;
+                this->direction = 1;
+            }
+        } else if (this->user == 1) {
+            if (key == FSKEY_UP) {
+                this->posY -= speed;
+                this->direction = 0;
+            }
+            if (key == FSKEY_DOWN) {
+                this->posY += speed;
+                this->direction = 0;
+            }
+            if (key == FSKEY_LEFT) {
+                this->posX -= speed;
+                this->direction = 1;
+            }
+            if (key == FSKEY_RIGHT) {
+                this->posX += speed;
+                this->direction = 1;
+            }
         }
     }
 }
@@ -419,99 +421,97 @@ void tank::draw(float width) {//draw tank according to its Type, standard size 4
     float ratio = width/40;
 //    bulletShot.Draw(posX, posY, fireAngle);
     tankBullet.Draw(posX, posY, fireAngle);
-    if(this->tankType == type1) {
-        //draw the tank wheel with red color
-        glColor3ub(128, 30, 0);
-        drawBody(posX, posY, width, this->direction);
-        //draw the wheel gap with black color
-        if (this->direction == 0) {
-            for (int i = 0; i < 5; i++) {
-                drawBlk(posX - 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
+    if(this->health >0) {//tank still alive
+        if (this->tankType == type1) {
+            //draw the tank wheel with red color
+            glColor3ub(128, 30, 0);
+            drawBody(posX, posY, width, this->direction);
+            //draw the wheel gap with black color
+            if (this->direction == 0) {
+                for (int i = 0; i < 5; i++) {
+                    drawBlk(posX - 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
+                }
+                for (int i = 0; i < 5; i++) {
+                    drawBlk(posX + 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
+                }
+            } else {
+                for (int i = 0; i < 5; i++) {
+                    drawBlk(posX - 16 * ratio + 8 * ratio * i, posY - 16 * ratio, width, this->direction);
+                }
+                for (int i = 0; i < 5; i++) {
+                    drawBlk(posX - 16 * ratio + 8 * ratio * i, posY + 16 * ratio, width, this->direction);
+                }
             }
-            for (int i = 0; i < 5; i++) {
-                drawBlk(posX + 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
+            //draw the tank head with red color
+            glColor3ub(255, 30, 0);
+            drawAim(posX, posY, width, fireAngle);
+        } else if (this->tankType == type2) {
+            glColor3ub(30, 128, 0);
+            drawBody(posX, posY, width, this->direction);
+            //draw the wheel gap with black color
+            if (this->direction == 0) {
+                for (int i = 0; i < 5; i++) {
+                    drawBlk(posX - 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
+                }
+                for (int i = 0; i < 5; i++) {
+                    drawBlk(posX + 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
+                }
+            } else {
+                for (int i = 0; i < 5; i++) {
+                    drawBlk(posX - 16 * ratio + 8 * ratio * i, posY - 16 * ratio, width, this->direction);
+                }
+                for (int i = 0; i < 5; i++) {
+                    drawBlk(posX - 16 * ratio + 8 * ratio * i, posY + 16 * ratio, width, this->direction);
+                }
             }
+            glColor3ub(30, 255, 0);
+            drawAim(posX, posY, width, fireAngle);
+        } else if (this->tankType == type3) {
+        } else if (this->tankType == type3) {
+            glColor3ub(0, 30, 128);
+            drawBody(posX, posY, width, this->direction);
+            //draw the wheel gap with black color
+            if (this->direction == 0) {
+                for (int i = 0; i < 5; i++) {
+                    drawBlk(posX - 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
+                }
+                for (int i = 0; i < 5; i++) {
+                    drawBlk(posX + 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
+                }
+            } else {
+                for (int i = 0; i < 5; i++) {
+                    drawBlk(posX - 16 * ratio + 8 * ratio * i, posY - 16 * ratio, width, this->direction);
+                }
+                for (int i = 0; i < 5; i++) {
+                    drawBlk(posX - 16 * ratio + 8 * ratio * i, posY + 16 * ratio, width, this->direction);
+                }
+            }
+            glColor3ub(0, 30, 255);
+            drawAim(posX, posY, width, fireAngle);
+        } else if (this->tankType == type4) {
+            glColor3ub(128, 128, 0);
+            drawBody(posX, posY, width, this->direction);
+            //draw the wheel gap with black color
+            if (this->direction == 0) {
+                for (int i = 0; i < 5; i++) {
+                    drawBlk(posX - 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
+                }
+                for (int i = 0; i < 5; i++) {
+                    drawBlk(posX + 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
+                }
+            } else {
+                for (int i = 0; i < 5; i++) {
+                    drawBlk(posX - 16 * ratio + 8 * ratio * i, posY - 16 * ratio, width, this->direction);
+                }
+                for (int i = 0; i < 5; i++) {
+                    drawBlk(posX - 16 * ratio + 8 * ratio * i, posY + 16 * ratio, width, this->direction);
+                }
+            }
+            glColor3ub(200, 200, 0);
+            drawAim(posX, posY, width, fireAngle);
+        } else {
+            printf("Error: tank Type not found");
         }
-        else {
-            for (int i = 0; i < 5; i++) {
-                drawBlk(posX - 16 * ratio + 8 * ratio * i, posY - 16 * ratio, width, this->direction);
-            }
-            for (int i = 0; i < 5; i++) {
-                drawBlk(posX - 16 * ratio + 8 * ratio * i, posY + 16 * ratio, width, this->direction);
-            }
-        }
-        //draw the tank head with red color
-        glColor3ub(255, 30, 0);
-        drawAim(posX, posY, width, fireAngle);
-    } else if(this->tankType == type2){
-        glColor3ub(30,128,0);
-        drawBody(posX, posY, width, this->direction);
-        //draw the wheel gap with black color
-        if (this->direction == 0) {
-            for (int i = 0; i < 5; i++) {
-                drawBlk(posX - 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
-            }
-            for (int i = 0; i < 5; i++) {
-                drawBlk(posX + 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
-            }
-        }
-        else {
-            for (int i = 0; i < 5; i++) {
-                drawBlk(posX - 16 * ratio + 8 * ratio * i, posY - 16 * ratio, width, this->direction);
-            }
-            for (int i = 0; i < 5; i++) {
-                drawBlk(posX - 16 * ratio + 8 * ratio * i, posY + 16 * ratio, width, this->direction);
-            }
-        }
-        glColor3ub(30,255,0);
-        drawAim(posX, posY, width, fireAngle);
-    } else if(this->tankType == type3){
-        glColor3ub(0,30,128);
-        drawBody(posX, posY, width, this->direction);
-        //draw the wheel gap with black color
-        if (this->direction == 0) {
-            for (int i = 0; i < 5; i++) {
-                drawBlk(posX - 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
-            }
-            for (int i = 0; i < 5; i++) {
-                drawBlk(posX + 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
-            }
-        }
-        else {
-            for (int i = 0; i < 5; i++) {
-                drawBlk(posX - 16 * ratio + 8 * ratio * i, posY - 16 * ratio, width, this->direction);
-            }
-            for (int i = 0; i < 5; i++) {
-                drawBlk(posX - 16 * ratio + 8 * ratio * i, posY + 16 * ratio, width, this->direction);
-            }
-        }
-        glColor3ub(0,30,255);
-        drawAim(posX, posY, width, fireAngle);
-    } else if(this->tankType == type4){
-        glColor3ub(128,128,0);
-        drawBody(posX, posY, width, this->direction);
-        //draw the wheel gap with black color
-        if (this->direction == 0) {
-            for (int i = 0; i < 5; i++) {
-                drawBlk(posX - 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
-            }
-            for (int i = 0; i < 5; i++) {
-                drawBlk(posX + 16 * ratio, posY - 16 * ratio + 8 * ratio * i, width, this->direction);
-            }
-        }
-        else {
-            for (int i = 0; i < 5; i++) {
-                drawBlk(posX - 16 * ratio + 8 * ratio * i, posY - 16 * ratio, width, this->direction);
-            }
-            for (int i = 0; i < 5; i++) {
-                drawBlk(posX - 16 * ratio + 8 * ratio * i, posY + 16 * ratio, width, this->direction);
-            }
-        }
-        glColor3ub(200,200,0);
-        drawAim(posX, posY, width, fireAngle);
-    }
-    else {
-        printf("Error: tank Type not found");
     }
 }
 
@@ -526,12 +526,14 @@ void wrap2pi(float &angle) {
 
 void tank::rotate(int key) {
     float stepAngle = 45*PI/180;
-    if((key == FSKEY_J && user == 0) || (key == FSKEY_5 && user == 1)){//clockwise
-        this->fireAngle -= stepAngle;
-        wrap2pi(this->fireAngle);
-    } else if ((key == FSKEY_K && user == 0) || (key == FSKEY_6 && user == 1)){//counter-clockwise
-        this->fireAngle += stepAngle;
-        wrap2pi(this->fireAngle);
+    if(this->health >0) {
+        if ((key == FSKEY_J && user == 0) || (key == FSKEY_5 && user == 1)) {//clockwise
+            this->fireAngle -= stepAngle;
+            wrap2pi(this->fireAngle);
+        } else if ((key == FSKEY_K && user == 0) || (key == FSKEY_6 && user == 1)) {//counter-clockwise
+            this->fireAngle += stepAngle;
+            wrap2pi(this->fireAngle);
+        }
     }
 }
 
@@ -542,31 +544,33 @@ void tank::checkFire(int key) {//TODO:check the bulletShot whether hit the targe
 }
 
 void tank::newFire(int key) {
-    if((key == FSKEY_SPACE && this->user == 0) || (key == FSKEY_0 && this->user == 1)){
-        if (BulletCount[currentBulletType] > 0) {
-            if (!tankBullet.GetIsHit() && tankBullet.GetIsShot()) {
-                std::cout << "Error: Bullet Not Hit!" << std::endl;
-            } else {
-                BulletCount[currentBulletType]--;
-                tankBullet.ChangeBulletType(currentBulletType);
-                tankBullet.ShootBullet();
-                std::cout << "Fire Success!" << std::endl;
-                switch (currentBulletType) {
-                    case 0:
-                        this->soundPlayer->playShootBullet1();
-                        break;
-                    case 1:
-                        this->soundPlayer->playShootBullet2();
-                        break;
-                    case 2:
-                        this->soundPlayer->playShootBullet3();
-                        break;
-                    default:
-                        break;
+    if(this->health >0) {
+        if ((key == FSKEY_SPACE && this->user == 0) || (key == FSKEY_0 && this->user == 1)) {
+            if (BulletCount[currentBulletType] > 0) {
+                if (!tankBullet.GetIsHit() && tankBullet.GetIsShot()) {
+                    std::cout << "Error: Bullet Not Hit!" << std::endl;
+                } else {
+                    BulletCount[currentBulletType]--;
+                    tankBullet.ChangeBulletType(currentBulletType);
+                    tankBullet.ShootBullet();
+                    std::cout << "Fire Success!" << std::endl;
+//                switch (currentBulletType) {
+//                    case 0:
+//                        this->soundPlayer->playShootBullet1();
+//                        break;
+//                    case 1:
+//                        this->soundPlayer->playShootBullet2();
+//                        break;
+//                    case 2:
+//                        this->soundPlayer->playShootBullet3();
+//                        break;
+//                    default:
+//                        break;
+//                }
                 }
+            } else {
+                std::cout << "Error: No More Bullets!" << std::endl;
             }
-        } else {
-            std::cout << "Error: No More Bullets!" << std::endl;
         }
     }
 }
@@ -580,11 +584,13 @@ void tank::checkBulletCount() {
 }
 
 void tank::changeFireBullet(int key) {
-    if((key == FSKEY_B && this->user == 0) || (key == FSKEY_7 && this->user == 1)){
-        currentBulletType = (currentBulletType + 1) % 3;
-        tankBullet.ChangeBulletType(currentBulletType);
-        std::cout << "Current Bullet Type: " << currentBulletType << std::endl;
-        checkBulletCount();
+    if(this->health >0) {
+        if ((key == FSKEY_B && this->user == 0) || (key == FSKEY_7 && this->user == 1)) {
+            currentBulletType = (currentBulletType + 1) % 3;
+            tankBullet.ChangeBulletType(currentBulletType);
+            std::cout << "Current Bullet Type: " << currentBulletType << std::endl;
+            checkBulletCount();
+        }
     }
 }
 
@@ -607,8 +613,20 @@ bool tank::checkTankHealth() {
     if(this->health > 0){
         return true;//alive
     } else {
-        this->soundPlayer->playDie();
         return false;//dead
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
