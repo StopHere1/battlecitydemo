@@ -208,7 +208,7 @@ bool IsColliding(int tankX, int tankY, int toolX, int toolY, int offsetX, int of
     toolY += offsetY;
     
     // Define a collision range
-    const int collisionRange = 10;
+    const int collisionRange = 20;
     return std::abs(tankX - toolX) <= collisionRange && std::abs(tankY - toolY) <= collisionRange;
 }
 
