@@ -72,16 +72,20 @@ void DrawCircle(int centerX, int centerY, int radius, const unsigned char color[
 
 void Tool::DrawHealthTool() const {
     const unsigned char red[3] = {255, 0, 0};
-    int circleRadius = 7;
-    int triangleSize = 15;
-    DrawCircle(this->x - circleRadius, this->y, circleRadius, red);
-    DrawCircle(this->x + circleRadius, this->y, circleRadius, red);
+    int circleRadius = 7*0.75;
+    int triangleSize = 15*0.75;
+    
+    int offsetX = 4 * circleRadius;
+    int offsetY = 4.5 * circleRadius;
+    
+    DrawCircle(this->x - circleRadius - offsetX, this->y - offsetY, circleRadius, red);
+    DrawCircle(this->x + circleRadius - offsetX, this->y - offsetY, circleRadius, red);
     
     glColor3ubv(red);
     glBegin(GL_TRIANGLES);
-    glVertex2i(this->x - triangleSize, this->y);
-    glVertex2i(this->x + triangleSize, this->y);
-    glVertex2i(this->x, this->y + triangleSize);
+    glVertex2i(this->x - triangleSize - offsetX, this->y - offsetY);
+    glVertex2i(this->x + triangleSize - offsetX, this->y - offsetY);
+    glVertex2i(this->x - offsetX, this->y + triangleSize - offsetX);
     glEnd();
 }
 
@@ -90,82 +94,83 @@ void Tool::DrawFireRateTool() const {
     const unsigned char gold[3] = {255, 215, 0};
 
     glColor3ubv(gold);
-    int bulletWidth = 9;
-    int bulletHeight = 15;
-    int triangleHeight = 7.5;
+    int bulletWidth = 9*0.9;
+    int bulletHeight = 15*0.9;
+    int triangleHeight = 7.5*0.9;
+    
+    int offsetX = 2.6 * bulletWidth;
+    int offsetY = 1.85 * bulletHeight;
+    
     glBegin(GL_TRIANGLES);
-    glVertex2i(this->x, this->y - triangleHeight);
-    glVertex2i(this->x - bulletWidth / 2, this->y);
-    glVertex2i(this->x + bulletWidth / 2, this->y);
+    glVertex2i(this->x - offsetX, this->y - triangleHeight - offsetY);
+    glVertex2i(this->x - bulletWidth / 2 - offsetX, this->y - offsetY);
+    glVertex2i(this->x + bulletWidth / 2 - offsetX, this->y - offsetY);
     glEnd();
 
     glBegin(GL_QUADS);
-    glVertex2i(this->x - bulletWidth / 2, this->y);
-    glVertex2i(this->x + bulletWidth / 2, this->y);
-    glVertex2i(this->x + bulletWidth / 2, this->y + bulletHeight);
-    glVertex2i(this->x - bulletWidth / 2, this->y + bulletHeight);
-    glEnd();
-
-    int plusSize = 15;
-    glColor3ubv(black);
-    glBegin(GL_LINES);
-    glVertex2i(this->x + bulletWidth / 2 + 4.5, this->y - bulletHeight / 2);
-    glVertex2i(this->x + bulletWidth / 2 + 4.5 + plusSize, this->y - bulletHeight / 2);
-    glVertex2i(this->x + bulletWidth / 2 + 4.5 + plusSize / 2, this->y - bulletHeight / 2 - plusSize / 2);
-    glVertex2i(this->x + bulletWidth / 2 + 4.5 + plusSize / 2, this->y - bulletHeight / 2 + plusSize / 2);
+    glVertex2i(this->x - bulletWidth / 2 - offsetX, this->y - offsetY);
+    glVertex2i(this->x + bulletWidth / 2 - offsetX, this->y - offsetY);
+    glVertex2i(this->x + bulletWidth / 2 - offsetX, this->y + bulletHeight - offsetY);
+    glVertex2i(this->x - bulletWidth / 2 - offsetX, this->y + bulletHeight - offsetY);
     glEnd();
 }
 
-void Tool::DrawLandMineTool() const {
-    int size = std::min(this->power, 25);
+void Tool::DrawAddSpeedTool() const {
+    const unsigned char lightBlue[3] = {173, 216, 230};
+    const unsigned char mediumBlue[3] = {0, 0, 205};
+    const unsigned char darkBlue[3] = {0, 0, 139};
 
-    int halfSize = size / 2;
-    int quarterSize = size / 4;
-    const unsigned char black[3] = {0, 0, 0};
-    glColor3ubv(black);
-    DrawCircle(this->x, this->y, halfSize, black);
+    int triangleBase = 10;
+    int triangleHeight = 17.5;
+    int offsetX = 1.85 * triangleHeight;
+    int offsetY = 2.8 * triangleBase;
 
+    int triangleOffsetX = triangleBase - 3; // Horizontal offset between triangles
+    int currentX = this->x;
+
+    glColor3ubv(lightBlue);
     glBegin(GL_TRIANGLES);
-    for (int i = 0; i < 8; ++i) {
-        double angle = i * M_PI / 4.0;
-        glVertex2i(this->x, this->y);
-        glVertex2i(this->x + halfSize * cos(angle - M_PI / 8), this->y + halfSize * sin(angle - M_PI / 8));
-        glVertex2i(this->x + halfSize * cos(angle + M_PI / 8), this->y + halfSize * sin(angle + M_PI / 8));
-    }
+    glVertex2i(currentX - offsetX, this->y - offsetY);
+    glVertex2i(currentX - offsetX, this->y + triangleHeight - offsetY);
+    glVertex2i(currentX + triangleBase - offsetX, this->y + (triangleHeight / 2) - offsetY);
     glEnd();
 
-    DrawCircle(this->x, this->y, quarterSize, black);
-    int dotRadius = size / 10;
-    DrawCircle(this->x, this->y, dotRadius, black);
+    currentX += triangleOffsetX;
 
-    int tinyTriangleSize = 5;
+    glColor3ubv(mediumBlue);
     glBegin(GL_TRIANGLES);
-    for (int i = 0; i < 8; ++i) {
-        double angle = i * M_PI / 4.0;
-        int outerRadius = halfSize + 2;
-        int tipX = this->x + (outerRadius + tinyTriangleSize) * cos(angle);
-        int tipY = this->y + (outerRadius + tinyTriangleSize) * sin(angle);
-        glVertex2i(tipX, tipY);
-        glVertex2i(this->x + outerRadius * cos(angle + M_PI / 16), this->y + outerRadius * sin(angle + M_PI / 16));
-        glVertex2i(this->x + outerRadius * cos(angle - M_PI / 16), this->y + outerRadius * sin(angle - M_PI / 16));
-    }
+    glVertex2i(currentX - offsetX, this->y - offsetY);
+    glVertex2i(currentX - offsetX, this->y + triangleHeight - offsetY);
+    glVertex2i(currentX + triangleBase - offsetX, this->y + (triangleHeight / 2) - offsetY);
+    glEnd();
+
+    currentX += triangleOffsetX;
+
+    glColor3ubv(darkBlue);
+    glBegin(GL_TRIANGLES);
+    glVertex2i(currentX - offsetX, this->y - offsetY);
+    glVertex2i(currentX - offsetX, this->y + triangleHeight - offsetY);
+    glVertex2i(currentX + triangleBase - offsetX, this->y + (triangleHeight / 2) - offsetY);
     glEnd();
 }
 
 void Tool::DrawShieldTool() const {
     const unsigned char black[3] = {0, 0, 0};
-    int squareSide = 30;
+    int squareSide = 15;
     int radius = squareSide / 2;
+    
+    int offsetX = 1.35 * squareSide;
+    int offsetY = 1.55 * squareSide;
 
     glColor3ubv(black);
     glBegin(GL_QUADS);
-    glVertex2i(this->x - radius, this->y - radius);
-    glVertex2i(this->x + radius, this->y - radius);
-    glVertex2i(this->x + radius, this->y + radius);
-    glVertex2i(this->x - radius, this->y + radius);
+    glVertex2i(this->x - radius - offsetX, this->y - radius - offsetY);
+    glVertex2i(this->x + radius - offsetX, this->y - radius - offsetY);
+    glVertex2i(this->x + radius - offsetX, this->y + radius - offsetY);
+    glVertex2i(this->x - radius - offsetX, this->y + radius - offsetY);
     glEnd();
 
-    DrawCircle(this->x, this->y + radius, radius, black);
+    DrawCircle(this->x - offsetX, this->y + radius - offsetY, radius, black);
 }
 
 void SetupTools(std::vector<Tool>& tools) {
@@ -173,7 +178,7 @@ void SetupTools(std::vector<Tool>& tools) {
 
      tools.emplace_back(120, 120, TOOL_HEALTH, true, 0, 20);
      tools.emplace_back(560, 360, TOOL_FIRE_RATE, true, 0, 20);
-     tools.emplace_back(440, 400, TOOL_LAND_MINE, true, 0, 20);
+     tools.emplace_back(440, 400, TOOL_ADD_SPEED, true, 0, 20);
      tools.emplace_back(880, 640, TOOL_SHIELD, true, 0, 20);
 }
 
@@ -187,8 +192,8 @@ void DisplayTools(const std::vector<Tool>& tools) {
                 case TOOL_FIRE_RATE:
                     tool.DrawFireRateTool();
                     break;
-                case TOOL_LAND_MINE:
-                    tool.DrawLandMineTool();
+                case TOOL_ADD_SPEED:
+                    tool.DrawAddSpeedTool();
                     break;
                 case TOOL_SHIELD:
                     tool.DrawShieldTool();
