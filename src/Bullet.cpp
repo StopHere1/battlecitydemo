@@ -421,6 +421,10 @@ void Bullet::Hit(void) {
     glEnd();
 }
 
+// void Bullet::ReoundCase(void){
+    
+// }
+
 void Bullet::Rotate(double& x, double& y, double theta) {
     double newx, newy;
     newx = cos(theta) * x - sin(theta) * y;

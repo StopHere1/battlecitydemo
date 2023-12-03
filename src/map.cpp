@@ -348,10 +348,10 @@ void Map::do_delete(int& x, int& y) {  // tank   //, int mapp[18][32]
 		}
 	}
 }
-void Map::do_delete2(int& x, int& y) {   // bullet // , int mapp[18][32]
-	for (int j = 0; j < wid; ++j) {
-		for (int i = 0; i < len; ++i) {  // destroy 1 3 
-			if (mapf[j][i] != 0 && checkCollision3(x, y, i, j)    //
+void Map::do_delete2(int& x, int& y, int&i, int&j) {   // bullet // , int mapp[18][32]
+	// for (int j = 0; j < wid; ++j) {
+	// 	for (int i = 0; i < len; ++i) {  // destroy 1 3 
+			if (mapf[j][i] != 0     //
 				//&& mapp[j][i] != 1 && mapp[j][i] != 3
 				&& mapf[j][i] != 2
 				&& mapf[j][i] != 4 && mapf[j][i] != 5
@@ -359,8 +359,8 @@ void Map::do_delete2(int& x, int& y) {   // bullet // , int mapp[18][32]
 				) { // this can set to delete which block After Collision Detection
 				deleteWall(i, j);
 			}
-		}
-	}
+	// 	}
+	// }
 }
 bool Map::not_move(int& x, int& y, int& prex, int& prey) {  // for non-destructive //��Ҫʵʱ���� ����main� // tank
 	for (int j = 0; j < wid; ++j) {
