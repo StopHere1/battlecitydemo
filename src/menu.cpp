@@ -1706,6 +1706,7 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             Bullet* bullet1 = testTank1.getBullet();
             Bullet* bullet2 = testTank2.getBullet();
             bulletTankCollision(*bullet1, *bullet2, testTank1, testTank2);
+            bulletMapCollision(*bullet1, *bullet2, mapmanager);
             FsSwapBuffers();
         }
     }else if(stage == 7){
@@ -2037,6 +2038,7 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             Bullet* bullet1 = testTank1.getBullet();
             Bullet* bullet2 = testTank2.getBullet();
             bulletTankCollision(*bullet1, *bullet2, testTank1, testTank2);
+            bulletMapCollision(*bullet1, *bullet2, mapmanager);
             FsSwapBuffers();
         }
     }
