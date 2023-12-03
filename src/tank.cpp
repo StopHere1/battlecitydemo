@@ -173,43 +173,12 @@ int tank::init(Type type, int User) {
     }
 }
 
-void tank::move(int key)
+void tank::move()
 {
-    if(this->health > 0) {
-        if (this->user == 0) {
-            if (key == FSKEY_W) {
-                this->posY -= speed;
-                this->direction = 0;
-            }
-            if (key == FSKEY_S) {
-                this->posY += speed;
-                this->direction = 0;
-            }
-            if (key == FSKEY_A) {
-                this->posX -= speed;
-                this->direction = 1;
-            }
-            if (key == FSKEY_D) {
-                this->posX += speed;
-                this->direction = 1;
-            }
-        } else if (this->user == 1) {
-            if (key == FSKEY_UP) {
-                this->posY -= speed;
-                this->direction = 0;
-            }
-            if (key == FSKEY_DOWN) {
-                this->posY += speed;
-                this->direction = 0;
-            }
-            if (key == FSKEY_LEFT) {
-                this->posX -= speed;
-                this->direction = 1;
-            }
-            if (key == FSKEY_RIGHT) {
-                this->posX += speed;
-                this->direction = 1;
-            }
+    if(this->health >0) {
+        if(this->canMove){
+            this->posX = this->nextPosX;
+            this->posY = this->nextPosY;
         }
     }
 }
@@ -616,6 +585,72 @@ bool tank::checkTankHealth() {
     }
 }
 
+void tank::setCanMove(bool input) {
+    this->canMove = input;
+}
+
+void tank::setNextPosX(float input) {
+    this->nextPosX = input;
+}
+
+void tank::setNextPosY(float input) {
+    this->nextPosY = input;
+}
+
+float tank::getNextPosX() {
+    return this->nextPosX;
+}
+
+float tank::getNextPosY() {
+    return this->nextPosY;
+}
+
+bool tank::getCanMove() {
+    return this->canMove;
+}
+
+std::vector<float> tank::checkMove(int key) {
+    if(this->canMove) {
+        if (this->health > 0) {
+            if (this->user == 0) {
+                if (key == FSKEY_W) {
+                    this->nextPosY = this->posY - speed;
+                    this->direction = 0;
+                }
+                if (key == FSKEY_S) {
+                    this->nextPosY = this->posY + speed;
+                    this->direction = 0;
+                }
+                if (key == FSKEY_A) {
+                    this->nextPosX = this->posX - speed;
+                    this->direction = 1;
+                }
+                if (key == FSKEY_D) {
+                    this->nextPosX = this->posX + speed;
+                    this->direction = 1;
+                }
+            } else if (this->user == 1) {
+                if (key == FSKEY_UP) {
+                    this->nextPosY = this->posY - speed;
+                    this->direction = 0;
+                }
+                if (key == FSKEY_DOWN) {
+                    this->nextPosY = this->posY + speed;
+                    this->direction = 0;
+                }
+                if (key == FSKEY_LEFT) {
+                    this->nextPosX = this->posX - speed;
+                    this->direction = 1;
+                }
+                if (key == FSKEY_RIGHT) {
+                    this->nextPosX = this->posX + speed;
+                    this->direction = 1;
+                }
+            }
+        }
+    }
+    return {this->nextPosX, this->nextPosY};
+}
 
 
 

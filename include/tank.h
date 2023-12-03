@@ -2,8 +2,8 @@
 // Created by anthonyshen on 11/13/23.
 //
 
-#ifndef TANK_H
-#define TANK_H
+#ifndef BATTLECITYDEMO_TANK_H
+#define BATTLECITYDEMO_TANK_H
 #include <list>
 #include "../include/Bullet.h"
 #include "../include/sound.h"
@@ -16,7 +16,8 @@
 class tank {
 public:
     tank() { posX = 0; posY = 0; armor = 0; health = 0; load = 0; speed = 0; power = 0;
-        weight = 0; state = 0; magSize = 0; fireAngle = 0; direction =0 ;healthMax = 100; tankType = type1; user = 0; currentBulletType = 0;}
+        weight = 0; state = 0; magSize = 0; fireAngle = 0; direction =0 ;healthMax = 100;
+        tankType = type1; user = 0; currentBulletType = 0; canMove = true; nextPosX = 0; nextPosY = 0;}
     enum Type {type1, type2, type3, type4};// tank Type
     float getPosX();
     float getPosY();
@@ -32,6 +33,9 @@ public:
     int getDirection();
     float getFireAngle();
     int getUser();
+    float getNextPosX();
+    float getNextPosY();
+    bool getCanMove();
     std::vector<int> getBulletCount();
     void setPosX(float input);
     void setPosY(float input);
@@ -47,10 +51,14 @@ public:
     void setFireAngle(float input);
     void setDirection(int input);
     void setUser(int input);
+    void setNextPosX(float input);
+    void setNextPosY(float input);
+    void setCanMove(bool input);
     void setSoundPlayer(Sound *soundplayer);
 
     int init(Type type, int user);
-    void move(int key);
+    void move();
+    std::vector<float> checkMove(int key);
     void singleReload(int key);
     void reload(int key);
     void fire();
@@ -79,6 +87,9 @@ protected:
     int user; //0 for player 1, 1 for player2
     float posX; // position x of tank
     float posY; // position y of tank
+    float nextPosX; // next position x of tank
+    float nextPosY; // next position y of tank
+    bool canMove; // if the tank can move
     float armor; // armor of tank
     float weight; // weight of tank
     float health; // health of tank
@@ -103,4 +114,4 @@ protected:
 };
 
 
-#endif //TANK_H
+#endif //BATTLECITYDEMO_TANK_H
