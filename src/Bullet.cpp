@@ -125,7 +125,7 @@ void Bullet::Draw(double tankx, double tanky, double tankangle) {
                     if (this->reboundable == 1 && this->count_rebound != 0) {
                         //sound effect for rebound
                         sound->playHitRebound();
-                        this->angle = - this->angle;
+                        this->angle == PI-this->angle;
                         CollisionCase = 0;
                         MapDestructible = 0;
                         CollideMap = 0;
@@ -421,9 +421,17 @@ void Bullet::Hit(void) {
     glEnd();
 }
 
-// void Bullet::ReoundCase(void){
-    
-// }
+void Bullet::ReboundCase(void){
+    if (this->angle == 0){
+        this->angle == PI-this->angle;
+    }
+    else if (this->angle == PI){
+        this->angle == 0;
+    }
+    else if (this->angle){
+        this->angle == -this->angle;
+    }
+}
 
 void Bullet::Rotate(double& x, double& y, double theta) {
     double newx, newy;

@@ -77,6 +77,7 @@ public:
     int GetBulletType(void);
     void IsCollideTank(void);
     void IsCollideMap(void);
+    void ReboundCase(void);
     // void IsCollideMapX(void);
     // void IsCollideMapY(void);
     void ShootBullet(void);
