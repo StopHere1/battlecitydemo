@@ -348,8 +348,8 @@ void Bullet::Reset(void) {
     this->damage = 0;
     this->damagemap = 0;
     this->count_rebound = 10;
-    this->x = 0;
-    this->y = 0;
+    this->x = -50;
+    this->y = -50;
 }
 
 void Bullet::ShootBullet(void) {

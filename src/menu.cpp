@@ -554,14 +554,16 @@ stage7: timelimited occupation
 void menu::bulletTankCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, tank &testTank1, tank &testTank2){
     // printf("bullet1 position x: %f y: %f", tank1Bullet.GetBulletX(), tank1Bullet.GetBulletY());
     // printf("tank 2 position x: %f y: %f", testTank2.getPosX(), testTank2.getPosY());
-    bool IsCollide;
-    IsCollide = tank1Bullet.CheckTankCollision(testTank2.getPosX(), testTank2.getPosY());
-    if (IsCollide){
+    // if(tank1Bullet.GetIsShot()){
+    bool IsCollideTank1;
+    IsCollideTank1 = tank1Bullet.CheckTankCollision(testTank2.getPosX(), testTank2.getPosY());
+    if (IsCollideTank1){
         tank1Bullet.IsCollideTank();
         double tank2health = testTank2.getHealth();
         double tank2armor = testTank2.getArmor();
         if (tank2armor > 0){
             double damage = 0.7*tank1Bullet.GetDamage();
+            // printf("damage:%f",damage);
             tank2armor -= damage;
             testTank2.setArmor(tank2armor);
         }
@@ -571,25 +573,29 @@ void menu::bulletTankCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, tank &t
             testTank2.setHealth(tank2health);   
         }     
     }  
+    // }
 
-    IsCollide = tank2Bullet.CheckTankCollision(testTank1.getPosX(), testTank1.getPosY());
-    if (IsCollide){
-        tank2Bullet.IsCollideTank();
-        double tank1health = testTank1.getHealth();
-        double tank1armor = testTank1.getArmor();
-        if (tank1armor > 0){
-            double damage = 0.7*tank2Bullet.GetDamage();
-            tank1armor -= damage;
-            printf("tank1armor: %f", tank1armor);
-            testTank1.setArmor(tank1armor);
-        }
-        else{
-            testTank1.setArmor(0.0);
-            tank1health = tank1health-tank2Bullet.GetDamage();
-            testTank1.setHealth(tank1health);   
-        }
-            
-    }  
+    // if(tank2Bullet.GetIsShot()){
+        bool IsCollideTank2;
+        IsCollideTank2 = tank2Bullet.CheckTankCollision(testTank1.getPosX(), testTank1.getPosY());
+        if (IsCollideTank2){
+            tank2Bullet.IsCollideTank();
+            double tank1health = testTank1.getHealth();
+            double tank1armor = testTank1.getArmor();
+            if (tank1armor > 0){
+                double damage = 0.7*tank2Bullet.GetDamage();
+                tank1armor -= damage;
+                // printf("tank1armor: %f", tank1armor);
+                testTank1.setArmor(tank1armor);
+            }
+            else{
+                testTank1.setArmor(0.0);
+                tank1health = tank1health-tank2Bullet.GetDamage();
+                testTank1.setHealth(tank1health);   
+            }
+                
+        }  
+    // }
 
     
 }
@@ -597,14 +603,16 @@ void menu::bulletMapCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, Map &map
     // if(maptype == 1){
     //     map.
     // }
+    // if(tank1Bullet.GetIsShot()){
     int bullet1x = tank1Bullet.GetBulletX();
     int bullet1y = tank1Bullet.GetBulletY();
     int map1x = floor(bullet1x/40);
     int map1y = floor(bullet1y/40);
-    bool IsCollideMap1 = map.checkCollision3(bullet1x,bullet1y,map1x,map1y);
+    // printf("bulletx: %d,mapx:%d",bullet1x,map1x);
+    bool IsCollideMap1 = map.bulletCollide(bullet1x, bullet1y, map1x, map1y);
     if (IsCollideMap1){
         bool IsDestructibleMap1 = map.not_move2(bullet1x,bullet1y);
-        if (IsDestructibleMap1){
+        if (not IsDestructibleMap1){
             tank1Bullet.IsMapDestructible();
         }
         tank1Bullet.IsCollideMap();
@@ -612,24 +620,26 @@ void menu::bulletMapCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, Map &map
     if (tank1Bullet.GetBulletType()!=2){
         map.do_delete2(bullet1x,bullet1y);
     }
+    // }
     
 
- 
+    // // if(tank2Bullet.GetIsShot()){
     int bullet2x = tank2Bullet.GetBulletX();
     int bullet2y = tank2Bullet.GetBulletY();
     int map2x = floor(bullet2x/40);
     int map2y = floor(bullet2y/40);
-    bool IsCollideMap2 = map.checkCollision3(bullet1x,bullet1y,map1x,map1y);
-    if (IsCollideMap2){
-        bool IsDestructibleMap2 = map.not_move2(bullet2x,bullet2y);
-        if (IsDestructibleMap2){
-            tank2Bullet.IsMapDestructible();
+    bool IsCollideMap2 = map.bulletCollide(bullet2x, bullet2y, map2x, map2y);
+        if (IsCollideMap2){
+            bool IsDestructibleMap2 = map.not_move2(bullet2x,bullet2y);
+            if (not IsDestructibleMap2){
+                tank2Bullet.IsMapDestructible();
+            }
+            tank2Bullet.IsCollideMap();
         }
-        tank2Bullet.IsCollideMap();
-    }
-    if (tank2Bullet.GetBulletType()!=2){
-        map.do_delete2(bullet1x,bullet1y);
-    }
+        if (tank2Bullet.GetBulletType()!=2){
+            map.do_delete2(bullet2x,bullet2y);
+        }
+    // }
 
 
 }

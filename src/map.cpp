@@ -309,20 +309,21 @@ bool Map::checkCollision2(int boxX, int boxY, int wallI, int wallJ) { // for lan
 	}
 	return true;  // Collision detected
 }
-bool Map::checkCollision3(int boxX, int boxY, int wallI, int wallJ) { // bullet
-	boxX += L / 2; boxY -= L / 2; int d = 10;
-	int boxLeft = boxX - d;
-	int boxRight = boxX + d;
-	int boxTop = boxY - d;
-	int boxBottom = boxY + d;
+bool Map::checkCollision3(int boxX, int  boxY, int wallI, int wallJ) { // bullet
+	// boxX += L / 2; boxY -= L / 2; int d = 10;
+	// int boxLeft = boxX - d;
+	// int boxRight = boxX + d;
+	// int boxTop = boxY - d;
+	// int boxBottom = boxY + d;
 
-	int wallLeft = (wallI * L) - 30;
+
+	int wallLeft = (wallI * L);
 	int wallRight = (wallI + 1) * L;
 	int wallBottom = wallJ * L;
 	int wallTop = (wallJ + 1) * L;
 
 	//printf("%d %d %d %d\n%d %d %d %d\n\n", boxLeft, boxRight, boxTop, boxBottom, wallLeft, wallRight, wallBottom, wallTop);
-	if (boxRight < wallLeft || boxLeft > wallRight || boxTop < wallBottom || boxBottom > wallTop) {
+	if (boxX < wallLeft || boxX > wallRight || boxY < wallBottom || boxY > wallTop) {
 		return false;  // No collision
 	}
 	return true;  // Collision detected
@@ -386,6 +387,13 @@ bool Map::not_move2(int& x, int& y) {  // for non-destructive //��Ҫʵʱ��
 		}
 	}
 	return true;
+}
+
+bool Map::bulletCollide(int &x, int &y, int &i, int &j){
+	if (mapf[j][i] != 0 && checkCollision3(x, y, i, j)){
+		return true;
+	}
+	return false;
 }
 //using Clock = std::chrono::high_resolution_clock;
 //using TimePoint = std::chrono::time_point<Clock>;
