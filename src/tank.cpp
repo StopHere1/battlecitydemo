@@ -110,10 +110,10 @@ int tank::init(Type type, int User) {
             this->tankType = type1;
             this->posX = 0;
             this->posY = 0;
-            this->armor = 100;
+            this->armor = 50;
             this->weight = 100;
-            this->health = 100;
-            this->healthMax = 100;
+            this->health = 50;
+            this->healthMax = 50;
             this->load = 100;
             this->magSize = 10;
             this->fireAngle = 0;
@@ -125,10 +125,10 @@ int tank::init(Type type, int User) {
             this->tankType = type2;
             this->posX = 0;
             this->posY = 0;
-            this->armor = 50;
+            this->armor = 30;
             this->weight = 50;
-            this->health = 100;
-            this->healthMax = 100;
+            this->health = 50;
+            this->healthMax = 50;
             this->load = 50;
             this->magSize = 5;
             this->direction = 0;
@@ -140,10 +140,10 @@ int tank::init(Type type, int User) {
             this->tankType = type3;
             this->posX = 0;
             this->posY = 0;
-            this->armor = 200;
+            this->armor = 100;
             this->weight = 200;
-            this->health = 100;
-            this->healthMax = 100;
+            this->health = 50;
+            this->healthMax = 50;
             this->load = 100;
             this->magSize = 20;
             this->fireAngle = 0;
@@ -155,16 +155,17 @@ int tank::init(Type type, int User) {
             this->tankType = type4;
             this->posX = 0;
             this->posY = 0;
-            this->armor = 80;
+            this->armor = 40;
             this->weight = 150;
-            this->health = 100;
-            this->healthMax = 100;
+            this->health = 80;
+            this->healthMax = 80;
             this->load = 200;
             this->magSize = 10;
             this->fireAngle = 0;
             this->direction = 0;
             this->power = 200;
             this->speed = 10;
+            this->BulletCount = {10, 20, 10};
             return 0;
         } else {
             printf("Error: tank Type not found");
@@ -650,6 +651,39 @@ std::vector<float> tank::checkMove(int key) {
         }
     }
     return {this->nextPosX, this->nextPosY};
+}
+
+void tank::setTankType(tank::Type type) {
+    this->tankType = type;
+    this->changeTankPara();
+}
+
+void tank::changeTankPara() {
+    if (this->tankType == type1) {//standard tank
+        this->armor = 50;
+        this->health = 50;
+        this->healthMax = 50;
+        this->speed = 10;
+    } else if (this->tankType == type2) {//fast tank
+        this->armor = 30;
+        this->health = 50;
+        this->healthMax = 50;
+        this->speed = 20;
+    } else if (this->tankType == type3) {//heavy tank
+        this->armor = 100;
+        this->health = 50;
+        this->healthMax = 50;
+        this->speed = 5;
+    } else if (this->tankType == type4) {//Load tank
+        this->armor = 40;
+        this->weight = 150;
+        this->health = 50;
+        this->healthMax = 50;
+        this->speed = 10;
+        this->BulletCount = {10, 20, 10};
+    } else {
+        printf("Error: tank Type not found");
+    }
 }
 
 

@@ -77,9 +77,10 @@ public:
     void newPickUpBullet(std::vector<int> bulletPack);//pick up bullet package
     void passSoundPlayer();//pass the sound player to the bullet
     bool checkTankHealth();//check if the tank is dead
+    void changeTankPara();
 
     Type getTankType() const { return tankType; }
-    void setTankType(Type type) { tankType = type; }
+    void setTankType(Type type);
     Bullet* getBullet(){return &tankBullet;}
 
     ~tank()= default;
@@ -108,7 +109,7 @@ protected:
     std::list<Bullet> bulletLoad; // list for storing bullet packages
 //    std::list<Tool> healthLoad; // list for storing health packages
     Bullet tankBullet = Bullet(0); // bullet for tank
-    std::vector<int> BulletCount = {5, 5, 5}; // count of each type of bullet
+    std::vector<int> BulletCount = {6, 10, 6}; // count of each type of bullet
     int currentBulletType = 0; // current bullet type
     Sound *soundPlayer;
 };
