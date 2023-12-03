@@ -77,9 +77,10 @@ public:
     void newPickUpBullet(std::vector<int> bulletPack);//pick up bullet package
     void passSoundPlayer();//pass the sound player to the bullet
     bool checkTankHealth();//check if the tank is dead
+    void changeTankPara();
 
     Type getTankType() const { return tankType; }
-    void setTankType(Type type) { tankType = type; }
+    void setTankType(Type type);
     Bullet* getBullet(){return &tankBullet;}
 
     ~tank()= default;

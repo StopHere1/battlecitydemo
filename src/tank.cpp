@@ -165,6 +165,7 @@ int tank::init(Type type, int User) {
             this->direction = 0;
             this->power = 200;
             this->speed = 10;
+            this->BulletCount = {10, 20, 10};
             return 0;
         } else {
             printf("Error: tank Type not found");
@@ -650,6 +651,39 @@ std::vector<float> tank::checkMove(int key) {
         }
     }
     return {this->nextPosX, this->nextPosY};
+}
+
+void tank::setTankType(tank::Type type) {
+    this->tankType = type;
+    this->changeTankPara();
+}
+
+void tank::changeTankPara() {
+    if (this->tankType == type1) {//standard tank
+        this->armor = 50;
+        this->health = 50;
+        this->healthMax = 50;
+        this->speed = 10;
+    } else if (this->tankType == type2) {//fast tank
+        this->armor = 30;
+        this->health = 50;
+        this->healthMax = 50;
+        this->speed = 20;
+    } else if (this->tankType == type3) {//heavy tank
+        this->armor = 100;
+        this->health = 50;
+        this->healthMax = 50;
+        this->speed = 5;
+    } else if (this->tankType == type4) {//Load tank
+        this->armor = 40;
+        this->weight = 150;
+        this->health = 50;
+        this->healthMax = 50;
+        this->speed = 10;
+        this->BulletCount = {10, 20, 10};
+    } else {
+        printf("Error: tank Type not found");
+    }
 }
 
 
