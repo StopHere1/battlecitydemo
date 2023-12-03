@@ -52,6 +52,6 @@ public:
 
 void SetupTools(std::vector<Tool>& tools);
 void DisplayTools(const std::vector<Tool>& tools);
-void UpdateTools(std::vector<Tool>& tools, const tank& playerTank, int& sharedRespawnTimer);
+void UpdateTools(std::vector<Tool>& tools, tank& playerTank, int& sharedRespawnTimer);
 
 #endif // TOOL_HPP

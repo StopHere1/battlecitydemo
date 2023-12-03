@@ -176,10 +176,10 @@ void Tool::DrawShieldTool() const {
 void SetupTools(std::vector<Tool>& tools) {
      tools.clear();
 
-     tools.emplace_back(120, 120, TOOL_HEALTH, true, 0, 20);
+     tools.emplace_back(120, 120, TOOL_HEALTH, true, 0, 30);
      tools.emplace_back(560, 360, TOOL_FIRE_RATE, true, 0, 20);
-     tools.emplace_back(440, 400, TOOL_ADD_SPEED, true, 0, 20);
-     tools.emplace_back(880, 640, TOOL_SHIELD, true, 0, 20);
+     tools.emplace_back(440, 400, TOOL_ADD_SPEED, true, 0, 15);
+     tools.emplace_back(880, 640, TOOL_SHIELD, true, 0, 30);
 }
 
 void DisplayTools(const std::vector<Tool>& tools) {
@@ -212,7 +212,7 @@ bool IsColliding(int tankX, int tankY, int toolX, int toolY, int offsetX, int of
     return std::abs(tankX - toolX) <= collisionRange && std::abs(tankY - toolY) <= collisionRange;
 }
 
-void UpdateTools(std::vector<Tool>& tools, const tank& playerTank, int& sharedRespawnTimer) {
+void UpdateTools(std::vector<Tool>& tools, tank& playerTank, int& sharedRespawnTimer) {
     bool allToolsNotVisible = true;
     tank& nonConstTank = const_cast<tank&>(playerTank);
     for (auto& tool : tools) {
@@ -238,8 +238,42 @@ void UpdateTools(std::vector<Tool>& tools, const tank& playerTank, int& sharedRe
                 break;
         }
 
-        if (IsColliding(static_cast<int>(nonConstTank.getPosX()), static_cast<int>(nonConstTank.getPosY()), tool.getX(), tool.getY(), offsetX, offsetY) && tool.getIsVisible()) {
-            tool.setIsVisible(false);
+        if (IsColliding(static_cast<int>(playerTank.getPosX()), static_cast<int>(playerTank.getPosY()), tool.getX(), tool.getY(), offsetX, offsetY) && tool.getIsVisible()) {
+            // Handle health tool
+            if (tool.getType() == TOOL_HEALTH) {
+                if (playerTank.getHealth() < 50) {
+                    float newHealth = std::min(playerTank.getHealth() + tool.getPower(), playerTank.getHealthMax());
+                    playerTank.setHealth(newHealth);
+                    tool.setIsVisible(false);
+                } else {
+                    std::cout << "You cannot apply add health tool since you have the max health value." << std::endl;
+                    allToolsNotVisible = false;
+                    continue;
+                }
+            }
+            else if (tool.getType() == TOOL_FIRE_RATE) {
+                std::vector<int> bulletCount = playerTank.getBulletCount(); // Make a copy
+                for (int& count : bulletCount) {
+                    count += 5; // Increase each bullet type's count by 5
+                }
+                playerTank.setBulletCount(bulletCount); // Set the modified vector back to the tank
+                tool.setIsVisible(false);
+            }
+
+            // Handle add speed tool
+            else if (tool.getType() == TOOL_ADD_SPEED) {
+                float newSpeed = playerTank.getSpeed() * 1.5f;
+                playerTank.setSpeed(newSpeed);
+                tool.setIsVisible(false);
+            }
+            // Handle add shield tool
+            else if (tool.getType() == TOOL_SHIELD) {
+                float newArmor = playerTank.getArmor() + 30;
+                playerTank.setArmor(newArmor);
+                tool.setIsVisible(false);
+            }
+
+            // Additional code for add bullet tool
         }
         if (tool.getIsVisible()) {
             allToolsNotVisible = false;
