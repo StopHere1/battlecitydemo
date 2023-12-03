@@ -391,7 +391,7 @@ bool Map::not_move2(int& x, int& y, int& prex, int& prey) {  // for non-destruct
 //using TimePoint = std::chrono::time_point<Clock>;
 //using Seconds = std::chrono::seconds;
 
-void Map::change_block(int& x, int& y) { // landing block   //, int mapp[18][32]
+bool Map::change_block(int& x, int& y) { // landing block   //, int mapp[18][32]
 	for (int j = 0; j < wid; ++j) {
 		for (int i = 0; i < len; ++i) {
 			if (mapf[j][i] != 0 && checkCollision(x, y, i, j)) { //&& checkCollision(x, y, i, j)  && mapp[j][i] == 5
@@ -413,12 +413,14 @@ void Map::change_block(int& x, int& y) { // landing block   //, int mapp[18][32]
 					score1 += 10;
 					//printf("hit\n");
 					//break;
+					return true;
 				}
 			}
 		}
 	}
+	return false;
 }
-void Map::change_block2(int& x, int& y) {   //, int mapp[18][32]
+bool Map::change_block2(int& x, int& y) {   //, int mapp[18][32]
 	for (int j = 0; j < wid; ++j) {
 		for (int i = 0; i < len; ++i) {
 			if (mapf[j][i] != 0) { //&& checkCollision(x, y, i, j)  && mapp[j][i] == 5
@@ -435,10 +437,12 @@ void Map::change_block2(int& x, int& y) {   //, int mapp[18][32]
 					mapf[j][i] = 2;  // Change back to other walls if no collision
 					score2 += 10;
 					//break;
+					return true;
 				}
 			}
 		}
 	}
+	return false;
 }
 
 
