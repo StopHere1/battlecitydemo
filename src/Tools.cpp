@@ -203,7 +203,10 @@ void DisplayTools(const std::vector<Tool>& tools) {
     }
 }
 
-bool IsColliding(int tankX, int tankY, int toolX, int toolY) {
+bool IsColliding(int tankX, int tankY, int toolX, int toolY, int offsetX, int offsetY) {
+    toolX += offsetX;
+    toolY += offsetY;
+    
     // Define a collision range
     const int collisionRange = 10;
     return std::abs(tankX - toolX) <= collisionRange && std::abs(tankY - toolY) <= collisionRange;
@@ -211,11 +214,31 @@ bool IsColliding(int tankX, int tankY, int toolX, int toolY) {
 
 void UpdateTools(std::vector<Tool>& tools, const tank& playerTank, int& sharedRespawnTimer) {
     bool allToolsNotVisible = true;
-
     tank& nonConstTank = const_cast<tank&>(playerTank);
-
     for (auto& tool : tools) {
-        if (IsColliding(static_cast<int>(nonConstTank.getPosX()), static_cast<int>(nonConstTank.getPosY()), tool.getX(), tool.getY()) && tool.getIsVisible()) {
+        int offsetX = 0;
+        int offsetY = 0;
+
+        switch (tool.getType()) {
+            case TOOL_HEALTH:
+                offsetX = -4 * 7 * 0.75; // 7 is the circleRadius in DrawHealthTool
+                offsetY = -4.5 * 7 * 0.75;
+                break;
+            case TOOL_FIRE_RATE:
+                offsetX = -2.6 * 9 * 0.9; // 9 is the bulletWidth in DrawFireRateTool
+                offsetY = -1.85 * 15 * 0.9; // 15 is the bulletHeight in DrawFireRateTool
+                break;
+            case TOOL_ADD_SPEED:
+                offsetX = -1.85 * 17.5; // 17.5 is the triangleHeight in DrawAddSpeedTool
+                offsetY = -2.8 * 10; // 10 is the triangleBase in DrawAddSpeedTool
+                break;
+            case TOOL_SHIELD:
+                offsetX = -1.35 * 15; // 15 is the squareSide in DrawShieldTool
+                offsetY = -1.55 * 15;
+                break;
+        }
+
+        if (IsColliding(static_cast<int>(nonConstTank.getPosX()), static_cast<int>(nonConstTank.getPosY()), tool.getX(), tool.getY(), offsetX, offsetY) && tool.getIsVisible()) {
             tool.setIsVisible(false);
         }
         if (tool.getIsVisible()) {
@@ -224,7 +247,7 @@ void UpdateTools(std::vector<Tool>& tools, const tank& playerTank, int& sharedRe
     }
 
     if (allToolsNotVisible && sharedRespawnTimer == 0) {
-        sharedRespawnTimer = 1500; // example respawn time
+        sharedRespawnTimer = 1500; // Respawn time
     }
 
     if (sharedRespawnTimer > 0) {
