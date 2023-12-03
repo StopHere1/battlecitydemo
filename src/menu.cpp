@@ -1038,6 +1038,7 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
     }else if(stage == 5){
         std::vector<Tool> tools;
         SetupTools(tools);
+        int share = 10;
         Map mapmanager;
         mapmanager.choosemap(1);
         tank testTank1;
@@ -1109,6 +1110,12 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                     testTank1.setPosY(360.0f);
                     testTank2.setPosX(160.0f+16.0f*40.0f);
                     testTank2.setPosY(360.0f);
+
+                    testTank1.setNextPosX(160.0f);
+                    testTank1.setNextPosY(360.0f);
+                    testTank2.setNextPosX(160.0f+16.0f*40.0f);
+                    testTank2.setNextPosY(360.0f);
+
                     testTank2.setFireAngle(PI);
                     soundplayer.playGameStart();
                     flag = true;
@@ -1341,12 +1348,29 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             snprintf(magsize3,8, "%d", testTank2.getBulletCount()[2]);
             glRasterPos2f(1180.0f,400.0f);
             YsGlDrawFontBitmap8x12(magsize3);
+
             if(!pause){
-            testTank1.move(key);
+            std::vector<float> nextpos= testTank1.checkMove(key);
+            if(mapmanager.not_move(nextpos[0]-20,nextpos[1]+20)){
+                testTank1.setCanMove(true);
+            }else{
+                testTank1.setCanMove(false);
+                testTank1.setNextPosX(testTank1.getPosX());
+                testTank1.setNextPosY(testTank1.getPosY());
+            }
+            std::vector<float> nextpos2= testTank2.checkMove(key);
+            if(mapmanager.not_move(nextpos2[0]-20,nextpos2[1]+20)){
+                testTank2.setCanMove(true);
+            }else{
+                testTank2.setCanMove(false);
+                testTank2.setNextPosX(testTank2.getPosX());
+                testTank2.setNextPosY(testTank2.getPosY());
+            }
+            testTank1.move();
             testTank1.changeFireBullet(key);
             testTank1.newFire(key);
             testTank1.rotate(key);
-            testTank2.move(key);
+            testTank2.move();
             testTank2.changeFireBullet(key);
             testTank2.newFire(key);
             testTank2.rotate(key);
@@ -1356,6 +1380,8 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             }
             mapmanager.print_map(mapmanager.mapf);
             DisplayTools(tools);
+            UpdateTools(tools,testTank1,share);
+            UpdateTools(tools,testTank2,share);
             if (!flag){
             for (int i = 0; i < stage5.size(); i++)
             {   
@@ -1376,6 +1402,9 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
            
         }
     }else if(stage == 6){
+        std::vector<Tool> tools;
+        SetupTools(tools);
+        int share = 10;
         Map mapmanager;
         mapmanager.choosemap(2);
         tank testTank1;
@@ -1384,8 +1413,10 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
         testTank1.setPosX(1125.0f);
         testTank1.setPosY(200.0f);
         testTank1.setSoundPlayer(&soundplayer);
+        testTank1.passSoundPlayer();
         testTank2.init(tank::type1,1);//magSize = 10
         testTank2.setSoundPlayer(&soundplayer);
+        testTank2.passSoundPlayer();
         testTank2.setPosX(1125.0f);
         testTank2.setPosY(350.0f);
         GameJudge gamejudger = GameJudge(GameMode::Occupation,120);
@@ -1445,6 +1476,10 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                     testTank1.setPosY(360.0f);
                     testTank2.setPosX(160.0f+16.0f*40.0f);
                     testTank2.setPosY(360.0f);
+                    testTank1.setNextPosX(160.0f);
+                    testTank1.setNextPosY(360.0f);
+                    testTank2.setNextPosX(160.0f+16.0f*40.0f);
+                    testTank2.setNextPosY(360.0f);
                     testTank2.setFireAngle(PI);
                     soundplayer.playGameStart();
                     flag = true;
@@ -1593,13 +1628,19 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             auto t=std::chrono::high_resolution_clock::now();
 		    auto millisec=std::chrono::duration_cast<std::chrono::milliseconds>(t-t0).count();
 		    double dt=(double)millisec/1000.0;
+            mapmanager.change_block((int)testTank1.getPosX()-20,(int)(testTank1.getPosY())+20);
+            mapmanager.change_block((int)testTank2.getPosX()-20,(int)(testTank2.getPosY())+20);
             if(!pause){
-            gamejudger.updateGameState(testTank1.getHealth(),testTank2.getHealth(),0,0,dt);
+            gamejudger.updateGameState(testTank1.getHealth(),testTank2.getHealth(),mapmanager.score1,mapmanager.score2,dt);
             if(gamejudger.checkWinCondition()){
                 soundplayer.playCelebration();
                 break;
                 }
             }
+            DisplayTools(tools);
+            UpdateTools(tools,testTank1,share);
+            UpdateTools(tools,testTank2,share);
+
             glColor3ub(0, 0, 0);
             glRasterPos2f(1020.0f,150.0f);
             YsGlDrawFontBitmap8x12("Player 1");
@@ -1639,6 +1680,13 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             glRasterPos2f(1180.0f,250.0f);
             YsGlDrawFontBitmap8x12(magsize3);
             
+            glRasterPos2f(1020.0f,270.0f);
+            YsGlDrawFontBitmap8x12("Player1 Score: ");
+            char* score = new char[6];
+            snprintf(score,8, "%d", mapmanager.score1);
+            glRasterPos2f(1180.0f,270.0f);
+            YsGlDrawFontBitmap8x12(score);
+
             glRasterPos2f(1020.0f,300.0f);
             YsGlDrawFontBitmap8x12("Player 2");
 
@@ -1677,13 +1725,35 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             glRasterPos2f(1180.0f,400.0f);
             YsGlDrawFontBitmap8x12(magsize3);
 
+            glRasterPos2f(1020.0f,420.0f);
+            YsGlDrawFontBitmap8x12("Player2 Score: ");
+            score = new char[6];
+            snprintf(score,8, "%d", mapmanager.score2);
+            glRasterPos2f(1180.0f,420.0f);
+            YsGlDrawFontBitmap8x12(score);
 
             if(!pause){
-            testTank1.move(key);
+            std::vector<float> nextpos= testTank1.checkMove(key);
+            if(mapmanager.not_move(nextpos[0]-20,nextpos[1]+20)){
+                testTank1.setCanMove(true);
+            }else{
+                testTank1.setCanMove(false);
+                testTank1.setNextPosX(testTank1.getPosX());
+                testTank1.setNextPosY(testTank1.getPosY());
+            }
+            std::vector<float> nextpos2= testTank2.checkMove(key);
+            if(mapmanager.not_move(nextpos2[0]-20,nextpos2[1]+20)){
+                testTank2.setCanMove(true);
+            }else{
+                testTank2.setCanMove(false);
+                testTank2.setNextPosX(testTank2.getPosX());
+                testTank2.setNextPosY(testTank2.getPosY());
+            }
+            testTank1.move();
             testTank1.changeFireBullet(key);
             testTank1.newFire(key);
             testTank1.rotate(key);
-            testTank2.move(key);
+            testTank2.move();
             testTank2.changeFireBullet(key);
             testTank2.newFire(key);
             testTank2.rotate(key);
@@ -1712,6 +1782,9 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             FsSwapBuffers();
         }
     }else if(stage == 7){
+        std::vector<Tool> tools;
+        SetupTools(tools);
+        int share = 10;
         Map mapmanager;
         mapmanager.choosemap(3);
         tank testTank1;
@@ -1720,8 +1793,10 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
         testTank1.setPosX(1125.0f);
         testTank1.setPosY(200.0f);
         testTank1.setSoundPlayer(&soundplayer);
+        testTank1.passSoundPlayer();
         testTank2.init(tank::type1,1);//magSize = 10
         testTank2.setSoundPlayer(&soundplayer);
+        testTank2.passSoundPlayer();
         testTank2.setPosX(1125.0f);
         testTank2.setPosY(350.0f);
         GameJudge gamejudger = GameJudge(GameMode::Occupation,120);
@@ -1781,6 +1856,10 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                     testTank1.setPosY(360.0f);
                     testTank2.setPosX(160.0f+16.0f*40.0f);
                     testTank2.setPosY(360.0f);
+                    testTank1.setNextPosX(160.0f);
+                    testTank1.setNextPosY(360.0f);
+                    testTank2.setNextPosX(160.0f+16.0f*40.0f);
+                    testTank2.setNextPosY(360.0f);
                     testTank2.setFireAngle(PI);
                     soundplayer.playGameStart();
                     flag = true;
@@ -1928,13 +2007,18 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             auto t=std::chrono::high_resolution_clock::now();
 		    auto millisec=std::chrono::duration_cast<std::chrono::milliseconds>(t-t0).count();
 		    double dt=(double)millisec/1000.0;
+            mapmanager.change_block((int)testTank1.getPosX()-20,(int)(testTank1.getPosY())+20);
+            mapmanager.change_block((int)testTank2.getPosX()-20,(int)(testTank2.getPosY())+20);
             if(!pause){
-            gamejudger.updateGameState(testTank1.getHealth(),testTank2.getHealth(),0,0,dt);
+            gamejudger.updateGameState(testTank1.getHealth(),testTank2.getHealth(),mapmanager.score1,mapmanager.score2,dt);
             if(gamejudger.checkWinCondition()){
                 soundplayer.playCelebration();
                 break;
             }
             }
+            DisplayTools(tools);
+            UpdateTools(tools,testTank1,share);
+            UpdateTools(tools,testTank2,share);
             glColor3ub(0, 0, 0);
             glRasterPos2f(1020.0f,150.0f);
             YsGlDrawFontBitmap8x12("Player 1");
@@ -1974,6 +2058,13 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             glRasterPos2f(1180.0f,250.0f);
             YsGlDrawFontBitmap8x12(magsize3);
             
+            glRasterPos2f(1020.0f,270.0f);
+            YsGlDrawFontBitmap8x12("Player1 Score: ");
+            char* score = new char[6];
+            snprintf(score,8, "%d", mapmanager.score1);
+            glRasterPos2f(1180.0f,270.0f);
+            YsGlDrawFontBitmap8x12(score);
+
             glRasterPos2f(1020.0f,300.0f);
             YsGlDrawFontBitmap8x12("Player 2");
 
@@ -2011,12 +2102,36 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             snprintf(magsize3,8, "%d", testTank2.getBulletCount()[2]);
             glRasterPos2f(1180.0f,400.0f);
             YsGlDrawFontBitmap8x12(magsize3);
+
+            glRasterPos2f(1020.0f,420.0f);
+            YsGlDrawFontBitmap8x12("Player2 Score: ");
+            score = new char[6];
+            snprintf(score,8, "%d", mapmanager.score2);
+            glRasterPos2f(1180.0f,420.0f);
+            YsGlDrawFontBitmap8x12(score);
+
             if(!pause){
-            testTank1.move(key);
+            std::vector<float> nextpos= testTank1.checkMove(key);
+            if(mapmanager.not_move(nextpos[0]-20,nextpos[1]+20)){
+                testTank1.setCanMove(true);
+            }else{
+                testTank1.setCanMove(false);
+                testTank1.setNextPosX(testTank1.getPosX());
+                testTank1.setNextPosY(testTank1.getPosY());
+            }
+            std::vector<float> nextpos2= testTank2.checkMove(key);
+            if(mapmanager.not_move(nextpos2[0]-20,nextpos2[1]+20)){
+                testTank2.setCanMove(true);
+            }else{
+                testTank2.setCanMove(false);
+                testTank2.setNextPosX(testTank2.getPosX());
+                testTank2.setNextPosY(testTank2.getPosY());
+            }
+            testTank1.move();
             testTank1.changeFireBullet(key);
             testTank1.newFire(key);
             testTank1.rotate(key);
-            testTank2.move(key);
+            testTank2.move();
             testTank2.changeFireBullet(key);
             testTank2.newFire(key);
             testTank2.rotate(key);

@@ -1,6 +1,6 @@
+#define GL_SILENCE_DEPRECATION
 #include"fssimplewindow.h"
 //#include "../../public/src/fssimplewindow/src/fssimplewindow.h"
-
 #include<stdio.h>
 #include<stdlib.h>
 #include<string>
@@ -362,12 +362,11 @@ void Map::do_delete2(int& x, int& y, int&i, int&j) {   // bullet // , int mapp[1
 	// 	}
 	// }
 }
-bool Map::not_move(int& x, int& y, int& prex, int& prey) {  // for non-destructive //��Ҫʵʱ���� ����main� // tank
+bool Map::not_move(int x, int y) {  // for non-destructive //��Ҫʵʱ���� ����main� // tank
 	for (int j = 0; j < wid; ++j) {
 		for (int i = 0; i < len; ++i) {
 			if (mapf[j][i] != 0 && checkCollision(x, y, i, j)) {
 				if (mapf[j][i] == 4 || mapf[j][i] == 3) {
-					x = prex, y = prey;
 					return false;
 				}
 			}
@@ -375,17 +374,22 @@ bool Map::not_move(int& x, int& y, int& prex, int& prey) {  // for non-destructi
 	}
 	return true;
 }
+// <<<<<<< HEAD
 bool Map::not_move2(int& x, int& y, int &i, int &j) {  // for non-destructive //��Ҫʵʱ���� ����main� // bullet
-	// for (int j = 0; j < wid; ++j) {
-	// 	for (int i = 0; i < len; ++i) {
+	for (int j = 0; j < wid; ++j) {
+		for (int i = 0; i < len; ++i) {
+
+// bool Map::not_move2(int& x, int& y, int& prex, int& prey) {  // for non-destructive //��Ҫʵʱ���� ����main� // bullet
+// 	for (int j = 0; j < wid; ++j) {
+// 		for (int i = 0; i < len; ++i) {
 			if (mapf[j][i] != 0 && checkCollision(x, y, i, j)) {
 				if (mapf[j][i] == 4) {  //2
 					// x = prex, y = prey;
 					return false;
 				}
 			}
-	// 	}
-	// }
+		}
+	}
 	return true;
 }
 
@@ -399,7 +403,7 @@ bool Map::bulletCollide(int &x, int &y, int &i, int &j){
 //using TimePoint = std::chrono::time_point<Clock>;
 //using Seconds = std::chrono::seconds;
 
-void Map::change_block(int& x, int& y) { // landing block   //, int mapp[18][32]
+void Map::change_block(int x, int y) { // landing block   //, int mapp[18][32]
 	for (int j = 0; j < wid; ++j) {
 		for (int i = 0; i < len; ++i) {
 			if (mapf[j][i] != 0 && checkCollision(x, y, i, j)) { //&& checkCollision(x, y, i, j)  && mapp[j][i] == 5

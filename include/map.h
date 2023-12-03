@@ -48,9 +48,9 @@ public:
 	using TimePoint = std::chrono::time_point<Clock>;
 	using Seconds = std::chrono::seconds;
 
-	void change_block(int& x, int& y);  //,  int mapp[wid][len]
+	void change_block(int x, int y);  //,  int mapp[wid][len]
 	void change_block2(int& x, int& y);
-	bool not_move(int& x, int& y, int& prex, int& prey);
+	bool not_move(int x, int y);
 	bool not_move2(int& x, int& y, int &i, int &j);
 	bool bulletCollide(int &x, int &y,int &i, int &j);
 	void copymap(int mapp[wid][len]);
