@@ -361,12 +361,12 @@ void Map::do_delete2(int& x, int& y) {   // bullet // , int mapp[18][32]
 		}
 	}
 }
-bool Map::not_move(int& x, int& y, int& prex, int& prey) {  // for non-destructive //需要实时数据 （在main里） // tank
+bool Map::not_move(int& x, int& y) {  // for non-destructive //需要实时数据 （在main里） // tank  //, int& prex, int& prey
 	for (int j = 0; j < wid; ++j) {
 		for (int i = 0; i < len; ++i) {
 			if (mapf[j][i] != 0 && checkCollision(x, y, i, j)) {
 				if (mapf[j][i] == 4 || mapf[j][i] == 3) {
-					x = prex, y = prey;
+					//x = prex, y = prey;
 					return false;
 				}
 			}
@@ -374,12 +374,12 @@ bool Map::not_move(int& x, int& y, int& prex, int& prey) {  // for non-destructi
 	}
 	return true;
 }
-bool Map::not_move2(int& x, int& y, int& prex, int& prey) {  // for non-destructive //需要实时数据 （在main里） // bullet
+bool Map::not_move2(int& x, int& y) {  // for non-destructive //需要实时数据 （在main里） // bullet  //, int& prex, int& prey
 	for (int j = 0; j < wid; ++j) {
 		for (int i = 0; i < len; ++i) {
 			if (mapf[j][i] != 0 && checkCollision(x, y, i, j)) {
 				if (mapf[j][i] == 4) {  //2
-					x = prex, y = prey;
+					//x = prex, y = prey;
 					return false;
 				}
 			}
@@ -391,7 +391,7 @@ bool Map::not_move2(int& x, int& y, int& prex, int& prey) {  // for non-destruct
 //using TimePoint = std::chrono::time_point<Clock>;
 //using Seconds = std::chrono::seconds;
 
-bool Map::change_block(int& x, int& y) { // landing block   //, int mapp[18][32]
+bool Map::change_block(int x, int y) { // landing block   //, int mapp[18][32]
 	for (int j = 0; j < wid; ++j) {
 		for (int i = 0; i < len; ++i) {
 			if (mapf[j][i] != 0 && checkCollision(x, y, i, j)) { //&& checkCollision(x, y, i, j)  && mapp[j][i] == 5
@@ -420,7 +420,7 @@ bool Map::change_block(int& x, int& y) { // landing block   //, int mapp[18][32]
 	}
 	return false;
 }
-bool Map::change_block2(int& x, int& y) {   //, int mapp[18][32]
+bool Map::change_block2(int x, int y) {   //, int mapp[18][32]
 	for (int j = 0; j < wid; ++j) {
 		for (int i = 0; i < len; ++i) {
 			if (mapf[j][i] != 0) { //&& checkCollision(x, y, i, j)  && mapp[j][i] == 5
