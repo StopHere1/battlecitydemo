@@ -14,7 +14,7 @@
 enum ToolType {
     TOOL_HEALTH,
     TOOL_FIRE_RATE,
-    TOOL_LAND_MINE,
+    TOOL_ADD_SPEED,
     TOOL_SHIELD
 };
 
@@ -46,7 +46,7 @@ public:
 
     void DrawHealthTool() const;
     void DrawFireRateTool() const;
-    void DrawLandMineTool() const;
+    void DrawAddSpeedTool() const;
     void DrawShieldTool() const;
 };
 
