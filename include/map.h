@@ -48,10 +48,10 @@ public:
 	using TimePoint = std::chrono::time_point<Clock>;
 	using Seconds = std::chrono::seconds;
 
-	bool change_block(int& x, int& y);  //,  int mapp[wid][len]
-	bool change_block2(int& x, int& y);
-	bool not_move(int& x, int& y, int& prex, int& prey);
-	bool not_move2(int& x, int& y, int& prex, int& prey);
+	bool change_block(int x, int y);  //,  int mapp[wid][len]
+	bool change_block2(int x, int y);
+	bool not_move(int& x, int& y);  //, int prex, int prey
+	bool not_move2(int& x, int& y);  //, int prex, int prey
 	void copymap(int mapp[wid][len]);
 	void testbox(int& x, int& y);
 	void testbullet(int& x, int& y);
