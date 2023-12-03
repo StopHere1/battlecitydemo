@@ -108,7 +108,7 @@ protected:
     std::list<Bullet> bulletLoad; // list for storing bullet packages
 //    std::list<Tool> healthLoad; // list for storing health packages
     Bullet tankBullet = Bullet(0); // bullet for tank
-    std::vector<int> BulletCount = {5, 5, 5}; // count of each type of bullet
+    std::vector<int> BulletCount = {6, 10, 6}; // count of each type of bullet
     int currentBulletType = 0; // current bullet type
     Sound *soundPlayer;
 };
