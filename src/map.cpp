@@ -375,17 +375,17 @@ bool Map::not_move(int& x, int& y, int& prex, int& prey) {  // for non-destructi
 	}
 	return true;
 }
-bool Map::not_move2(int& x, int& y) {  // for non-destructive //��Ҫʵʱ���� ����main� // bullet
-	for (int j = 0; j < wid; ++j) {
-		for (int i = 0; i < len; ++i) {
+bool Map::not_move2(int& x, int& y, int &i, int &j) {  // for non-destructive //��Ҫʵʱ���� ����main� // bullet
+	// for (int j = 0; j < wid; ++j) {
+	// 	for (int i = 0; i < len; ++i) {
 			if (mapf[j][i] != 0 && checkCollision(x, y, i, j)) {
 				if (mapf[j][i] == 4) {  //2
 					// x = prex, y = prey;
 					return false;
 				}
 			}
-		}
-	}
+	// 	}
+	// }
 	return true;
 }
 

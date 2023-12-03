@@ -123,6 +123,7 @@ void Bullet::Draw(double tankx, double tanky, double tankangle) {
                 }
                 else {
                     if (this->reboundable == 1 && this->count_rebound != 0) {
+                        printf("rebound");
                         //sound effect for rebound
                         sound->playHitRebound();
                         this->angle == PI-this->angle;
