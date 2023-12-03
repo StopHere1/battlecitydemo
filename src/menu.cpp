@@ -10,8 +10,8 @@
 #include <time.h>
 #include <fstream>
 #include "../include/sound.h"
-#include "../include/map.h"
 #include "../include/tank.h"
+#include "../include/map.h"
 #include "../include/GameJudge.h"
 #include "../include/tool.h"
 #include "../../public/src/fssimplewindow/src/fssimplewindow.h"
@@ -516,10 +516,10 @@ public:
     void start();
     void drawBackground(YsRawPngDecoder &background);
     void bulletTankCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, tank &testTank1, tank &testTank2);
-    void bulletMapCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, Map &map,int maptype);
+    void bulletMapCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, Map &map);
     void setstage(int input);
     void run(Sound &soundplayer,UserInfoManager &manager,std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2,
-     std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5,std::vector<buttom> &stage6,std::vector<buttom> &stage7, YsRawPngDecoder &background);
+    std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5,std::vector<buttom> &stage6,std::vector<buttom> &stage7, YsRawPngDecoder &background);
 };
 menu::menu()
 {
@@ -593,7 +593,7 @@ void menu::bulletTankCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, tank &t
 
     
 }
-void menu::bulletMapCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, Map &map,int maptype){
+void menu::bulletMapCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, Map &map){
     // if(maptype == 1){
     //     map.
     // }
@@ -601,41 +601,34 @@ void menu::bulletMapCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, Map &map
     int bullet1y = tank1Bullet.GetBulletY();
     int map1x = floor(bullet1x/40);
     int map1y = floor(bullet1y/40);
-    bool IsCollideMap1 = map.checkCollision(bullet1x,bullet1y,map1x,map1y);
-    // if(IsCollideMap1){
-    //     tank1Bullet.IsCollideMap();
-    // }
-    if (tank1Bullet.GetBulletType() != 2){
-        if(maptype == 1){
-            map.do_delete(bullet1x,bullet1y,map.map1);
+    bool IsCollideMap1 = map.checkCollision3(bullet1x,bullet1y,map1x,map1y);
+    if (IsCollideMap1){
+        bool IsDestructibleMap1 = map.not_move2(bullet1x,bullet1y);
+        if (IsDestructibleMap1){
+            tank1Bullet.IsMapDestructible();
         }
-        else if(maptype == 2){
-            map.do_delete(bullet1x,bullet1y,map.map2);
-        }
-        else if(maptype == 3){
-            map.do_delete(bullet1x,bullet1y,map.map3);
-        }
-        
+        tank1Bullet.IsCollideMap();
     }
+    if (tank1Bullet.GetBulletType()!=2){
+        map.do_delete2(bullet1x,bullet1y);
+    }
+    
+
  
     int bullet2x = tank2Bullet.GetBulletX();
     int bullet2y = tank2Bullet.GetBulletY();
     int map2x = floor(bullet2x/40);
     int map2y = floor(bullet2y/40);
-    // bool IsCollideMap2 = map.checkCollision(bullet2x,bullet2y,map2x,map2y);
-    // if(IsCollideMap2){
-    //     tank2Bullet.IsCollideMap();
-    // }
-    if (tank2Bullet.GetBulletType() != 2){
-        if(maptype == 1){
-            map.do_delete(bullet2x,bullet2y,map.map1);
+    bool IsCollideMap2 = map.checkCollision3(bullet1x,bullet1y,map1x,map1y);
+    if (IsCollideMap2){
+        bool IsDestructibleMap2 = map.not_move2(bullet2x,bullet2y);
+        if (IsDestructibleMap2){
+            tank2Bullet.IsMapDestructible();
         }
-        else if(maptype == 2){
-            map.do_delete(bullet2x,bullet2y,map.map2);
-        }
-        else if(maptype == 3){
-            map.do_delete(bullet2x,bullet2y,map.map3);
-        }
+        tank2Bullet.IsCollideMap();
+    }
+    if (tank2Bullet.GetBulletType()!=2){
+        map.do_delete2(bullet1x,bullet1y);
     }
 
 
@@ -1366,7 +1359,7 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             Bullet* bullet1 = testTank1.getBullet();
             Bullet* bullet2 = testTank2.getBullet();
             bulletTankCollision(*bullet1, *bullet2, testTank1, testTank2);
-            // bulletMapCollision(*bullet1, *bullet2, mapmanager,1);
+            bulletMapCollision(*bullet1, *bullet2, mapmanager);
             FsSwapBuffers();
            
         }

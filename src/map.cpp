@@ -361,7 +361,7 @@ void Map::do_delete2(int& x, int& y) {   // bullet // , int mapp[18][32]
 		}
 	}
 }
-bool Map::not_move(int& x, int& y, int& prex, int& prey) {  // for non-destructive //需要实时数据 （在main里） // tank
+bool Map::not_move(int& x, int& y, int& prex, int& prey) {  // for non-destructive //锟斤拷要实时锟斤拷锟斤拷 锟斤拷锟斤拷main锟斤） // tank
 	for (int j = 0; j < wid; ++j) {
 		for (int i = 0; i < len; ++i) {
 			if (mapf[j][i] != 0 && checkCollision(x, y, i, j)) {
@@ -374,12 +374,12 @@ bool Map::not_move(int& x, int& y, int& prex, int& prey) {  // for non-destructi
 	}
 	return true;
 }
-bool Map::not_move2(int& x, int& y, int& prex, int& prey) {  // for non-destructive //需要实时数据 （在main里） // bullet
+bool Map::not_move2(int& x, int& y) {  // for non-destructive //锟斤拷要实时锟斤拷锟斤拷 锟斤拷锟斤拷main锟斤） // bullet
 	for (int j = 0; j < wid; ++j) {
 		for (int i = 0; i < len; ++i) {
 			if (mapf[j][i] != 0 && checkCollision(x, y, i, j)) {
 				if (mapf[j][i] == 4) {  //2
-					x = prex, y = prey;
+					// x = prex, y = prey;
 					return false;
 				}
 			}
