@@ -72,6 +72,7 @@ public:
 
     Type getTankType() const { return tankType; }
     void setTankType(Type type) { tankType = type; }
+    Bullet* getBullet(){return &tankBullet;}
 
     ~tank()= default;
 protected:

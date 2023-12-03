@@ -441,8 +441,6 @@ void Map::change_block2(int& x, int& y) {   //, int mapp[18][32]
 	}
 }
 
-
-
 void Map::copymap(int mapp[18][32]) {
 	for (int j = 0; j < wid; ++j) {
 		for (int i = 0; i < len; ++i) {

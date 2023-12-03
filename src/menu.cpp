@@ -516,6 +516,7 @@ public:
     void start();
     void drawBackground(YsRawPngDecoder &background);
     void bulletTankCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, tank &testTank1, tank &testTank2);
+    void bulletMapCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, Map &map,int maptype);
     void setstage(int input);
     void run(Sound &soundplayer,UserInfoManager &manager,std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2,
      std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5,std::vector<buttom> &stage6,std::vector<buttom> &stage7, YsRawPngDecoder &background);
@@ -551,8 +552,93 @@ stage7: timelimited occupation
 */
 
 void menu::bulletTankCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, tank &testTank1, tank &testTank2){
+    // printf("bullet1 position x: %f y: %f", tank1Bullet.GetBulletX(), tank1Bullet.GetBulletY());
+    // printf("tank 2 position x: %f y: %f", testTank2.getPosX(), testTank2.getPosY());
+    bool IsCollide;
+    IsCollide = tank1Bullet.CheckTankCollision(testTank2.getPosX(), testTank2.getPosY());
+    if (IsCollide){
+        tank1Bullet.IsCollideTank();
+        double tank2health = testTank2.getHealth();
+        double tank2armor = testTank2.getArmor();
+        if (tank2armor > 0){
+            double damage = 0.7*tank1Bullet.GetDamage();
+            tank2armor -= damage;
+            testTank2.setArmor(tank2armor);
+        }
+        else{
+            testTank2.setArmor(0.0);
+            tank2health = tank2health-tank1Bullet.GetDamage();
+            testTank2.setHealth(tank2health);   
+        }     
+    }  
+
+    IsCollide = tank2Bullet.CheckTankCollision(testTank1.getPosX(), testTank1.getPosY());
+    if (IsCollide){
+        tank2Bullet.IsCollideTank();
+        double tank1health = testTank1.getHealth();
+        double tank1armor = testTank1.getArmor();
+        if (tank1armor > 0){
+            double damage = 0.7*tank2Bullet.GetDamage();
+            tank1armor -= damage;
+            printf("tank1armor: %f", tank1armor);
+            testTank1.setArmor(tank1armor);
+        }
+        else{
+            testTank1.setArmor(0.0);
+            tank1health = tank1health-tank2Bullet.GetDamage();
+            testTank1.setHealth(tank1health);   
+        }
+            
+    }  
+
     
-    
+}
+void menu::bulletMapCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, Map &map,int maptype){
+    // if(maptype == 1){
+    //     map.
+    // }
+    int bullet1x = tank1Bullet.GetBulletX();
+    int bullet1y = tank1Bullet.GetBulletY();
+    int map1x = floor(bullet1x/40);
+    int map1y = floor(bullet1y/40);
+    bool IsCollideMap1 = map.checkCollision(bullet1x,bullet1y,map1x,map1y);
+    // if(IsCollideMap1){
+    //     tank1Bullet.IsCollideMap();
+    // }
+    if (tank1Bullet.GetBulletType() != 2){
+        if(maptype == 1){
+            map.do_delete(bullet1x,bullet1y,map.map1);
+        }
+        else if(maptype == 2){
+            map.do_delete(bullet1x,bullet1y,map.map2);
+        }
+        else if(maptype == 3){
+            map.do_delete(bullet1x,bullet1y,map.map3);
+        }
+        
+    }
+ 
+    int bullet2x = tank2Bullet.GetBulletX();
+    int bullet2y = tank2Bullet.GetBulletY();
+    int map2x = floor(bullet2x/40);
+    int map2y = floor(bullet2y/40);
+    // bool IsCollideMap2 = map.checkCollision(bullet2x,bullet2y,map2x,map2y);
+    // if(IsCollideMap2){
+    //     tank2Bullet.IsCollideMap();
+    // }
+    if (tank2Bullet.GetBulletType() != 2){
+        if(maptype == 1){
+            map.do_delete(bullet2x,bullet2y,map.map1);
+        }
+        else if(maptype == 2){
+            map.do_delete(bullet2x,bullet2y,map.map2);
+        }
+        else if(maptype == 3){
+            map.do_delete(bullet2x,bullet2y,map.map3);
+        }
+    }
+
+
 }
 void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2, std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5,std::vector<buttom> &stage6,std::vector<buttom> &stage7, YsRawPngDecoder &background)
 {   
@@ -1276,6 +1362,11 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                 stage5[i].draw();
             }
             }
+            //Collision:
+            Bullet* bullet1 = testTank1.getBullet();
+            Bullet* bullet2 = testTank2.getBullet();
+            bulletTankCollision(*bullet1, *bullet2, testTank1, testTank2);
+            // bulletMapCollision(*bullet1, *bullet2, mapmanager,1);
             FsSwapBuffers();
            
         }
@@ -1608,6 +1699,10 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                 stage6[i].draw();
             }
             }
+            //Collision:
+            Bullet* bullet1 = testTank1.getBullet();
+            Bullet* bullet2 = testTank2.getBullet();
+            bulletTankCollision(*bullet1, *bullet2, testTank1, testTank2);
             FsSwapBuffers();
         }
     }else if(stage == 7){
@@ -1935,6 +2030,10 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                 stage7[i].draw();
             }
             }
+            //Collision:
+            Bullet* bullet1 = testTank1.getBullet();
+            Bullet* bullet2 = testTank2.getBullet();
+            bulletTankCollision(*bullet1, *bullet2, testTank1, testTank2);
             FsSwapBuffers();
         }
     }
@@ -2055,3 +2154,4 @@ void menu::start()
         }
     }
 }
+
