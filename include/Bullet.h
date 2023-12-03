@@ -15,7 +15,7 @@
 const double PI = 3.1415926;
 const double DamageTankTable[3] = { 30,10,20 };
 const int DamageMapTable[3] = { 1,1,0 };
-const double VTable[3] = { 50, 80, 60 };
+const double VTable[3] = { 50, 120, 80 };
 const double AXTable[3] = { 0 };
 const double AYTable[3] = { 0 };
 const int ReboundTable[3] = { 0, 0, 1 };
@@ -45,7 +45,7 @@ protected:
     double damage;
     double damagemap;
     double xsize, ysize;//bullet size
-    double angle;
+    float angle;
     int BulletType = 0;
     bool IsShot = 0, IsHit = 0;
     bool CollideBullet, CollideTank, CollideMap, CollideMapX, CollideMapY, MapDestructible;

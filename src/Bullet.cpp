@@ -123,10 +123,12 @@ void Bullet::Draw(double tankx, double tanky, double tankangle) {
                 }
                 else {
                     if (this->reboundable == 1 && this->count_rebound != 0) {
-                        printf("rebound");
+                        // printf("rebound\n");
+                        // printf("angle before:%f",angle);
                         //sound effect for rebound
                         sound->playHitRebound();
-                        this->angle == PI-this->angle;
+                        this->ReboundCase();
+                        // printf("angle after:%f",angle);
                         CollisionCase = 0;
                         MapDestructible = 0;
                         CollideMap = 0;
@@ -364,8 +366,8 @@ void Bullet::ShootBullet(void) {
 
 void Bullet::Motion(void) {    
     
-    this->vx = VTable[this->BulletType] * cos(-this->angle);
-    this->vy = VTable[this->BulletType] * sin(-this->angle);
+    // this->vx = VTable[this->BulletType] * cos(-this->angle);
+    // this->vy = VTable[this->BulletType] * sin(-this->angle);
     this->x = this->x + this->vx * this->dt;
     this->y = this->y + this->vy * this->dt;
 
@@ -423,14 +425,22 @@ void Bullet::Hit(void) {
 }
 
 void Bullet::ReboundCase(void){
-    if (this->angle == 0){
-        this->angle == PI-this->angle;
-    }
-    else if (this->angle == PI){
-        this->angle == 0;
-    }
-    else if (this->angle){
-        this->angle == -this->angle;
+    double nx=this->x;
+	double ny=this->y;
+	double d=sqrt(nx*nx+ny*ny);
+	if(0!=d)
+	{
+		nx/=d;
+		ny/=d;
+
+		double k1=this->vx*nx+this->vy*ny;
+		double k2=0;
+
+		this->vx=this->vx+nx*(k2-k1);
+		this->vy=this->vy+ny*(k2-k1);
+
+		// vx2=vx2+nx*(k1-k2);
+		// vy2=vy2+ny*(k1-k2);
     }
 }
 
