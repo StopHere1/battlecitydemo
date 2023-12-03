@@ -38,6 +38,7 @@ private:
     int CollisionCase = 0;
     Sound *sound;//SHY: pointer to the sound player
     int count_rebound = 10;
+    int count_rebound_time = 0;
 
 protected:
     double x, y;//bullet position

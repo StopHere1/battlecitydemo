@@ -122,24 +122,31 @@ void Bullet::Draw(double tankx, double tanky, double tankangle) {
                     break;
                 }
                 else {
-                    if (this->reboundable == 1 && this->count_rebound != 0) {
-                        // printf("rebound\n");
-                        // printf("angle before:%f",angle);
-                        //sound effect for rebound
-                        sound->playHitRebound();
-                        this->ReboundCase();
-                        // printf("angle after:%f",angle);
-                        CollisionCase = 0;
-                        MapDestructible = 0;
-                        CollideMap = 0;
-                        count_rebound -= 1;
-                    }
-                    else {
+                    // if (this->reboundable == 1 && this->count_rebound != 0 && this->count_rebound_time == 0) {
+                    //     // printf("rebound\n");
+                    //     // printf("angle before:%f",angle);
+                    //     //sound effect for rebound
+                    //     sound->playHitRebound();
+                    //     this->ReboundCase();
+                    //     // printf("angle after:%f",angle);
+                    //     CollisionCase = 0;
+                    //     MapDestructible = 0;
+                    //     CollideMap = 0;
+                    //     count_rebound -= 1;
+                    //     count_rebound_time = 1;
+                    // }
+                    // else if(this->reboundable == 1 && this->count_rebound != 0 && this->count_rebound_time != 0){
+                    //     count_rebound_time -= 1;
+                    //     if (count_rebound_time<0){
+                    //         count_rebound_time=0;
+                    //     }
+                    // }
+                    // else {
                         //sound effect for destroy bullet
                         sound->playHitWall();
                         this->IsHit = 1;
                         this->IsShot = 0;
-                    }
+                    // }
                     break;
                 }
             // case 3:
