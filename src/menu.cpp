@@ -611,10 +611,10 @@ void menu::bulletMapCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, Map &map
     // printf("bulletx: %d,mapx:%d",bullet1x,map1x);
     bool IsCollideMap1 = map.bulletCollide(bullet1x, bullet1y, map1x, map1y);
     if (IsCollideMap1){
-        printf("collidemap");
+        // printf("collidemap");
         bool NotDestructibleMap1 = map.not_move2(bullet1x,bullet1y, map1x, map1y);
         if (not NotDestructibleMap1){
-            printf("destructible");
+            // printf("destructible");
             tank1Bullet.IsMapDestructible();
         }
         tank1Bullet.IsCollideMap();
