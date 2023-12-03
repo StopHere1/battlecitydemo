@@ -384,7 +384,6 @@ int Bullet::CheckCollision(void) {
         return 1;
     }
     else if (CollideMap == 1) { 
-        printf(" collision case2");
         // this->CheckMapDestructible();
         return 2;
     }
