@@ -55,6 +55,7 @@ public:
     void setNextPosY(float input);
     void setCanMove(bool input);
     void setSoundPlayer(Sound *soundplayer);
+    void setBulletCount(std::vector<int> count);
 
     int init(Type type, int user);
     void move();
