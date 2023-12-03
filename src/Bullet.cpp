@@ -47,7 +47,7 @@ Bullet::~Bullet() {
     ax = 0;
     ay = 0;
     count = 0;
-    count_rebound = 0;
+    count_rebound = 10;
 }
 
 void Bullet::Draw(double tankx, double tanky, double tankangle) {
@@ -122,21 +122,31 @@ void Bullet::Draw(double tankx, double tanky, double tankangle) {
                     break;
                 }
                 else {
-                    if (this->reboundable == 1 && this->count_rebound != 0) {
-                        //sound effect for rebound
-                        sound->playHitRebound();
-                        this->angle = - this->angle;
-                        CollisionCase = 0;
-                        MapDestructible = 0;
-                        CollideMap = 0;
-                        count_rebound -= 1;
-                    }
-                    else {
+                    // if (this->reboundable == 1 && this->count_rebound != 0 && this->count_rebound_time == 0) {
+                    //     // printf("rebound\n");
+                    //     // printf("angle before:%f",angle);
+                    //     //sound effect for rebound
+                    //     sound->playHitRebound();
+                    //     this->ReboundCase();
+                    //     // printf("angle after:%f",angle);
+                    //     CollisionCase = 0;
+                    //     MapDestructible = 0;
+                    //     CollideMap = 0;
+                    //     count_rebound -= 1;
+                    //     count_rebound_time = 1;
+                    // }
+                    // else if(this->reboundable == 1 && this->count_rebound != 0 && this->count_rebound_time != 0){
+                    //     count_rebound_time -= 1;
+                    //     if (count_rebound_time<0){
+                    //         count_rebound_time=0;
+                    //     }
+                    // }
+                    // else {
                         //sound effect for destroy bullet
                         sound->playHitWall();
                         this->IsHit = 1;
                         this->IsShot = 0;
-                    }
+                    // }
                     break;
                 }
             // case 3:
@@ -348,8 +358,8 @@ void Bullet::Reset(void) {
     this->damage = 0;
     this->damagemap = 0;
     this->count_rebound = 10;
-    this->x = 0;
-    this->y = 0;
+    this->x = -50;
+    this->y = -50;
 }
 
 void Bullet::ShootBullet(void) {
@@ -363,8 +373,8 @@ void Bullet::ShootBullet(void) {
 
 void Bullet::Motion(void) {    
     
-    this->vx = VTable[this->BulletType] * cos(-this->angle);
-    this->vy = VTable[this->BulletType] * sin(-this->angle);
+    // this->vx = VTable[this->BulletType] * cos(-this->angle);
+    // this->vy = VTable[this->BulletType] * sin(-this->angle);
     this->x = this->x + this->vx * this->dt;
     this->y = this->y + this->vy * this->dt;
 
@@ -382,7 +392,7 @@ int Bullet::CheckCollision(void) {
     if (CollideTank == 1) {
         return 1;
     }
-    else if (CollideMap == 1) {
+    else if (CollideMap == 1) { 
         // this->CheckMapDestructible();
         return 2;
     }
@@ -419,6 +429,26 @@ void Bullet::Hit(void) {
         glVertex2d(this->x + xr, this->y + yr);
     }
     glEnd();
+}
+
+void Bullet::ReboundCase(void){
+    double nx=this->x;
+	double ny=this->y;
+	double d=sqrt(nx*nx+ny*ny);
+	if(0!=d)
+	{
+		nx/=d;
+		ny/=d;
+
+		double k1=this->vx*nx+this->vy*ny;
+		double k2=0;
+
+		this->vx=this->vx+nx*(k2-k1);
+		this->vy=this->vy+ny*(k2-k1);
+
+		// vx2=vx2+nx*(k1-k2);
+		// vy2=vy2+ny*(k1-k2);
+    }
 }
 
 void Bullet::Rotate(double& x, double& y, double theta) {

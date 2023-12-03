@@ -109,7 +109,7 @@ class menu{
     void test();
     void start();
     void bulletTankCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, tank &testTank1, tank &testTank2);
-    void bulletMapCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, Map &map,int maptype);
+    void bulletMapCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, Map &map);
     void drawBackground(YsRawPngDecoder &background);
     void setstage(int input);
     void run(Sound &soundplayer, UserInfoManager &manager, std::vector<buttom> &stage0, std::vector<buttom> &stage1, std::vector<buttom> &stage2, std::vector<buttom> &stage3,std::vector<buttom> &stage4,std::vector<buttom> &stage5,std::vector<buttom> &stage6,std::vector<buttom> &stage7, YsRawPngDecoder &background);

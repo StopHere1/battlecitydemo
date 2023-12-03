@@ -41,7 +41,7 @@ public:
 	bool checkCollision3(int boxX, int boxY, int wallI, int wallJ);
 	void deleteWall(int i, int j);
 	void do_delete(int& x, int& y);  //, int mapp[wid][len]
-	void do_delete2(int& x, int& y);
+	void do_delete2(int& x, int& y, int&i, int&j);
 
 
 	using Clock = std::chrono::high_resolution_clock;
@@ -51,7 +51,8 @@ public:
 	void change_block(int& x, int& y);  //,  int mapp[wid][len]
 	void change_block2(int& x, int& y);
 	bool not_move(int& x, int& y, int& prex, int& prey);
-	bool not_move2(int& x, int& y, int& prex, int& prey);
+	bool not_move2(int& x, int& y, int &i, int &j);
+	bool bulletCollide(int &x, int &y,int &i, int &j);
 	void copymap(int mapp[wid][len]);
 	void testbox(int& x, int& y);
 	void testbullet(int& x, int& y);

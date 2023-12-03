@@ -309,20 +309,21 @@ bool Map::checkCollision2(int boxX, int boxY, int wallI, int wallJ) { // for lan
 	}
 	return true;  // Collision detected
 }
-bool Map::checkCollision3(int boxX, int boxY, int wallI, int wallJ) { // bullet
-	boxX += L / 2; boxY -= L / 2; int d = 10;
-	int boxLeft = boxX - d;
-	int boxRight = boxX + d;
-	int boxTop = boxY - d;
-	int boxBottom = boxY + d;
+bool Map::checkCollision3(int boxX, int  boxY, int wallI, int wallJ) { // bullet
+	// boxX += L / 2; boxY -= L / 2; int d = 10;
+	// int boxLeft = boxX - d;
+	// int boxRight = boxX + d;
+	// int boxTop = boxY - d;
+	// int boxBottom = boxY + d;
 
-	int wallLeft = (wallI * L) - 30;
+
+	int wallLeft = (wallI * L);
 	int wallRight = (wallI + 1) * L;
 	int wallBottom = wallJ * L;
 	int wallTop = (wallJ + 1) * L;
 
 	//printf("%d %d %d %d\n%d %d %d %d\n\n", boxLeft, boxRight, boxTop, boxBottom, wallLeft, wallRight, wallBottom, wallTop);
-	if (boxRight < wallLeft || boxLeft > wallRight || boxTop < wallBottom || boxBottom > wallTop) {
+	if (boxX < wallLeft || boxX > wallRight || boxY < wallBottom || boxY > wallTop) {
 		return false;  // No collision
 	}
 	return true;  // Collision detected
@@ -347,10 +348,10 @@ void Map::do_delete(int& x, int& y) {  // tank   //, int mapp[18][32]
 		}
 	}
 }
-void Map::do_delete2(int& x, int& y) {   // bullet // , int mapp[18][32]
-	for (int j = 0; j < wid; ++j) {
-		for (int i = 0; i < len; ++i) {  // destroy 1 3 
-			if (mapf[j][i] != 0 && checkCollision3(x, y, i, j)    //
+void Map::do_delete2(int& x, int& y, int&i, int&j) {   // bullet // , int mapp[18][32]
+	// for (int j = 0; j < wid; ++j) {
+	// 	for (int i = 0; i < len; ++i) {  // destroy 1 3 
+			if (mapf[j][i] != 0     //
 				//&& mapp[j][i] != 1 && mapp[j][i] != 3
 				&& mapf[j][i] != 2
 				&& mapf[j][i] != 4 && mapf[j][i] != 5
@@ -358,10 +359,10 @@ void Map::do_delete2(int& x, int& y) {   // bullet // , int mapp[18][32]
 				) { // this can set to delete which block After Collision Detection
 				deleteWall(i, j);
 			}
-		}
-	}
+	// 	}
+	// }
 }
-bool Map::not_move(int& x, int& y, int& prex, int& prey) {  // for non-destructive //ÐèÒªÊµÊ±Êý¾Ý £¨ÔÚmainÀï£© // tank
+bool Map::not_move(int& x, int& y, int& prex, int& prey) {  // for non-destructive //ï¿½ï¿½ÒªÊµÊ±ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½mainï¿½ï£© // tank
 	for (int j = 0; j < wid; ++j) {
 		for (int i = 0; i < len; ++i) {
 			if (mapf[j][i] != 0 && checkCollision(x, y, i, j)) {
@@ -374,18 +375,25 @@ bool Map::not_move(int& x, int& y, int& prex, int& prey) {  // for non-destructi
 	}
 	return true;
 }
-bool Map::not_move2(int& x, int& y, int& prex, int& prey) {  // for non-destructive //ÐèÒªÊµÊ±Êý¾Ý £¨ÔÚmainÀï£© // bullet
-	for (int j = 0; j < wid; ++j) {
-		for (int i = 0; i < len; ++i) {
+bool Map::not_move2(int& x, int& y, int &i, int &j) {  // for non-destructive //ï¿½ï¿½ÒªÊµÊ±ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½mainï¿½ï£© // bullet
+	// for (int j = 0; j < wid; ++j) {
+	// 	for (int i = 0; i < len; ++i) {
 			if (mapf[j][i] != 0 && checkCollision(x, y, i, j)) {
 				if (mapf[j][i] == 4) {  //2
-					x = prex, y = prey;
+					// x = prex, y = prey;
 					return false;
 				}
 			}
-		}
-	}
+	// 	}
+	// }
 	return true;
+}
+
+bool Map::bulletCollide(int &x, int &y, int &i, int &j){
+	if (mapf[j][i] != 0 && checkCollision3(x, y, i, j)){
+		return true;
+	}
+	return false;
 }
 //using Clock = std::chrono::high_resolution_clock;
 //using TimePoint = std::chrono::time_point<Clock>;
