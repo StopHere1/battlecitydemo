@@ -47,7 +47,7 @@ Bullet::~Bullet() {
     ax = 0;
     ay = 0;
     count = 0;
-    count_rebound = 0;
+    count_rebound = 10;
 }
 
 void Bullet::Draw(double tankx, double tanky, double tankangle) {
@@ -383,7 +383,8 @@ int Bullet::CheckCollision(void) {
     if (CollideTank == 1) {
         return 1;
     }
-    else if (CollideMap == 1) {
+    else if (CollideMap == 1) { 
+        printf(" collision case2");
         // this->CheckMapDestructible();
         return 2;
     }
