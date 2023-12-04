@@ -13,7 +13,7 @@
 
 enum ToolType {
     TOOL_HEALTH,
-    TOOL_FIRE_RATE,
+    TOOL_ADD_BULLETS,
     TOOL_ADD_SPEED,
     TOOL_SHIELD
 };
@@ -34,6 +34,7 @@ public:
     int getY() const;
     ToolType getType() const;
     bool getIsVisible() const;
+    bool messageDisplayed = false;
     int getRespawnTimer() const;
     int getPower() const;
 
@@ -45,13 +46,13 @@ public:
     void setPower(int newPower);
 
     void DrawHealthTool() const;
-    void DrawFireRateTool() const;
+    void DrawAddBulletsTool() const;
     void DrawAddSpeedTool() const;
     void DrawShieldTool() const;
 };
 
 void SetupTools(std::vector<Tool>& tools);
 void DisplayTools(const std::vector<Tool>& tools);
-void UpdateTools(std::vector<Tool>& tools, const tank& playerTank, int& sharedRespawnTimer);
+void UpdateTools(std::vector<Tool>& tools, tank& playerTank, int& sharedRespawnTimer);
 
 #endif // TOOL_HPP
