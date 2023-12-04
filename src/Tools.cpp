@@ -251,14 +251,14 @@ void UpdateTools(std::vector<Tool>& tools, tank& playerTank, int& sharedRespawnT
                     continue;
                 }
             }
-            else if (tool.getType() == TOOL_FIRE_RATE) {
-                std::vector<int> bulletCount = playerTank.getBulletCount(); // Make a copy
-                for (int& count : bulletCount) {
-                    count += 5; // Increase each bullet type's count by 5
-                }
-                playerTank.setBulletCount(bulletCount); // Set the modified vector back to the tank
-                tool.setIsVisible(false);
-            }
+            //else if (tool.getType() == TOOL_FIRE_RATE) {
+            //    std::vector<int> bulletCount = playerTank.getBulletCount(); // Make a copy
+             //   for (int& count : bulletCount) {
+             //       count += 5; // Increase each bullet type's count by 5
+             //   }
+             //   playerTank.setBulletCount(bulletCount); // Set the modified vector back to the tank
+             //   tool.setIsVisible(false);
+            //}
 
             // Handle add speed tool
             else if (tool.getType() == TOOL_ADD_SPEED) {
