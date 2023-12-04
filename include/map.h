@@ -1,8 +1,8 @@
 #ifndef MAP_H
 #define MAP_H
 
-//#include"fssimplewindow.h"
-#include "../../public/src/fssimplewindow/src/fssimplewindow.h"
+#include"fssimplewindow.h"
+//#include "../../public/src/fssimplewindow/src/fssimplewindow.h"
 
 #include<chrono>
 
@@ -16,7 +16,7 @@ private:
 	//const int len = 32, wid = 18;
 
 public:
-	int score = 0, score2 = 0, ter = 0, choice = 2, timeInt = 20;
+	int score1 = 0, score2 = 0, ter = 0, choice = 0, timeInt = 20;
 
 	int mapf[18][32] = {};  //wid x len = 18 x 32   //mapf[18][32];    //mapf[wid][len]
 	//int map1[18][32], map2[18][32], map3[18][32], map0[18][32];  
@@ -38,19 +38,21 @@ public:
 	void print_map(int mapp[wid][len]);   //mapp[wid][len]
 	bool checkCollision(int boxX, int boxY, int wallI, int wallJ);
 	bool checkCollision2(int boxX, int boxY, int wallI, int wallJ);
+	bool checkCollision3(int boxX, int boxY, int wallI, int wallJ);
 	void deleteWall(int i, int j);
-	void do_delete(int& x, int& y, int mapp[wid][len]);
-	void do_delete2(int& x, int& y, int mapp[wid][len]);
+	void do_delete(int& x, int& y);  //, int mapp[wid][len]
+	void do_delete2(int& x, int& y, int&i, int&j);
 
 
 	using Clock = std::chrono::high_resolution_clock;
 	using TimePoint = std::chrono::time_point<Clock>;
 	using Seconds = std::chrono::seconds;
 
-	void change_block(int& x, int& y,  int mapp[wid][len]);
-	void change_block2(int& x, int& y, int mapp[wid][len]);
-	bool not_move(int& x, int& y, int& prex, int& prey);
-	bool not_move2(int& x, int& y, int& prex, int& prey);
+	void change_block(int x, int y);  //,  int mapp[wid][len]
+	void change_block2(int& x, int& y);
+	bool not_move(int x, int y);
+	bool not_move2(int& x, int& y, int &i, int &j);
+	bool bulletCollide(int &x, int &y,int &i, int &j);
 	void copymap(int mapp[wid][len]);
 	void testbox(int& x, int& y);
 	void testbullet(int& x, int& y);

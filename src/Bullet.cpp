@@ -47,7 +47,7 @@ Bullet::~Bullet() {
     ax = 0;
     ay = 0;
     count = 0;
-    count_rebound = 0;
+    count_rebound = 10;
 }
 
 void Bullet::Draw(double tankx, double tanky, double tankangle) {
@@ -101,6 +101,7 @@ void Bullet::Draw(double tankx, double tanky, double tankangle) {
         }
 
         int CollisionCase = this->CheckCollision();
+        // printf("collision case: %d", CollisionCase);
         switch (CollisionCase) {
             case 0:
                 break;
@@ -113,7 +114,7 @@ void Bullet::Draw(double tankx, double tanky, double tankangle) {
                 break;
             case 2:
                 if (this->MapDestructible == 1) {
-                    this->damage = DamageMapTable[this->BulletType];
+                    this->damagemap = DamageMapTable[this->BulletType];
                     //sound effect for destroy map
                     sound->playHitWall();
                     this->IsHit = 1;
@@ -121,56 +122,67 @@ void Bullet::Draw(double tankx, double tanky, double tankangle) {
                     break;
                 }
                 else {
-                    if (this->reboundable == 1 && this->count_rebound != 0) {
-                        //sound effect for rebound
-                        sound->playHitRebound();
-                        this->vx = - this->vx;
-                        CollisionCase = 0;
-                        MapDestructible = 0;
-                        CollideMapX = 0;
-                        count_rebound -= 1;
-                    }
-                    else {
+                    // if (this->reboundable == 1 && this->count_rebound != 0 && this->count_rebound_time == 0) {
+                    //     // printf("rebound\n");
+                    //     // printf("angle before:%f",angle);
+                    //     //sound effect for rebound
+                    //     sound->playHitRebound();
+                    //     this->ReboundCase();
+                    //     // printf("angle after:%f",angle);
+                    //     CollisionCase = 0;
+                    //     MapDestructible = 0;
+                    //     CollideMap = 0;
+                    //     count_rebound -= 1;
+                    //     count_rebound_time = 1;
+                    // }
+                    // else if(this->reboundable == 1 && this->count_rebound != 0 && this->count_rebound_time != 0){
+                    //     count_rebound_time -= 1;
+                    //     if (count_rebound_time<0){
+                    //         count_rebound_time=0;
+                    //     }
+                    // }
+                    // else {
                         //sound effect for destroy bullet
                         sound->playHitWall();
                         this->IsHit = 1;
                         this->IsShot = 0;
-                    }
+                    // }
                     break;
                 }
-            case 3:
-                if (this->MapDestructible == 1) {
-                    this->damage = DamageMapTable[this->BulletType];
-                    //sound effect for destroy map
-                    sound->playHitWall();
-                    this->IsHit = 1;
-                    this->IsShot = 0;
-                    break;
-                }
-                else {
-                    if (this->reboundable == 1 && this->count_rebound != 0) {
-                        //sound effect for rebound
-                        sound->playHitRebound();
-                        this->vy = - this->vy;
-                        CollisionCase = 0;
-                        MapDestructible = 0;
-                        CollideMapY = 0;
-                        count_rebound -= 1;
-                        break;
-                    }
-                    else {
-                        //sound effect for destroy bullet
-                        sound->playHitWall();
-                        this->IsHit = 1;
-                        this->IsShot = 0;
-                        break;
-                    }
-                }
-            case 4:
-                this->IsHit = 1;
+            // case 3:
+            //     if (this->MapDestructible == 1) {
+            //         this->damagemap = DamageMapTable[this->BulletType];
+            //         //sound effect for destroy map
+            //         sound->playHitWall();
+            //         this->IsHit = 1;
+            //         this->IsShot = 0;
+            //         break;
+            //     }
+            //     else {
+            //         if (this->reboundable == 1 && this->count_rebound != 0) {
+            //             //sound effect for rebound
+            //             sound->playHitRebound();
+            //             this->vy = - this->vy;
+            //             CollisionCase = 0;
+            //             MapDestructible = 0;
+            //             CollideMapY = 0;
+            //             count_rebound -= 1;
+            //             break;
+            //         }
+            //         else {
+            //             //sound effect for destroy bullet
+            //             sound->playHitWall();
+            //             this->IsHit = 1;
+            //             this->IsShot = 0;
+            //             break;
+            //         }
+            //     }
+            // case 4:
+            //     this->IsHit = 1;
         }
     }
     else if (this->IsHit == 1) {
+        this->damage = 0;
         if (this->count < 20) {
             this->Hit();
             this->count += 1;
@@ -198,12 +210,16 @@ bool Bullet::GetBulletStatus(void) {
 }
 
 double Bullet::GetDamage(void) {
-    if (this->IsHit == 1 && this->FirstHit) {
-        return this->damage;
-    }
-    else {
-        return 0;
-    }
+    // if (this->IsHit == 1 && this->FirstHit) {
+    return this->damage;
+    // }
+    // else {
+    //     return 0;
+    // }
+}
+
+int Bullet::GetDamageMap(void){
+    return this->damagemap;
 }
 
 void Bullet::ChangeBulletType(int type) {//Make a Change
@@ -223,13 +239,17 @@ void Bullet::IsCollideTank(void) {
     this->CollideTank = 1;
 }
 
-void Bullet::IsCollideMapX(void) {
-    this->CollideMapX = 1;
+void Bullet::IsCollideMap(void) {
+    this->CollideMap = 1;
 }
 
-void Bullet::IsCollideMapY(void) {
-    this->CollideMapY = 1;
-}
+// void Bullet::IsCollideMapX(void) {
+//     this->CollideMapX = 1;
+// }
+
+// void Bullet::IsCollideMapY(void) {
+//     this->CollideMapY = 1;
+// }
 
 void Bullet::IsCollideBullet(void) {
     this->CollideBullet = 1;
@@ -246,6 +266,25 @@ bool Bullet::GetIsHit() {
 void Bullet::setSoundPlayer(Sound *soundPlayer) {//setter
     this->sound = soundPlayer;
 }
+
+bool Bullet::CheckTankCollision(const double &tankx, const double &tanky) {
+	double tankupperbound = tanky+20;
+    double tanklowerbound = tanky-20;
+    double tankleftbound = tankx -20;
+    double tankrightbound = tankx + 20;
+
+    if (this->x >= tankleftbound && this->x <= tankrightbound && this->y <= tankupperbound && this->y >= tanklowerbound){
+        // printf("collision detected!");
+	    return true;  // Collision detected
+    }
+    else{
+        return false;
+    }
+}
+
+// bool Bullet::CheckMapCollision(){
+
+// }
 
 //Protected
 void Bullet::Initialize(double tankx, double tanky, double tankangle) {
@@ -272,30 +311,33 @@ void Bullet::Initialize(double tankx, double tanky, double tankangle) {
     this->MapDestructible = 0;
     this->count = 0;
     this->damage = 0;
+    this->damagemap = 0;
     this->count_rebound = 10;
 }
 
 void Bullet::Initialize(void) {
     this->FirstShoot = 0;
     this->FirstHit = 1;
-    this->vx = VTable[this->BulletType] * cos(-this->angle);
-    this->vy = VTable[this->BulletType] * sin(-this->angle);
-    this->ax = AXTable[this->BulletType];
-    this->ay = AYTable[this->BulletType];
+    // this->vx = VTable[this->BulletType] * cos(-this->angle);
+    // this->vy = VTable[this->BulletType] * sin(-this->angle);
+    // this->ax = AXTable[this->BulletType];
+    // this->ay = AYTable[this->BulletType];
     this->xsize = XSize[this->BulletType];
     this->ysize = YSize[this->BulletType];
     this->reboundable = ReboundTable[this->BulletType];
-    this->x = x0;
-    this->y = y0;
+    // this->x = x0;
+    // this->y = y0;
     this->dt = 0.1;
     this->CollisionCase = 0;
     this->CollideTank = 0;
-    this->CollideMapX = 0;
-    this->CollideMapY = 0;
+    this->CollideMap = 0;
+    // this->CollideMapX = 0;
+    // this->CollideMapY = 0;
     this->CollideBullet = 0;
     this->MapDestructible = 0;
     this->count = 0;
     this->damage = 0;
+    this->damagemap = 0;
     this->count_rebound = 10;
 
 }
@@ -308,12 +350,16 @@ void Bullet::Reset(void) {
     this->count = 0;
     this->CollisionCase = 0;
     this->CollideTank = 0;
-    this->CollideMapX = 0;
-    this->CollideMapY = 0;
+    this->CollideMap = 0;
+    // this->CollideMapX = 0;
+    // this->CollideMapY = 0;
     this->CollideBullet = 0;
     this->MapDestructible = 0;
     this->damage = 0;
+    this->damagemap = 0;
     this->count_rebound = 10;
+    this->x = -50;
+    this->y = -50;
 }
 
 void Bullet::ShootBullet(void) {
@@ -325,45 +371,47 @@ void Bullet::ShootBullet(void) {
     }
 }
 
-void Bullet::Motion(void) {
+void Bullet::Motion(void) {    
+    
+    // this->vx = VTable[this->BulletType] * cos(-this->angle);
+    // this->vy = VTable[this->BulletType] * sin(-this->angle);
     this->x = this->x + this->vx * this->dt;
     this->y = this->y + this->vy * this->dt;
-    this->vx += this->ax * this->dt;
-    this->vy += this->ay * this->dt;
+
 }
 
 int Bullet::CheckCollision(void) {
     //CheckCollisionTank
     //CheckCollisionMap
-    if (this->x >= 1280 || this->x <= 0) {
-        CollideMapX = 1;
+    if (this->x >= 1000 || this->x <= 0||this->y >= 720 || this->y <= 0) {
+        CollideMap = 1;
     }
-    else if (this->y >= 720 || this->y <= 0) {
-        CollideMapY = 1;
-    }
+    // else if () {
+    //     CollideMapY = 1;
+    // }
     if (CollideTank == 1) {
         return 1;
     }
-    else if (CollideMapX == 1) {
-        this->CheckMapDestructible();
+    else if (CollideMap == 1) { 
+        // this->CheckMapDestructible();
         return 2;
     }
-    else if (CollideMapY == 1) {
-        this->CheckMapDestructible();
-        return 3;
-    }
-    else if (CollideBullet == 1) {
-        return 4;
-    }
-    else {
-        return 0;
-    }
+    // else if (CollideMapY == 1) {
+    //     this->CheckMapDestructible();
+    //     return 3;
+    // }
+    // else if (CollideBullet == 1) {
+    //     return 4;
+    // }
+    // else {
+    //     return 0;
+    // }
 }
 
-void Bullet::CheckMapDestructible(void) {
-    //Map map;
-    //MapDestructible = map.CheckDestructible(this->x,this->y);
-}
+// void Bullet::CheckMapDestructible(void) {
+//     //Map map;
+//     //MapDestructible = map.CheckDestructible(this->x,this->y);
+// }
 
 void Bullet::Hit(void) {
     glPointSize(3);
@@ -381,6 +429,26 @@ void Bullet::Hit(void) {
         glVertex2d(this->x + xr, this->y + yr);
     }
     glEnd();
+}
+
+void Bullet::ReboundCase(void){
+    double nx=this->x;
+	double ny=this->y;
+	double d=sqrt(nx*nx+ny*ny);
+	if(0!=d)
+	{
+		nx/=d;
+		ny/=d;
+
+		double k1=this->vx*nx+this->vy*ny;
+		double k2=0;
+
+		this->vx=this->vx+nx*(k2-k1);
+		this->vy=this->vy+ny*(k2-k1);
+
+		// vx2=vx2+nx*(k1-k2);
+		// vy2=vy2+ny*(k1-k2);
+    }
 }
 
 void Bullet::Rotate(double& x, double& y, double theta) {
