@@ -41,7 +41,7 @@ bool GameJudge::checkWinCondition() {
 }
 
 bool GameJudge::checkDeathBattleWin() {
-    // std::cout << "Player 1 HP: " << player1HP << ", Player 2 HP: " << player2HP << std::endl;
+    std::cout << "Player 1 HP: " << player1HP << ", Player 2 HP: " << player2HP << std::endl;
     if (player1HP <= 0 && player2HP > 0) {
         winner = 2;  // Player 2 wins
         return true;
@@ -56,11 +56,20 @@ bool GameJudge::checkDeathBattleWin() {
 
 
 bool GameJudge::checkOccupationWin() {
-    if (player1OccupationPoints >= 3) {
+    // Check if either player's HP has dropped to 0 or below
+    if (player1HP <= 0 && player2HP > 0) {
+        winner = 2;  // Player 2 wins
+        return true;
+    }
+    else if (player2HP <= 0 && player1HP > 0) {
         winner = 1;  // Player 1 wins
         return true;
     }
-    else if (player2OccupationPoints >= 3) {
+    if (player1OccupationPoints >= 50) {
+        winner = 1;  // Player 1 wins
+        return true;
+    }
+    else if (player2OccupationPoints >= 50) {
         winner = 2;  // Player 2 wins
         return true;
     }
@@ -69,7 +78,17 @@ bool GameJudge::checkOccupationWin() {
 
 
 bool GameJudge::checkTimeLimitedOccupationWin() {
-    if (elapsedTime >= totalTime) {
+    // Check if either player's HP has dropped to 0 or below
+    if (player1HP <= 0 && player2HP > 0) {
+        winner = 2;  // Player 2 wins
+        return true;
+    }
+    else if (player2HP <= 0 && player1HP > 0) {
+        winner = 1;  // Player 1 wins
+        return true;
+    }
+
+    if (elapsedTime >= 120) {
         if (player1OccupationPoints > player2OccupationPoints) {
             winner = 1;  // Player 1 wins
             return true;
@@ -78,12 +97,15 @@ bool GameJudge::checkTimeLimitedOccupationWin() {
             winner = 2;  // Player 2 wins
             return true;
         }
-        // In case of a tie, you can decide how to handle it
-        // For instance, declare it a draw or use another metric to determine the winner
+        else if (player2OccupationPoints == player1OccupationPoints) {
+            winner = 3;  // Player 2 wins
+            return true;
+
+        }
+        return false; // No winner yet, or time not up yet
     }
-    return false; // No winner yet, or time not up yet
 }
 
 int GameJudge::getWinner() const {
     return winner;
-}
+    }
