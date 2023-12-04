@@ -89,6 +89,9 @@ void tank::setFireAngle(float input) {
 void tank::setDirection(int input) {
     direction = input;
 }
+void tank::setBulletCount(std::vector<int> count) {
+    BulletCount = count;
+}
 float calSpeed(float power, int load, float weight) {
     return power/(load+weight);
 }
