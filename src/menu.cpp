@@ -1640,7 +1640,7 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             DisplayTools(tools);
             UpdateTools(tools,testTank1,share);
             UpdateTools(tools,testTank2,share);
-
+            
             glColor3ub(0, 0, 0);
             glRasterPos2f(1020.0f,150.0f);
             YsGlDrawFontBitmap8x12("Player 1");
