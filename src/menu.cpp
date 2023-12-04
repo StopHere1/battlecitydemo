@@ -19,7 +19,7 @@
 #include "../../public/src/ysbitmap/src/yspng.h"
 #include "../../public/src/yssimplesound/src/yssimplesound.h"
 
-bool enabletest = true;
+bool enabletest = false;
 
 
 std::vector <std::string> Parse(std::string incoming)
@@ -1059,6 +1059,8 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
         int user1select = 0;
         int user2select = 0;
         bool flag = false;
+        int winningPlayer =0;
+        char winnerText[50];
         // testTank1.checkLoad();
         for (;;)
         {
@@ -1268,8 +1270,16 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             if(!pause){
                 gamejudger.updateGameState(testTank1.getHealth(),testTank2.getHealth(),0,0,dt);
                 if(gamejudger.checkWinCondition()){
-                    soundplayer.playCelebration();
-                    break;
+                winningPlayer = gamejudger.getWinner();
+                if (winningPlayer == 1 || winningPlayer == 2) {
+                sprintf(winnerText, "Player %d Wins!", winningPlayer);
+                soundplayer.playCelebration();
+                }
+                else if (winningPlayer == 3) {
+                sprintf(winnerText, "Tie!");
+                soundplayer.playGameOver();
+                }
+                pause = true;
                 }
             }
             glColor3ub(0, 0, 0);
@@ -1382,6 +1392,14 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             DisplayTools(tools);
             UpdateTools(tools,testTank1,share);
             UpdateTools(tools,testTank2,share);
+             if (winningPlayer!=0){
+                glColor3ub(255,0,0);
+                glRasterPos2i(640-32*strlen(winnerText)/2, 360+48); // Position where text will be drawn
+                YsGlDrawFontBitmap32x48(winnerText);
+                if(key == FSKEY_R){
+                    break;
+                }
+            }
             if (!flag){
             for (int i = 0; i < stage5.size(); i++)
             {   
@@ -1424,6 +1442,8 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
         int user1select = 0;
         int user2select = 0;
         bool flag = false;
+        int winningPlayer =0;
+        char winnerText[50];
         for (;;)
         {
             FsPollDevice();
@@ -1610,7 +1630,6 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
                 stage6[6].setstate(0);
             }
             }
-
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             if(!flag){
             glColor3ub(0, 0, 0);
@@ -1633,14 +1652,23 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             if(!pause){
             gamejudger.updateGameState(testTank1.getHealth(),testTank2.getHealth(),mapmanager.score1,mapmanager.score2,dt);
             if(gamejudger.checkWinCondition()){
+                winningPlayer = gamejudger.getWinner();
+                if (winningPlayer == 1 || winningPlayer == 2) {
+                sprintf(winnerText, "Player %d Wins!", winningPlayer);
                 soundplayer.playCelebration();
-                break;
+                }
+                else if (winningPlayer == 3) {
+                sprintf(winnerText, "Tie!");
+                soundplayer.playGameOver();
+                }
+                pause = true;
+                
                 }
             }
             DisplayTools(tools);
             UpdateTools(tools,testTank1,share);
             UpdateTools(tools,testTank2,share);
-
+            
             glColor3ub(0, 0, 0);
             glRasterPos2f(1020.0f,150.0f);
             YsGlDrawFontBitmap8x12("Player 1");
@@ -1762,7 +1790,14 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             testTank2.draw(40);//default size is 40
             }
             mapmanager.print_map(mapmanager.mapf);
-
+            if (winningPlayer!=0){
+                glColor3ub(255,0,0);
+                glRasterPos2i(640-32*strlen(winnerText)/2, 360+48); // Position where text will be drawn
+                YsGlDrawFontBitmap32x48(winnerText);
+                if(key == FSKEY_R){
+                    break;
+                }
+            }
             if (!flag){
             for (int i = 0; i < stage5.size(); i++)
             {   
@@ -1804,6 +1839,8 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
         int user1select = 0;
         int user2select = 0;
         bool flag = false;
+        int winningPlayer =0;
+        char winnerText[50];
         for (;;)
         {
             FsPollDevice();
@@ -2012,9 +2049,17 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             if(!pause){
             gamejudger.updateGameState(testTank1.getHealth(),testTank2.getHealth(),mapmanager.score1,mapmanager.score2,dt);
             if(gamejudger.checkWinCondition()){
+                winningPlayer = gamejudger.getWinner();
+                if (winningPlayer == 1 || winningPlayer == 2) {
+                sprintf(winnerText, "Player %d Wins!", winningPlayer);
                 soundplayer.playCelebration();
-                break;
-            }
+                }
+                else if (winningPlayer == 3) {
+                sprintf(winnerText, "Tie!");
+                soundplayer.playGameOver();
+                }
+                pause = true;
+                }
             }
             DisplayTools(tools);
             UpdateTools(tools,testTank1,share);
@@ -2140,6 +2185,14 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
             testTank2.draw(40);//default size is 40
             }
             mapmanager.print_map(mapmanager.mapf);
+            if (winningPlayer!=0){
+                glColor3ub(255,0,0);
+                glRasterPos2i(640-32*strlen(winnerText)/2, 360+48); // Position where text will be drawn
+                YsGlDrawFontBitmap32x48(winnerText);
+                if(key == FSKEY_R){
+                    break;
+                }
+            }
             if (!flag){
             for (int i = 0; i < stage5.size(); i++)
             {   
