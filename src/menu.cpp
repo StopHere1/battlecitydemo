@@ -19,7 +19,7 @@
 #include "../../public/src/ysbitmap/src/yspng.h"
 #include "../../public/src/yssimplesound/src/yssimplesound.h"
 
-bool enabletest = false;
+bool enabletest = true;
 
 
 std::vector <std::string> Parse(std::string incoming)
@@ -561,17 +561,23 @@ void menu::bulletTankCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, tank &t
         tank1Bullet.IsCollideTank();
         double tank2health = testTank2.getHealth();
         double tank2armor = testTank2.getArmor();
-        if (tank2armor > 0){
-            double damage = 0.7*tank1Bullet.GetDamage();
-            // printf("damage:%f",damage);
-            tank2armor -= damage;
-            testTank2.setArmor(tank2armor);
-        }
+        if (tank1Bullet.GetBulletType()!=2){
+            if (tank2armor > 0){
+                double damage = 0.7*tank1Bullet.GetDamage();
+                // printf("damage:%f",damage);
+                tank2armor -= damage;
+                testTank2.setArmor(tank2armor);
+            }
+            else{
+                testTank2.setArmor(0.0);
+                tank2health = tank2health-tank1Bullet.GetDamage();
+                testTank2.setHealth(tank2health);   
+            }
+        }    
         else{
-            testTank2.setArmor(0.0);
-            tank2health = tank2health-tank1Bullet.GetDamage();
-            testTank2.setHealth(tank2health);   
-        }     
+                tank2health = tank2health-tank1Bullet.GetDamage();
+                testTank2.setHealth(tank2health); 
+        } 
     }  
     // }
 
@@ -582,16 +588,22 @@ void menu::bulletTankCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, tank &t
             tank2Bullet.IsCollideTank();
             double tank1health = testTank1.getHealth();
             double tank1armor = testTank1.getArmor();
-            if (tank1armor > 0){
-                double damage = 0.7*tank2Bullet.GetDamage();
-                tank1armor -= damage;
-                // printf("tank1armor: %f", tank1armor);
-                testTank1.setArmor(tank1armor);
+            if (tank2Bullet.GetBulletType()!=2){
+                if (tank1armor > 0){
+                    double damage = 0.7*tank2Bullet.GetDamage();
+                    tank1armor -= damage;
+                    // printf("tank1armor: %f", tank1armor);
+                    testTank1.setArmor(tank1armor);
+                }
+                else{
+                    testTank1.setArmor(0.0);
+                    tank1health = tank1health-tank2Bullet.GetDamage();
+                    testTank1.setHealth(tank1health);   
+                }
             }
             else{
-                testTank1.setArmor(0.0);
                 tank1health = tank1health-tank2Bullet.GetDamage();
-                testTank1.setHealth(tank1health);   
+                testTank1.setHealth(tank1health); 
             }
                 
         }  
@@ -613,7 +625,7 @@ void menu::bulletMapCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, Map &map
     if (IsCollideMap1){
         // printf("collidemap");
         bool NotDestructibleMap1 = map.not_move2(bullet1x,bullet1y, map1x, map1y);
-        if (not NotDestructibleMap1){
+        if (NotDestructibleMap1==false){
             // printf("destructible");
             tank1Bullet.IsMapDestructible();
         }
@@ -633,7 +645,7 @@ void menu::bulletMapCollision(Bullet &tank1Bullet, Bullet &tank2Bullet, Map &map
     bool IsCollideMap2 = map.bulletCollide(bullet2x, bullet2y, map2x, map2y);
         if (IsCollideMap2){
             bool NotDestructibleMap2 = map.not_move2(bullet2x,bullet2y, map2x,map2y);
-            if (not NotDestructibleMap2){
+            if (NotDestructibleMap2==false){
                 tank2Bullet.IsMapDestructible();
             }
             tank2Bullet.IsCollideMap();

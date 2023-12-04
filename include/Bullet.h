@@ -13,9 +13,9 @@
 #include "../../battlecitydemo/include/sound.h"
 
 const double PI = 3.1415926;
-const double DamageTankTable[3] = { 30,10,20 };
+const double DamageTankTable[3] = { 30,10,10 };
 const int DamageMapTable[3] = { 1,1,0 };
-const double VTable[3] = { 50, 120, 80 };
+const double VTable[3] = { 40, 120, 80 };
 const double AXTable[3] = { 0 };
 const double AYTable[3] = { 0 };
 const int ReboundTable[3] = { 0, 0, 1 };

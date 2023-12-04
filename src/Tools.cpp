@@ -62,7 +62,7 @@ void DrawCircle(int centerX, int centerY, int radius, const unsigned char color[
     glColor3ubv(color);
     glBegin(GL_POLYGON);
     for (int i = 0; i < 360; i++) {
-        double angle = i * M_PI / 180.0;
+        double angle = i * PI / 180.0;
         int x = centerX + radius * cos(angle);
         int y = centerY + radius * sin(angle);
         glVertex2i(x, y);
