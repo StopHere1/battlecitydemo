@@ -13,7 +13,7 @@
 
 enum ToolType {
     TOOL_HEALTH,
-    TOOL_FIRE_RATE,
+    TOOL_ADD_BULLETS,
     TOOL_ADD_SPEED,
     TOOL_SHIELD
 };
@@ -34,6 +34,7 @@ public:
     int getY() const;
     ToolType getType() const;
     bool getIsVisible() const;
+    bool messageDisplayed = false;
     int getRespawnTimer() const;
     int getPower() const;
 
@@ -45,7 +46,7 @@ public:
     void setPower(int newPower);
 
     void DrawHealthTool() const;
-    void DrawFireRateTool() const;
+    void DrawAddBulletsTool() const;
     void DrawAddSpeedTool() const;
     void DrawShieldTool() const;
 };

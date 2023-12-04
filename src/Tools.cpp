@@ -89,7 +89,7 @@ void Tool::DrawHealthTool() const {
     glEnd();
 }
 
-void Tool::DrawFireRateTool() const {
+void Tool::DrawAddBulletsTool() const {
     const unsigned char black[3] = {0, 0, 0};
     const unsigned char gold[3] = {255, 215, 0};
 
@@ -177,7 +177,7 @@ void SetupTools(std::vector<Tool>& tools) {
      tools.clear();
 
      tools.emplace_back(120, 120, TOOL_HEALTH, true, 0, 30);
-     tools.emplace_back(560, 360, TOOL_FIRE_RATE, true, 0, 20);
+     tools.emplace_back(560, 360, TOOL_ADD_BULLETS, true, 0, 5);
      tools.emplace_back(440, 400, TOOL_ADD_SPEED, true, 0, 15);
      tools.emplace_back(880, 640, TOOL_SHIELD, true, 0, 30);
 }
@@ -189,8 +189,8 @@ void DisplayTools(const std::vector<Tool>& tools) {
                 case TOOL_HEALTH:
                     tool.DrawHealthTool();
                     break;
-                case TOOL_FIRE_RATE:
-                    tool.DrawFireRateTool();
+                case TOOL_ADD_BULLETS:
+                    tool.DrawAddBulletsTool();
                     break;
                 case TOOL_ADD_SPEED:
                     tool.DrawAddSpeedTool();
@@ -224,7 +224,7 @@ void UpdateTools(std::vector<Tool>& tools, tank& playerTank, int& sharedRespawnT
                 offsetX = -4 * 7 * 0.75; // 7 is the circleRadius in DrawHealthTool
                 offsetY = -4.5 * 7 * 0.75;
                 break;
-            case TOOL_FIRE_RATE:
+            case TOOL_ADD_BULLETS:
                 offsetX = -2.6 * 9 * 0.9; // 9 is the bulletWidth in DrawFireRateTool
                 offsetY = -1.85 * 15 * 0.9; // 15 is the bulletHeight in DrawFireRateTool
                 break;
@@ -245,13 +245,18 @@ void UpdateTools(std::vector<Tool>& tools, tank& playerTank, int& sharedRespawnT
                     float newHealth = std::min(playerTank.getHealth() + tool.getPower(), playerTank.getHealthMax());
                     playerTank.setHealth(newHealth);
                     tool.setIsVisible(false);
+                    tool.messageDisplayed = false;
                 } else {
-                    std::cout << "You cannot apply add health tool since you have the max health value." << std::endl;
+                    if (!tool.messageDisplayed) {
+                        std::cout << "You cannot apply add health tool since you have the max health value." << std::endl;
+                        tool.messageDisplayed = true;
+                    }
                     allToolsNotVisible = false;
                     continue;
                 }
             }
-            else if (tool.getType() == TOOL_FIRE_RATE) {
+            // Handle add bullets tool
+            else if (tool.getType() == TOOL_ADD_BULLETS) {
                 std::vector<int> bulletCount = playerTank.getBulletCount(); // Make a copy
                 for (int& count : bulletCount) {
                     count += 5; // Increase each bullet type's count by 5
