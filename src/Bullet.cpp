@@ -122,31 +122,35 @@ void Bullet::Draw(double tankx, double tanky, double tankangle) {
                     break;
                 }
                 else {
-                    // if (this->reboundable == 1 && this->count_rebound != 0 && this->count_rebound_time == 0) {
-                    //     // printf("rebound\n");
-                    //     // printf("angle before:%f",angle);
-                    //     //sound effect for rebound
-                    //     sound->playHitRebound();
-                    //     this->ReboundCase();
-                    //     // printf("angle after:%f",angle);
-                    //     CollisionCase = 0;
-                    //     MapDestructible = 0;
-                    //     CollideMap = 0;
-                    //     count_rebound -= 1;
-                    //     count_rebound_time = 1;
-                    // }
+                    if (this->reboundable == 1 && this->count_rebound != 0 && this->count_rebound_time == 0) {
+                        printf("rebound\n");
+                        printf("before vx: %f, vy: %f", this->vx, this->vy);
+                        // printf("angle before:%f",angle);
+                        //sound effect for rebound
+                        sound->playHitRebound();
+                        this->ReboundCase();
+                        printf("after vx: %f, vy: %f", this->vx, this->vy);
+                        // this->vx = -this->vx;
+                        // this->vy = -this->vy;
+                        // printf("angle after:%f",angle);
+                        this->CollisionCase = 0;
+                        this->MapDestructible = 0;
+                        this->CollideMap = 0;
+                        this->count_rebound -= 1;
+                        this->count_rebound_time = 0;
+                    }
                     // else if(this->reboundable == 1 && this->count_rebound != 0 && this->count_rebound_time != 0){
-                    //     count_rebound_time -= 1;
-                    //     if (count_rebound_time<0){
-                    //         count_rebound_time=0;
+                    //     this->count_rebound_time -= 1;
+                    //     if (this->count_rebound_time<0){
+                    //         this->count_rebound_time=0;
                     //     }
                     // }
-                    // else {
+                    else {
                         //sound effect for destroy bullet
                         sound->playHitWall();
                         this->IsHit = 1;
                         this->IsShot = 0;
-                    // }
+                    }
                     break;
                 }
             // case 3:
@@ -432,23 +436,41 @@ void Bullet::Hit(void) {
 }
 
 void Bullet::ReboundCase(void){
-    double nx=this->x;
-	double ny=this->y;
-	double d=sqrt(nx*nx+ny*ny);
-	if(0!=d)
-	{
-		nx/=d;
-		ny/=d;
-
-		double k1=this->vx*nx+this->vy*ny;
-		double k2=0;
-
-		this->vx=this->vx+nx*(k2-k1);
-		this->vy=this->vy+ny*(k2-k1);
-
-		// vx2=vx2+nx*(k1-k2);
-		// vy2=vy2+ny*(k1-k2);
+ 	double x2max = floor(this->x/40)*40+40;
+    double x2min = floor(this->x/40)*40-40;    
+    double y2max = floor(this->y/40)*40+40;
+    double y2min = floor(this->y/40)*40-40;
+    if (abs(this->x-x2max)<1 || abs(this->x-x2min)<1)
+    {
+        printf("xdir");
+        this->vx = -this->vx;
     }
+    else if (abs(this->y-y2max<1 ||abs(this->y-y2min)<1))
+    {
+        printf("ydir");
+        this->vy = -this->vy;
+    }
+    else{
+        printf("neither");
+    }
+
+    // if (abs(this->x-x2max)<1 || abs(this->x-x2min)<1)
+    // {
+    //     this->vy = -this->vy;
+    // }
+    // double y2 = floor(this->y/40)*40+20;
+    // double dx = std::abs(this->x-x2);
+    // double dy = std::abs(this->y-y2);
+    // if (dx>dy){
+    //     this->vx = -this->vx;
+    // }
+    // else if(dy>dx){
+    //     this->vy = -this->vy;
+    // }
+    // else{
+    //     this->vx = -this->vx;
+    //     this->vy = -this->vy;
+    // }
 }
 
 void Bullet::Rotate(double& x, double& y, double theta) {
