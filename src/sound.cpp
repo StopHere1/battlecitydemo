@@ -81,36 +81,42 @@ void Sound::setBGMVolume(float input)
 void Sound::volumeUp()
 {
     bgmPlayer.Stop(bgm);
-    if (bgmVolumeLevel < 1.0)
+    if(YSTRUE != bgmPlayer.IsPlaying(bgm))
     {
-        this->bgmVolumeLevel += 0.1;
+        if (bgmVolumeLevel < 1.0)
+        {
+            this->bgmVolumeLevel += 0.1;
+        }
+        else
+        {
+            this->bgmVolumeLevel = 1.0;
+        }
+        bgmPlayer.SetVolume(bgm, bgmVolumeLevel);
     }
-    else
-    {
-        this->bgmVolumeLevel = 1.0;
-    }
-    bgmPlayer.SetVolume(bgm, bgmVolumeLevel);
     BGM();
 }
 
 void Sound::volumeDown()
 {
     bgmPlayer.Stop(bgm);
-    if (bgmVolumeLevel > 0.0)
+    if(YSTRUE != bgmPlayer.IsPlaying(bgm))
     {
-        this->bgmVolumeLevel -= 0.1;
+        if (bgmVolumeLevel > 0.0)
+        {
+            this->bgmVolumeLevel -= 0.1;
+        }
+        else
+        {
+            this->bgmVolumeLevel = 0.0;
+        }
+        bgmPlayer.SetVolume(bgm, bgmVolumeLevel);
     }
-    else
-    {
-        this->bgmVolumeLevel = 0.0;
-    }
-    bgmPlayer.SetVolume(bgm, bgmVolumeLevel);
     BGM();
 }
 
 void Sound::BGM()
 {
-    printf("volume = %f", bgmVolumeLevel);
+    printf("volume = %f\n", bgmVolumeLevel);
     bgmPlayer.MakeCurrent();
     bgmPlayer.Start();
     bgmPlayer.PlayBackground(bgm);
