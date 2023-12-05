@@ -15,9 +15,9 @@
 
 class tank {
 public:
-    tank() { posX = 0; posY = 0; armor = 0; health = 0; load = 0; speed = 0; power = 0;
+    tank() { posX = 20; posY = 20; armor = 0; health = 0; load = 0; speed = 0; power = 0;
         weight = 0; state = 0; magSize = 0; fireAngle = 0; direction =0 ;healthMax = 100;
-        tankType = type1; user = 0; currentBulletType = 0; canMove = true; nextPosX = 0; nextPosY = 0;}
+        tankType = type1; user = 0; currentBulletType = 0; canMove = true; nextPosX = 20; nextPosY = 20;}
     enum Type {type1, type2, type3, type4};// tank Type
     float getPosX();
     float getPosY();
