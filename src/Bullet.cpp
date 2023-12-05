@@ -121,36 +121,36 @@ void Bullet::Draw(double tankx, double tanky, double tankangle) {
                     this->IsShot = 0;
                     break;
                 }
-                else {
-                    if (this->reboundable == 1 && this->count_rebound != 0 && this->count_rebound_time == 0) {
-                        printf("rebound\n");
-                        printf("before vx: %f, vy: %f", this->vx, this->vy);
-                        // printf("angle before:%f",angle);
-                        //sound effect for rebound
-                        sound->playHitRebound();
-                        this->ReboundCase();
-                        printf("after vx: %f, vy: %f", this->vx, this->vy);
-                        // this->vx = -this->vx;
-                        // this->vy = -this->vy;
-                        // printf("angle after:%f",angle);
-                        this->CollisionCase = 0;
-                        this->MapDestructible = 0;
-                        this->CollideMap = 0;
-                        this->count_rebound -= 1;
-                        this->count_rebound_time = 0;
-                    }
-                    // else if(this->reboundable == 1 && this->count_rebound != 0 && this->count_rebound_time != 0){
-                    //     this->count_rebound_time -= 1;
-                    //     if (this->count_rebound_time<0){
-                    //         this->count_rebound_time=0;
-                    //     }
-                    // }
+                // else {
+                //     if (this->reboundable == 1 && this->count_rebound != 0 && this->count_rebound_time == 0) {
+                //         printf("rebound\n");
+                //         printf("before vx: %f, vy: %f", this->vx, this->vy);
+                //         // printf("angle before:%f",angle);
+                //         //sound effect for rebound
+                //         sound->playHitRebound();
+                //         this->ReboundCase();
+                //         printf("after vx: %f, vy: %f", this->vx, this->vy);
+                //         // this->vx = -this->vx;
+                //         // this->vy = -this->vy;
+                //         // printf("angle after:%f",angle);
+                //         this->CollisionCase = 0;
+                //         this->MapDestructible = 0;
+                //         this->CollideMap = 0;
+                //         this->count_rebound -= 1;
+                //         this->count_rebound_time = 0;
+                //     }
+                //     // else if(this->reboundable == 1 && this->count_rebound != 0 && this->count_rebound_time != 0){
+                //     //     this->count_rebound_time -= 1;
+                //     //     if (this->count_rebound_time<0){
+                //     //         this->count_rebound_time=0;
+                //     //     }
+                //     // }
                     else {
                         //sound effect for destroy bullet
                         sound->playHitWall();
                         this->IsHit = 1;
                         this->IsShot = 0;
-                    }
+                    // }
                     break;
                 }
             // case 3:
