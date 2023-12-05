@@ -111,8 +111,6 @@ int tank::init(Type type, int User) {
         this->user = User;
         if (type == type1) {//standard tank
             this->tankType = type1;
-            this->posX = 0;
-            this->posY = 0;
             this->armor = 50;
             this->weight = 100;
             this->health = 50;
@@ -126,8 +124,6 @@ int tank::init(Type type, int User) {
             return 0;
         } else if (type == type2) {//fast tank
             this->tankType = type2;
-            this->posX = 0;
-            this->posY = 0;
             this->armor = 30;
             this->weight = 50;
             this->health = 50;
@@ -141,8 +137,6 @@ int tank::init(Type type, int User) {
             return 0;
         } else if (type == type3) {//heavy tank
             this->tankType = type3;
-            this->posX = 0;
-            this->posY = 0;
             this->armor = 100;
             this->weight = 200;
             this->health = 50;
@@ -156,8 +150,6 @@ int tank::init(Type type, int User) {
             return 0;
         } else if (type == type4) {//Load tank
             this->tankType = type4;
-            this->posX = 0;
-            this->posY = 0;
             this->armor = 40;
             this->weight = 150;
             this->health = 80;
@@ -618,36 +610,76 @@ std::vector<float> tank::checkMove(int key) {
         if (this->health > 0) {
             if (this->user == 0) {
                 if (key == FSKEY_W) {
-                    this->nextPosY = this->posY - speed;
+                    if(nextPosY - 20 <= 0){
+                        this->nextPosY = 20;
+                        this->canMove = false;
+                    } else {
+                        this->nextPosY = this->posY - speed;
+                    }
                     this->direction = 0;
                 }
                 if (key == FSKEY_S) {
-                    this->nextPosY = this->posY + speed;
+                    if(nextPosY + 20 >= 720){
+                        this->nextPosY = 700;
+                        this->canMove = false;
+                    } else {
+                        this->nextPosY = this->posY + speed;
+                    }
                     this->direction = 0;
                 }
                 if (key == FSKEY_A) {
-                    this->nextPosX = this->posX - speed;
+                    if(nextPosX - 20 <= 0){
+                        this->nextPosX = 20;
+                        this->canMove = false;
+                    } else {
+                        this->nextPosX = this->posX - speed;
+                    }
                     this->direction = 1;
                 }
                 if (key == FSKEY_D) {
-                    this->nextPosX = this->posX + speed;
+                    if(nextPosX + 20 >= 1280){
+                        this->nextPosX = 1260;
+                        this->canMove = false;
+                    } else {
+                        this->nextPosX = this->posX + speed;
+                    }
                     this->direction = 1;
                 }
             } else if (this->user == 1) {
                 if (key == FSKEY_UP) {
-                    this->nextPosY = this->posY - speed;
+                    if(nextPosY - 20 <= 0){
+                        this->nextPosY = 20;
+                        this->canMove = false;
+                    } else {
+                        this->nextPosY = this->posY - speed;
+                    }
                     this->direction = 0;
                 }
                 if (key == FSKEY_DOWN) {
-                    this->nextPosY = this->posY + speed;
+                    if(nextPosY + 20 >= 720){
+                        this->nextPosY = 700;
+                        this->canMove = false;
+                    } else {
+                        this->nextPosY = this->posY + speed;
+                    }
                     this->direction = 0;
                 }
                 if (key == FSKEY_LEFT) {
-                    this->nextPosX = this->posX - speed;
+                    if(nextPosX - 20 <= 0){
+                        this->nextPosX = 20;
+                        this->canMove = false;
+                    } else {
+                        this->nextPosX = this->posX - speed;
+                    }
                     this->direction = 1;
                 }
                 if (key == FSKEY_RIGHT) {
-                    this->nextPosX = this->posX + speed;
+                    if(nextPosX + 20 >= 1280){
+                        this->nextPosX = 1260;
+                        this->canMove = false;
+                    } else {
+                        this->nextPosX = this->posX + speed;
+                    }
                     this->direction = 1;
                 }
             }
