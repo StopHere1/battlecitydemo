@@ -430,7 +430,7 @@ void Map::change_block(int x, int y) { // landing block   //, int mapp[18][32]
 		}
 	}
 }
-void Map::change_block2(int& x, int& y) {   //, int mapp[18][32]
+void Map::change_block2(int x, int y) {   //, int mapp[18][32]
 	for (int j = 0; j < wid; ++j) {
 		for (int i = 0; i < len; ++i) {
 			if (mapf[j][i] != 0) { //&& checkCollision(x, y, i, j)  && mapp[j][i] == 5

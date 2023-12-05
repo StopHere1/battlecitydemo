@@ -1660,7 +1660,7 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
 		    auto millisec=std::chrono::duration_cast<std::chrono::milliseconds>(t-t0).count();
 		    double dt=(double)millisec/1000.0;
             mapmanager.change_block((int)testTank1.getPosX()-20,(int)(testTank1.getPosY())+20);
-            mapmanager.change_block((int)testTank2.getPosX()-20,(int)(testTank2.getPosY())+20);
+            mapmanager.change_block2((int)testTank2.getPosX()-20,(int)(testTank2.getPosY())+20);
             if(!pause){
             gamejudger.updateGameState(testTank1.getHealth(),testTank2.getHealth(),mapmanager.score1,mapmanager.score2,dt);
             if(gamejudger.checkWinCondition()){
@@ -2057,7 +2057,7 @@ void menu::run(Sound &soundplayer, UserInfoManager &manager,std::vector<buttom> 
 		    auto millisec=std::chrono::duration_cast<std::chrono::milliseconds>(t-t0).count();
 		    double dt=(double)millisec/1000.0;
             mapmanager.change_block((int)testTank1.getPosX()-20,(int)(testTank1.getPosY())+20);
-            mapmanager.change_block((int)testTank2.getPosX()-20,(int)(testTank2.getPosY())+20);
+            mapmanager.change_block2((int)testTank2.getPosX()-20,(int)(testTank2.getPosY())+20);
             if(!pause){
             gamejudger.updateGameState(testTank1.getHealth(),testTank2.getHealth(),mapmanager.score1,mapmanager.score2,dt);
             if(gamejudger.checkWinCondition()){

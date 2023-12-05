@@ -48,3 +48,16 @@ Source Tree:
 --public
 ```
 
+CC-BY-Licensed music files:
+• 3playerSwitch.wav
+Gabriel Araujo (2015), Sound Effects of Winning the game, Ear0.com. [online] Available at: https://www.ear0.com/sound/13209
+• 6hitTank.wav
+Ka, L. (2021), Bullets Hitting the Dirt/ Rock, Ear0.com. [online] Available at: https://www.ear0.com/sound/20883
+• 10gameOver.wav
+Rdholder (2019), Sound Effects of Winning the game/ Achieving goals, Ear0.com. [online] Available at: https://www.ear0.com/sound/18111 
+Royalty Free or CC-Licensed music files from known games:
+• 4gameStart.wav: from the original Battle City Game (NES)
+• 6hitAmor.wav, 7occupied.wav, 7occupyFailed.wav, 7occupying.wav: from the Apex Legends sound effect pack
+Other files in the “soundlib” directory are royalty free or under CC-License from online music library websites.
+
+
