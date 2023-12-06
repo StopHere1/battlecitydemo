@@ -19,7 +19,7 @@
 #include "../../public/src/ysbitmap/src/yspng.h"
 #include "../../public/src/yssimplesound/src/yssimplesound.h"
 
-bool enabletest = true;
+bool enabletest = false;
 
 
 std::vector <std::string> Parse(std::string incoming)
