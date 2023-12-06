@@ -48,6 +48,22 @@ Source Tree:
 --public
 ```
 
+How to Control Your Tank
+​
+The game should have two player, `player1` and `player2`. 
+​
+Your tank can move in 4 directions: up, down, left and right. For the `player1`, you can use `W` to go up, use `S` to go down, use `A` to turn left and `D` to turn right. For `player2`, you should use `Up, Down, Left and Right` arrow key.
+​
+`Player1` can use the `Space` to fire the bullet while `player2` should use the `0`.
+​
+Player can also rotate the aim direction. `Player1` can use `J` to rotate clockwise while `K` for counter-clockwise. `Player2` should use `5` to rotate clockwise while `6` to rotate counter-clockwise. 
+​
+When one type of the bullet is run out, `player1` can use `B` to switch the bullet type while `player2` should use `7`.
+​
+That's all! 
+​
+And Enjoy Your Game!
+
 CC-BY-Licensed music files:
 • 3playerSwitch.wav
 Gabriel Araujo (2015), Sound Effects of Winning the game, Ear0.com. [online] Available at: https://www.ear0.com/sound/13209
