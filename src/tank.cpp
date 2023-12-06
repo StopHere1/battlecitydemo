@@ -20,23 +20,11 @@ float tank::getHealth() {
 float tank::getHealthMax() {
     return healthMax;
 }
-int tank::getLoad() {
-    return load;
-}
 float tank::getSpeed() {
     return speed;
 }
-float tank::getPower() {
-    return power;
-}
-float tank::getWeight() {
-    return weight;
-}
 int tank::getState() {
     return state;
-}
-int tank::getMagSize() {
-    return magSize;
 }
 float tank::getFireAngle() {
     return fireAngle;
@@ -65,23 +53,11 @@ void tank::setHealth(float input) {
 void tank::setHealthMax(float input) {
     healthMax = input;
 }
-void tank::setLoad(int input) {
-    load = input;
-}
 void tank::setSpeed(float input) {
     speed = input;
 }
-void tank::setPower(float input) {
-    power = input;
-}
-void tank::setWeight(float input) {
-    weight = input;
-}
 void tank::setState(int input) {
     state = input;
-}
-void tank::setMagSize(int input) {
-    magSize = input;
 }
 void tank::setFireAngle(float input) {
     fireAngle = input;
@@ -91,9 +67,6 @@ void tank::setDirection(int input) {
 }
 void tank::setBulletCount(std::vector<int> count) {
     BulletCount = count;
-}
-float calSpeed(float power, int load, float weight) {
-    return power/(load+weight);
 }
 void tank::setUser(int input) {
     if(input == 0 || input == 1){
@@ -112,53 +85,37 @@ int tank::init(Type type, int User) {
         if (type == type1) {//standard tank
             this->tankType = type1;
             this->armor = 50;
-            this->weight = 100;
             this->health = 50;
             this->healthMax = 50;
-            this->load = 100;
-            this->magSize = 10;
             this->fireAngle = 0;
             this->direction = 0;
-            this->power = 100;
             this->speed = 10;
             return 0;
         } else if (type == type2) {//fast tank
             this->tankType = type2;
             this->armor = 30;
-            this->weight = 50;
             this->health = 50;
             this->healthMax = 50;
-            this->load = 50;
-            this->magSize = 5;
             this->direction = 0;
             this->fireAngle = 0;
-            this->power = 100;
             this->speed = 20;
             return 0;
         } else if (type == type3) {//heavy tank
             this->tankType = type3;
             this->armor = 100;
-            this->weight = 200;
             this->health = 50;
             this->healthMax = 50;
-            this->load = 100;
-            this->magSize = 20;
             this->fireAngle = 0;
             this->direction = 0;
-            this->power = 200;
             this->speed = 5;
             return 0;
         } else if (type == type4) {//Load tank
             this->tankType = type4;
             this->armor = 40;
-            this->weight = 150;
             this->health = 80;
             this->healthMax = 80;
-            this->load = 200;
-            this->magSize = 10;
             this->fireAngle = 0;
             this->direction = 0;
-            this->power = 200;
             this->speed = 10;
             this->BulletCount = {10, 20, 10};
             return 0;
@@ -176,124 +133,6 @@ void tank::move()
             this->posX = this->nextPosX;
             this->posY = this->nextPosY;
         }
-    }
-}
-
-void tank::singleReload(int key){//load one bullet from bulletLoad to bulletMag, less time cost
-    //use splice to move the first element of bulletLoad to the end of bulletMag
-    if((key == FSKEY_T && user ==0) || (key == FSKEY_9 && user == 1)) {
-        if(bulletMag.size() < magSize) {
-            while (!bulletLoad.empty() && bulletMag.size() < magSize) {
-                bulletMag.splice(bulletMag.end(), bulletLoad, bulletLoad.begin());
-            }
-            std::cout << "Reload Success!" << std::endl;
-        } else {
-            std::cout << "Error: Mag Is Full!" << std::endl;
-        }
-    }
-}
-
-void tank::reload(int key) {//load a full mag from bulletLoad to bulletMag, more time cost
-    if((key == FSKEY_R && user ==0) || (key == FSKEY_8 && user == 1)) {
-        if (bulletMag.size() < magSize) {
-            while (!bulletLoad.empty() && bulletMag.size() < magSize) {
-                bulletMag.splice(bulletMag.end(), bulletLoad, bulletLoad.begin());
-            }
-            std::cout << "Reload Success!" << std::endl;
-        } else {
-            std::cout << "Error: Mag Is Full!" << std::endl;
-        }
-    }
-}
-
-void tank::fire() {
-    if(!bulletMag.empty()){
-        //use splice to move the first element of bulletMag to the end of bulletShot
-        bulletShot = bulletMag.front();
-        bulletMag.pop_front();
-        bulletShot.ShootBullet();
-        std::cout << "Fire Success!" << std::endl;
-    } else {
-        std::cout << "Error: Need Reload!" << std::endl;
-    }
-}
-
-//void tank::checkLoad() {//check the bulletLoad and healthLoad
-//    if(!bulletLoad.empty()){
-//        std::cout << "Bullet Pack Remains: " << bulletLoad.size() << std::endl;
-//    } else {
-//        std::cout << "Error: Bullet Load Empty!" << std::endl;
-//    }
-//    if(!healthLoad.empty()){
-//        std::cout << "Health Pack Remains: " << healthLoad.size() << std::endl;
-//    } else {
-//        std::cout << "Error: Health Load Empty!" << std::endl;
-//    }
-//}
-
-void tank::printBulletMag() {//print the bullets in the mag
-    if(bulletMag.empty()){
-        std::cout << "Error: No Bullet In Mag!" << std::endl;
-    }
-    else {
-        std::cout << "Bullets In the Mag: ";
-        for(auto i : bulletMag){
-            std::cout << i.GetBulletType() << " ";
-        }
-        std::cout << std::endl;
-    }
-}
-
-//void tank::heal() {//heal the tank
-//    if(!healthLoad.empty()){
-//        if(health + 50 <= healthMax){
-//            health += 50;
-//            healthLoad.pop_front();
-//        } else {
-//            health = healthMax;
-//            healthLoad.pop_front();
-//        }
-//    } else {
-//        std::cout << "Error: Health Load Empty!" << std::endl;
-//    }
-//}
-
-void tank::pickUpBullet(std::list<Bullet> bulletPack) {//pick up bullet package to bulletLoad
-    if(bulletLoad.size() >= load){
-        std::cout << "Error: Bullet Load Full!" << std::endl;
-    }
-    else {
-        while (!bulletPack.empty() && bulletLoad.size() < load) {
-            //use splice to move the first element of bulletPack to the end of bulletLoad
-            bulletLoad.splice(bulletLoad.end(), bulletPack, bulletPack.begin());
-        }
-        std::cout << "Bullet Resupply Success!" << std::endl;
-    }
-}
-
-//void tank::pickUpHealth(std::list<Tool> healthPack) {//pick up health package to healthLoad
-//    if(healthLoad.size() >= load){
-//        std::cout << "Error: Health Load Full!" << std::endl;
-//    }
-//    else {
-//        while (!healthPack.empty() && healthLoad.size() < load) {
-//            //use splice to move the first element of healthPack to the end of healthLoad
-//            healthLoad.splice(healthLoad.end(), healthPack, healthPack.begin());
-//        }
-//        std::cout << "Health Resupply Success!" << std::endl;
-//    }
-//}
-
-void tank::printBulletLoad() {//print the bullets in the bulletLoad
-    if(bulletLoad.empty()){
-        std::cout << "Error: No Bullet In Load!" << std::endl;
-    }
-    else {
-        std::cout << "Bullet Pack Remains: ";
-        for(auto i : bulletLoad){
-            std::cout << i.GetBulletType() << " ";
-        }
-        std::cout << std::endl;
     }
 }
 
@@ -501,12 +340,6 @@ void tank::rotate(int key) {
     }
 }
 
-void tank::checkFire(int key) {//TODO:check the bulletShot whether hit the target
-    if((key == FSKEY_SPACE && this->user == 0) || (key == FSKEY_0 && this->user == 1)){
-        this->fire();
-    }
-}
-
 void tank::newFire(int key) {
     if(this->health >0) {
         if ((key == FSKEY_SPACE && this->user == 0) || (key == FSKEY_0 && this->user == 1)) {
@@ -518,19 +351,6 @@ void tank::newFire(int key) {
                     tankBullet.ChangeBulletType(currentBulletType);
                     tankBullet.ShootBullet();
                     std::cout << "Fire Success!" << std::endl;
-//                switch (currentBulletType) {
-//                    case 0:
-//                        this->soundPlayer->playShootBullet1();
-//                        break;
-//                    case 1:
-//                        this->soundPlayer->playShootBullet2();
-//                        break;
-//                    case 2:
-//                        this->soundPlayer->playShootBullet3();
-//                        break;
-//                    default:
-//                        break;
-//                }
                 }
             } else {
                 std::cout << "Error: No More Bullets!" << std::endl;
@@ -711,7 +531,6 @@ void tank::changeTankPara() {
         this->speed = 5;
     } else if (this->tankType == type4) {//Load tank
         this->armor = 40;
-        this->weight = 150;
         this->health = 50;
         this->healthMax = 50;
         this->speed = 10;
