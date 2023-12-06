@@ -7,6 +7,7 @@
 #include<string.h>
 #include<time.h>
 #include<chrono>
+#include<iostream>
 
 #include"map.h"
 //#include"../include/map.h"
@@ -403,7 +404,7 @@ bool Map::bulletCollide(int &x, int &y, int &i, int &j){
 //using TimePoint = std::chrono::time_point<Clock>;
 //using Seconds = std::chrono::seconds;
 
-void Map::change_block(int x, int y) { // landing block   //, int mapp[18][32]
+void Map::change_block1(int x, int y) { // landing block   //, int mapp[18][32]
 	for (int j = 0; j < wid; ++j) {
 		for (int i = 0; i < len; ++i) {
 			if (mapf[j][i] != 0 && checkCollision(x, y, i, j)) { //&& checkCollision(x, y, i, j)  && mapp[j][i] == 5
@@ -422,6 +423,7 @@ void Map::change_block(int x, int y) { // landing block   //, int mapp[18][32]
 					mapf[j][i] == 7
 					) {
 					mapf[j][i] = 2;  // Change back to other walls if no collision
+					// std::cout<<"from change_block"<<std::endl;
 					score1 += 10;
 					//printf("hit\n");
 					//break;
@@ -430,10 +432,12 @@ void Map::change_block(int x, int y) { // landing block   //, int mapp[18][32]
 		}
 	}
 }
+
 void Map::change_block2(int x, int y) {   //, int mapp[18][32]
+// std::cout<<x<<"  "<<y<<std::endl;
 	for (int j = 0; j < wid; ++j) {
 		for (int i = 0; i < len; ++i) {
-			if (mapf[j][i] != 0) { //&& checkCollision(x, y, i, j)  && mapp[j][i] == 5
+			if (mapf[j][i] != 0 && checkCollision(x, y, i, j)) { //&& checkCollision(x, y, i, j)  && mapp[j][i] == 5
 				TimePoint startTime = Clock::now();
 				while (checkCollision2(x, y, i, j) && mapf[j][i] == 5) {
 					TimePoint currentTime = Clock::now();
@@ -445,6 +449,7 @@ void Map::change_block2(int x, int y) {   //, int mapp[18][32]
 				}
 				if (!checkCollision2(x, y, i, j) && mapf[j][i] == 7) {
 					mapf[j][i] = 2;  // Change back to other walls if no collision
+					// std::cout<<"from change_block2"<<std::endl;
 					score2 += 10;
 					//break;
 				}
